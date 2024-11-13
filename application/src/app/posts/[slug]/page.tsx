@@ -7,14 +7,15 @@ import { getAllPosts, getPostBySlug } from "@/lib/getPost";
 import markdownToHtml from "@/lib/markdownToHtml";
 
 type Props = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 // Async function to fetch post data
 export default async function PostPage({ params }: Props) {
-  const post = getPostBySlug(params.slug, [
+  const { slug } = await params;
+  const post = getPostBySlug(slug, [
     "slug",
     "title",
     "excerpt",
@@ -34,7 +35,7 @@ export default async function PostPage({ params }: Props) {
         <h1 className="text-4xl font-bold">{post.title}</h1>
         {post.excerpt && <p className="mt-2 text-xl">{post.excerpt}</p>}
         <time className="flex mt-2 text-gray-400">
-          {distanceToNow(new Date(post.date))}
+          {post.date ? distanceToNow(new Date(post.date)): "!BROKEN DATE! src/app/posts/[slug]/page.tsx"}
         </time>
       </header>
 
@@ -46,7 +47,8 @@ export default async function PostPage({ params }: Props) {
 
 // Generate dynamic metadata based on the post's title
 export async function generateMetadata({ params }: Props) {
-  const post = getPostBySlug(params.slug, ["title"]);
+  const { slug } = await params;
+  const post = getPostBySlug(slug, ["title"]);
 
   return {
     title: post ? `${post.title} | My awesome blog` : "Post not found",
