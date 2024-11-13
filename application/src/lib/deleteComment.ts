@@ -8,7 +8,11 @@ export default async function deleteComments(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const url = clearUrl(req.headers.referer);
+  const referer = req.headers.referer;
+  if (!referer) {
+    return res.status(400).json({ message: "Missing referer." });
+  } 
+  const url = clearUrl(referer);
   const { comment }: { url: string; comment: Comment } = req.body;
   const { authorization } = req.headers;
 
@@ -37,7 +41,7 @@ export default async function deleteComments(
     await redis.lrem(url, 0, JSON.stringify(comment));
 
     return res.status(200).end();
-  } catch (err) {
+  } catch {
     return res.status(400);
   }
 }

@@ -3,7 +3,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 type CommentFormProps = {
   text: string;
-  setText: Function;
+  setText: (text: string) => void; 
   onSubmit: (e: React.FormEvent) => Promise<void>;
 };
 
@@ -21,14 +21,13 @@ export default function CommentForm({
         rows={2}
         placeholder={
           session
-            ? `What are your thoughts?`
+            ? "What are your thoughts?"  
             : "Please login to leave a comment"
         }
         onChange={(e) => setText(e.target.value)}
         value={text}
         disabled={!session}
       />
-
       <div className="flex items-center mt-4">
         {session ? (
           <div className="flex items-center space-x-6">
