@@ -1,7 +1,6 @@
 // src/components/header.tsx
 import Link from "next/link";
 import Container from "@/components/container";
-import { UserButton } from "@/components/user-button";
 
 export default function Header() {
   return (

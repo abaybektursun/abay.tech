@@ -21,5 +21,5 @@ export type Post = {
   date?: Date;
   content?: string;
   excerpt?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 };

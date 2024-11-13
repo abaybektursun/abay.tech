@@ -9,7 +9,11 @@ export default async function createComments(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const url = clearUrl(req.headers.referer);
+  const referer = req.headers.referer;
+  if (!referer) {
+    return res.status(400).json({ message: "Missing referer." });
+  }
+  const url = clearUrl(referer);
   const { text } = req.body;
   const { authorization } = req.headers;
 
@@ -42,7 +46,7 @@ export default async function createComments(
     await redis.lpush(url, JSON.stringify(comment));
 
     return res.status(200).json(comment);
-  } catch (_) {
+  } catch {
     return res.status(400).json({ message: "Unexpected error occurred." });
   }
 }

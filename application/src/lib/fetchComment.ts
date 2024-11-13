@@ -7,7 +7,11 @@ export default async function fetchComment(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const url = clearUrl(req.headers.referer);
+  const refer = req.headers.referer;
+  if (!refer) {
+    return res.status(400).json({ message: "Missing referer." });
+  }
+  const url = clearUrl(refer);
 
   if (!redis) {
     return res.status(500).json({ message: "Failed to connect to redis." });
@@ -18,14 +22,14 @@ export default async function fetchComment(
     const rawComments = await redis.lrange(url, 0, -1);
 
     // string data to object
-    const comments = rawComments.map((c) => {
+    const comments = rawComments.map((c: string) => {
       const comment: Comment = JSON.parse(c);
       delete comment.user.email;
       return comment;
     });
 
     return res.status(200).json(comments);
-  } catch (_) {
+  } catch {
     return res.status(400).json({ message: "Unexpected error occurred." });
   }
 }
