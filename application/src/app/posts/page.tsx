@@ -17,7 +17,7 @@ export default async function NotePage() {
             </Link>
             <p>{post.excerpt}</p>
             <div className="text-gray-400">
-              <time>{distanceToNow(new Date(post.date))}</time>
+              <time>{post.date ? distanceToNow(new Date(post.date)) : "!Broken date! src/app/posts/page.tsx"}</time>
             </div>
           </article>
         ))

@@ -16,7 +16,9 @@ export default function CommentList({ comments, onDelete }: CommentListProps) {
     <div className="space-y-6 mt-10">
       {comments &&
         comments.map((comment) => {
-          const isAuthor = user && user.sub === comment.user.sub;
+          // TODO! uncomment
+          //const isAuthor = user && user.sub === comment.user.sub;
+          const isAuthor = false;
           const isAdmin = user && user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
 
           return (
@@ -35,7 +37,7 @@ export default function CommentList({ comments, onDelete }: CommentListProps) {
                 <div className="flex space-x-2">
                   <b>{comment.user.name}</b>
                   <time className="text-gray-400">
-                    {distanceToNow(comment.created_at)}
+                    {distanceToNow(new Date(comment.created_at))}
                   </time>
                   {(isAdmin || isAuthor) && (
                     <button
