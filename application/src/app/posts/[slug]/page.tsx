@@ -1,6 +1,7 @@
 // src/app/posts/[slug]/page.tsx
 import { notFound } from "next/navigation";
-import Comment from "@/components/comment";
+//import Comment from "@/components/comment";
+import Comment from "@/components/comments";
 import Container from "@/components/container";
 import distanceToNow from "@/lib/dateRelative";
 import { getAllPosts, getPostBySlug } from "@/lib/getPost";

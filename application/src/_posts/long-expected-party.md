@@ -1,7 +1,6 @@
 ---
 title: "That time my baby ate hotpot"
-excerpt: "Gandalf arrives in the Shire for Bilbo's Farewell Birthday Party.
-Bilbo leaves the Shire permanently."
+excerpt: "Abay learned the hard way that when his spice-averse girlfriend devoured the hottest hotpot like it was soup, the real burn wasn’t in the broth—it was in his pride."
 date: "2024-10-02"
 ---
 
