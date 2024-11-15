@@ -25,3 +25,8 @@ export const springTransition = {
   stiffness: 300,
   damping: 30
 };
+
+export const textChange = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+};
