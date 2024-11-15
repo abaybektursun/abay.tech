@@ -5,13 +5,32 @@ import Image from "next/image";
 import Container from "@/components/container";
 import { motion } from 'framer-motion';
 import { variants, transition } from '@/lib/animations';
+import RotatingText from '@/components/RotatingText';
 
 export default function HomePage() {
   return (
-    <>
-      <Container>
+    <Container>
+      <div className="flex flex-col md:flex-row md:items-center md:gap-12">
         <motion.div 
-          className="space-y-6"
+          className="md:w-1/2"
+          initial="hidden"
+          animate="visible"
+          variants={variants.gentleScale}
+          transition={{ ...transition, delay: 0.2 }}
+        >
+          <div className="relative aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
+            <Image
+              src="/DSC07673.jpg"
+              alt="profile"
+              fill
+              priority
+              className="object-cover object-[60%_center]"
+            />
+          </div>
+        </motion.div>
+
+        <motion.div 
+          className="space-y-6 mt-6 md:mt-0 md:w-1/2"
           initial="hidden"
           animate="visible"
           variants={variants.fadeIn}
@@ -22,8 +41,7 @@ export default function HomePage() {
             variants={variants.softFadeUp}
             transition={{ ...transition, delay: 0.1 }}
           >
-            Hey, I&apos;m a consultant and fractional CTO. I enjoy turning 
-            AI models into products deeply aligned with customers.
+            Hey, I&apos;m <RotatingText />
           </motion.h1>
           <motion.p
             variants={variants.softFadeUp}
@@ -32,25 +50,7 @@ export default function HomePage() {
             I specialize in ML engineering, computer vision, and application of LLMs.
           </motion.p>
         </motion.div>
-      </Container>
-
-      <div className="container max-w-4xl m-auto px-4 mt-20">
-        <motion.div 
-          className="relative aspect-[3/2] w-full"
-          initial="hidden"
-          animate="visible"
-          variants={variants.gentleScale}
-          transition={{ ...transition, delay: 0.2 }}
-        >
-          <Image
-            src="/locked_in.jpg"
-            alt="lock in"
-            fill
-            priority
-            className="object-contain"
-          />
-        </motion.div>
       </div>
-    </>
+    </Container>
   );
 }
