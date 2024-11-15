@@ -8,7 +8,6 @@ import { variants, transition } from '@/lib/animations';
 import RotatingText from '@/components/RotatingText';
 import { ExternalLinks } from "@/components/external";
 
-
 export default function HomePage() {
   return (
     <Container>
