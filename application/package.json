@@ -11,6 +11,7 @@
   "dependencies": {
     "@giscus/react": "^3.0.0",
     "date-fns": "^4.1.0",
+    "framer-motion": "^11.11.17",
     "fs": "^0.0.1-security",
     "gray-matter": "^4.0.3",
     "ioredis": "^5.4.1",
