@@ -6,12 +6,14 @@ import Container from "@/components/container";
 import { motion } from 'framer-motion';
 import { variants, transition } from '@/lib/animations';
 import RotatingText from '@/components/RotatingText';
+import { ExternalLinks } from "@/components/external";
+
 
 export default function HomePage() {
   return (
     <Container>
       <div className="flex flex-col md:flex-row md:items-center md:gap-12">
-        <motion.div 
+        <motion.div
           className="md:w-1/2"
           initial="hidden"
           animate="visible"
@@ -41,7 +43,7 @@ export default function HomePage() {
             variants={variants.softFadeUp}
             transition={{ ...transition, delay: 0.1 }}
           >
-            Hey, I&apos;m <RotatingText />
+            👋 I&apos;m <RotatingText />
           </motion.h1>
           <motion.p
             variants={variants.softFadeUp}
@@ -51,6 +53,15 @@ export default function HomePage() {
           </motion.p>
         </motion.div>
       </div>
+      <motion.div
+        className="mt-12"
+        initial="hidden"
+        animate="visible"
+        variants={variants.fadeIn}
+        transition={{ ...transition, duration: 0.3 }}
+      >
+        <ExternalLinks/>
+      </motion.div>
     </Container>
   );
 }
