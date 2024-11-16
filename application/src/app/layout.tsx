@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import Header from "@/components/header";
 import "@/styles/globals.css";
 import { AnimatePresence } from 'framer-motion';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
           <AnimatePresence mode="wait">
             {children}
           </AnimatePresence>
+          <GoogleAnalytics gaId="G-E2WDH18DG3" />
         </main>
       </body>
     </html>
