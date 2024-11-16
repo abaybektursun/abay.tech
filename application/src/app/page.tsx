@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { variants, transition } from '@/lib/animations';
 import RotatingText from '@/components/RotatingText';
 import { ExternalLinks } from "@/components/external";
+import ProgressiveImage from "@/components/progressive"
 
 export default function HomePage() {
   return (
@@ -20,13 +21,13 @@ export default function HomePage() {
           transition={{ ...transition, delay: 0.2 }}
         >
           <div className="relative aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
-            <Image
-              src="/DSC07673.jpg"
-              alt="profile"
-              fill
-              priority
-              className="object-cover object-[60%_center]"
-            />
+        <ProgressiveImage
+        src="/DSC07673.jpg"
+        alt="Description"
+        width={2048}
+        height={1365}
+        className="rounded-lg" // optional
+      />
           </div>
         </motion.div>
 
