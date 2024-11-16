@@ -6,7 +6,6 @@ import Container from "@/components/container";
 import { useState } from 'react'
 import { Check, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { id } from "date-fns/locale";
 
 export default function Component() {
     const [openItems, setOpenItems] = useState<number[]>([])

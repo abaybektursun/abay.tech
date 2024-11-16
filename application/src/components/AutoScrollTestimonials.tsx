@@ -21,6 +21,7 @@ interface AutoScrollTestimonialsProps {
 }
 
 // More subtle card styling inspired by Hugging Face
+// Modified StyledCard with no borders
 const StyledCard = styled(Card)(({ theme }) => ({
   width: '14rem',
   minHeight: '10rem',
@@ -28,16 +29,16 @@ const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   transition: 'all 0.15s ease-in-out',
-  border: '1px solid #E5E7EB',
+  border: 'none',
   boxShadow: 'none',
   borderRadius: '0.5rem',
   backgroundColor: '#FFFFFF',
   '&:hover': {
     transform: 'translateY(-2px)',
     boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)',
-    borderColor: '#D1D5DB',
   }
 }));
+
 
 const CompactCardHeader = styled(CardHeader)({
   padding: '12px 16px',
@@ -66,7 +67,7 @@ const CompactCardHeader = styled(CardHeader)({
 
 const CompactCardContent = styled(CardContent)({
   padding: '0 16px 16px 16px',
-  flexGrow: 1,
+  flexGrow: 0.5,
   display: 'flex',
   flexDirection: 'column',
   '&:last-child': {
