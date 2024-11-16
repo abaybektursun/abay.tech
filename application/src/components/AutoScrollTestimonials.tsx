@@ -134,14 +134,9 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
           </div>
         ) : (
           <div className="relative">
-            <Quote 
-              className="absolute -top-1 -left-1 w-4 h-4" 
-              style={{ color: '#D1D5DB' }}
-            />
             <TruncatedText 
               variant="body2"
               sx={{
-                paddingLeft: '1.5rem',
                 position: 'relative',
                 '&::first-letter': {
                   marginLeft: '0.2em',
