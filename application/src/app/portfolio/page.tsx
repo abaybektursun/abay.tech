@@ -90,9 +90,9 @@ export default async function PortfolioPage() {
                   <Link 
                     href={`/portfolio/${post.slug}`}
                     key={post.slug} 
-                    className="flex-shrink-0 w-80 snap-start group"
+                    className=""
                   >
-                    <div className="relative aspect-[4/3] mb-4 bg-gray-100 rounded-lg overflow-hidden">
+                    <div className="relative aspect-[4/2] mb-4 bg-gray-100 rounded-lg overflow-hidden">
                       {post.image ? (
                         <img 
                           src={post.image} 
@@ -126,7 +126,6 @@ export default async function PortfolioPage() {
         </section>
         {/* Testimonials Section */}
         <section id="testimonials" className="space-y-8">
-          <h2 className="font-semibold mb-8">Some Client Feedback</h2>
           <AutoScrollTestimonials testimonials={testimonials} />
         </section>
 
