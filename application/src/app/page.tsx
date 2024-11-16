@@ -9,6 +9,7 @@ import RotatingText from '@/components/RotatingText';
 import { ExternalLinks } from "@/components/external";
 import ProgressiveImage from "@/components/progressive"
 
+
 export default function HomePage() {
   return (
     <Container>
