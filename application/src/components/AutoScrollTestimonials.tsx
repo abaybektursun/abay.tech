@@ -89,6 +89,7 @@ const ContentContainer = styled(motion.div)({
 });
 
 // Modified text styling with custom font
+
 const TruncatedText = styled(Typography)({
   display: '-webkit-box',
   WebkitLineClamp: 4,
@@ -96,9 +97,9 @@ const TruncatedText = styled(Typography)({
   overflow: 'hidden',
   lineHeight: '1.6',
   fontSize: '0.875rem',
-  fontFamily: 'Georgia, serif', // Changed to serif font for quotes
+  fontFamily: 'Georgia, serif',
   fontStyle: 'italic',
-  color: '#4B5563', // Slightly lighter than header text
+  color: '#4B5563',
   marginTop: '4px',
 });
 
@@ -133,12 +134,17 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
           </div>
         ) : (
           <div className="relative">
+            <Quote 
+              className="absolute -top-1 -left-1 w-4 h-4" 
+              style={{ color: '#D1D5DB' }}
+            />
             <TruncatedText 
-              component="div"
+              variant="body2"
               sx={{
+                paddingLeft: '1.5rem',
                 position: 'relative',
                 '&::first-letter': {
-                  marginLeft: '0.2em', // Slight offset for first letter
+                  marginLeft: '0.2em',
                 }
               }}
             >
