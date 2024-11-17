@@ -27,7 +27,7 @@ export default function RootLayout({
           <AnimatePresence mode="wait">
             {children}
           </AnimatePresence>
-          <GoogleAnalytics gaId="G-E2WDH18DG3" />
+          <GoogleAnalytics gaId="G-Z50F6SX483" />
         </main>
       </body>
     </html>
