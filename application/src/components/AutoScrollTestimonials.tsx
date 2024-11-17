@@ -2,219 +2,160 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardMedia, Typography } from '@mui/material';
-import { Quote, Play } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { styled } from '@mui/material/styles';
 import Link from 'next/link';
+import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+import type { Review } from "@/interfaces";
 
-interface Testimonial {
-  id: number;
-  type: 'video' | 'text';
-  content: string;
-  name: string;
-  role: string;
+interface AutoScrollReviewsProps {
+  reviews: Review[];
 }
 
-interface AutoScrollTestimonialsProps {
-  testimonials: Testimonial[];
-}
-
-// More subtle card styling inspired by Hugging Face
-// Modified StyledCard with no borders
-const StyledCard = styled(Card)(({ theme }) => ({
-  width: '14rem',
-  minHeight: '10rem',
-  cursor: 'pointer',
-  display: 'flex',
-  flexDirection: 'column',
-  transition: 'all 0.15s ease-in-out',
-  border: 'none',
-  boxShadow: 'none',
-  borderRadius: '0.5rem',
-  backgroundColor: '#FFFFFF',
-  '&:hover': {
-    transform: 'translateY(-2px)',
-    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)',
-  }
-}));
-
-
-const CompactCardHeader = styled(CardHeader)({
-  padding: '12px 16px',
-  '& .MuiCardHeader-content': {
-    overflow: 'hidden',
-  },
-  '& .MuiCardHeader-title': {
-    fontSize: '0.875rem',
-    fontWeight: 600,
-    lineHeight: '1.25',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    color: '#111827',
-  },
-  '& .MuiCardHeader-subheader': {
-    fontSize: '0.75rem',
-    lineHeight: '1.25',
-    marginTop: '1px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    color: '#6B7280',
-  }
-});
-
-const CompactCardContent = styled(CardContent)({
-  padding: '0 16px 16px 16px',
-  flexGrow: 0.5,
-  display: 'flex',
-  flexDirection: 'column',
-  '&:last-child': {
-    paddingBottom: '16px',
-  }
-});
-
-const ScrollContainer = styled('div')({
-  overflowX: 'hidden',
-  position: 'relative',
-  maxWidth: '72rem',
-  margin: '0 auto',
-});
-
-const ContentContainer = styled(motion.div)({
-  display: 'flex',
-  gap: '1rem',
-  padding: '0.5rem 0',
-  width: 'max-content',
-});
-
-// Modified text styling with custom font
-
-const TruncatedText = styled(Typography)({
-  display: '-webkit-box',
-  WebkitLineClamp: 4,
-  WebkitBoxOrient: 'vertical',
-  overflow: 'hidden',
-  lineHeight: '1.6',
-  fontSize: '0.875rem',
-  fontFamily: 'Georgia, serif',
-  fontStyle: 'italic',
-  color: '#4B5563',
-  marginTop: '4px',
-});
-
-const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
-  <Link href="/testimonials" style={{ textDecoration: 'none' }}>
-    <StyledCard>
-      <CompactCardHeader
-        title={testimonial.name}
-        subheader={testimonial.role}
-      />
-      <CompactCardContent>
-        {testimonial.type === 'video' ? (
-          <div className="relative w-full aspect-video rounded-md overflow-hidden"> 
-            <CardMedia
-              component="img"
-              image={testimonial.content}
-              alt={`${testimonial.name}'s testimonial`}
-              sx={{ 
-                objectFit: 'cover',
-                width: '100%',
-                height: '100%',
-              }}
-            />
-            <motion.div 
-              className="absolute inset-0 flex items-center justify-center"
-              initial={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
-              whileHover={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
-              transition={{ duration: 0.15 }}
-            >
-              <Play className="w-7 h-7 text-white" />
-            </motion.div>
+const ReviewCard = ({ review }: { review: Review }) => (
+  <Link href="/testimonials" className="block w-64 h-[140px] p-3 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg">
+  <div className="flex gap-4 h-full">
+    <Avatar className="w-10 h-10 border shrink-0">
+      <AvatarImage alt={review.name} src="/placeholder-user.jpg" />
+      <AvatarFallback>{review.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+    </Avatar>
+    <div className="grid gap-2 overflow-hidden">
+      <div className="flex gap-4 items-start">
+        <div className="grid gap-0.5 text-sm">
+          <h3 className="font-semibold truncate">{review.name}</h3>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="truncate">{review.role}</p>
           </div>
-        ) : (
-          <div className="relative">
-            <TruncatedText 
-              variant="body2"
-              sx={{
-                position: 'relative',
-                '&::first-letter': {
-                  marginLeft: '0.2em',
-                }
-              }}
-            >
-              {testimonial.content}
-            </TruncatedText>
-          </div>
-        )}
-      </CompactCardContent>
-    </StyledCard>
+        </div>
+      </div>
+      <div className="text-sm leading-normal text-gray-500 dark:text-gray-400">
+        <p className="line-clamp-3">{review.content}</p>
+      </div>
+    </div>
+  </div>
   </Link>
 );
 
-// Rest of the component remains the same...
-export function AutoScrollTestimonials({ testimonials }: AutoScrollTestimonialsProps) {
+export function AutoScrollReviews({ reviews }: AutoScrollReviewsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isScrolling, setIsScrolling] = useState(true);
-  const scrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const animationRef = useRef<number>();
+  const previousTimeRef = useRef<number>();
+  const scrollPositionRef = useRef(0);
+  const autoScrollTimeoutRef = useRef<NodeJS.Timeout>();
+  const SCROLL_SPEED = 0.05; // pixels per millisecond
+
+  const animate = useCallback((currentTime: number) => {
+    if (previousTimeRef.current === undefined) {
+      previousTimeRef.current = currentTime;
+    }
+
+    const deltaTime = currentTime - previousTimeRef.current;
+    previousTimeRef.current = currentTime;
+
+    const scrollContainer = scrollRef.current;
+    const container = containerRef.current;
+    if (!scrollContainer || !container || !isScrolling) return;
+
+    scrollPositionRef.current += deltaTime * SCROLL_SPEED;
+
+    // Reset scroll position when reaching the end
+    if (scrollPositionRef.current >= (container.scrollWidth / 2)) {
+      scrollPositionRef.current = 0;
+    }
+
+    // Use transform instead of scrollLeft for smoother animation
+    container.style.transform = `translateX(${-scrollPositionRef.current}px)`;
+    animationRef.current = requestAnimationFrame(animate);
+  }, [isScrolling]);
 
   const startScrolling = useCallback(() => {
-    if (scrollIntervalRef.current) return;
-    
     setIsScrolling(true);
-    scrollIntervalRef.current = setInterval(() => {
-      const scrollContainer = scrollRef.current;
-      const container = containerRef.current;
-      if (!scrollContainer || !container) return;
-
-      if (scrollContainer.scrollLeft >= (container.scrollWidth - scrollContainer.clientWidth)) {
-        scrollContainer.scrollLeft = 0;
-      } else {
-        scrollContainer.scrollLeft += 1;
-      }
-    }, 50);
-  }, []);
+    if (!animationRef.current) {
+      previousTimeRef.current = undefined;
+      animationRef.current = requestAnimationFrame(animate);
+    }
+  }, [animate]);
 
   const stopScrolling = useCallback(() => {
     setIsScrolling(false);
-    if (scrollIntervalRef.current) {
-      clearInterval(scrollIntervalRef.current);
-      scrollIntervalRef.current = null;
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = undefined;
     }
   }, []);
 
+  // Handle auto-scroll restart after interruptions
+  const handleScrollPause = useCallback(() => {
+    stopScrolling();
+    // Clear any existing timeout
+    if (autoScrollTimeoutRef.current) {
+      clearTimeout(autoScrollTimeoutRef.current);
+    }
+    // Set new timeout to restart scrolling after 2 seconds of inactivity
+    autoScrollTimeoutRef.current = setTimeout(startScrolling, 2000);
+  }, [stopScrolling, startScrolling]);
+
+  // Handle mouse wheel (middle mouse) scrolling
+  const handleWheel = useCallback((e: WheelEvent) => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Stop animation while manually scrolling
+    handleScrollPause();
+
+    // Update scroll position based on wheel delta
+    scrollPositionRef.current = Math.max(
+      0,
+      Math.min(
+        scrollPositionRef.current + e.deltaX,
+        container.scrollWidth / 2
+      )
+    );
+    
+    container.style.transform = `translateX(${-scrollPositionRef.current}px)`;
+    
+    // Prevent default scrolling behavior
+    e.preventDefault();
+  }, [handleScrollPause]);
+
   useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
+    }
+
     startScrolling();
+
     return () => {
-      if (scrollIntervalRef.current) {
-        clearInterval(scrollIntervalRef.current);
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('wheel', handleWheel);
+      }
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      if (autoScrollTimeoutRef.current) {
+        clearTimeout(autoScrollTimeoutRef.current);
       }
     };
-  }, [startScrolling]);
+  }, [startScrolling, handleWheel]);
 
   return (
-    <ScrollContainer ref={scrollRef}>
-      <ContentContainer
+    <div className="overflow-hidden relative max-w-6xl mx-auto" ref={scrollRef}>
+      <div
         ref={containerRef}
-        drag="x"
-        dragConstraints={scrollRef}
-        onDragStart={stopScrolling}
-        onDragEnd={startScrolling}
-        dragElastic={0}
-        dragTransition={{ power: 0.2, timeConstant: 200 }}
+        className="flex gap-4 py-2 w-max"
+        style={{ willChange: 'transform' }}
+        onMouseEnter={handleScrollPause}
+        onMouseLeave={startScrolling}
       >
-        {[...testimonials, ...testimonials].map((testimonial, index) => (
-          <motion.div
-            key={`${testimonial.id}-${index}`}
-            onHoverStart={stopScrolling}
-            onHoverEnd={startScrolling}
-          >
-            <TestimonialCard testimonial={testimonial} />
-          </motion.div>
+        {[...reviews, ...reviews].map((review, index) => (
+          <div key={`${review.content}-${index}`}>
+            <ReviewCard review={review} />
+          </div>
         ))}
-      </ContentContainer>
-    </ScrollContainer>
+      </div>
+    </div>
   );
 }
+
+export default AutoScrollReviews;

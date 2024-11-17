@@ -8,3 +8,9 @@ export type Post = {
   excerpt?: string;
   [key: string]: unknown;
 };
+
+export interface Review {
+    content: string;
+    name: string;
+    role: string;
+}
