@@ -7,6 +7,11 @@ export const reviews: Review[] = [
       role: 'Professor, Columbia University'
     },
     {
+      content: 'Knowledgeable and skilled AI professional who is a joy to work with.',
+      name: 'John Mchale',
+      role: 'Partner, Genesis Inventions'
+    },
+    {
       content: 'Abay quickly set us down the right path with our model selection and training needs. He is both broad and deep on ML/AI knowledge and is skilled at application development as well.',
       name: 'John Lupher',
       role: 'CEO, Modern Motion'
@@ -16,24 +21,24 @@ export const reviews: Review[] = [
       name: 'Stephanie Goldman',
       role: 'Founder, Gridlines'
     },
-    { 
-      content: 'Abay was excellent. This was my second time working with him and I couldn\'t have been happier with his performance. Abay is an expert on Machine Learning and was completely dedicated to the quality of the final product . Beyond that he was highly available and would do whatever it took to make sure the final product was high quality.',
-      name: 'Client',
-      role: 'Healthcare Industry'
-    },
     {
-      content: 'Abay was fantastic. He\'s extremely knowledgeable on all things AI & ML. I had him complete a project in competition with some other very strong computer vision programmers, and his submission was by far the best. He\'s very knowledgeable all around, but especially strong with computer vision etc. I consider him a valuable resource and will definitely be working with him again.',
-      name: 'Client',
-      role: 'Healthcare Industry'
-    },
-    {
-      content: 'Abay was the best choice for AI developers. He is extremely fast, and detailed with his work. He was available quickly when any issues occured with our operating environment and was able to develop an efficient and accurate AI. We will be hiring Abay again in the future!',
+      content: 'Abay was the best choice for AI developers on this site. He is extremely fast, and detailed with his work. He was available quickly when any issues occured with our operating environment and was able to develop an efficient and accurate AI.',
       name: 'Kevin Cantrell',
       role: 'Founder, Crop Watch'
     },
     {
+      content: 'Abay was fantastic. He\'s extremely knowledgeable on all things AI & ML. I had him complete a project in competition with some other very strong computer vision programmers, and his submission was by far the best. He\'s very knowledgeable all around, but especially strong with computer vision etc. I consider him a valuable resource and will definitely be working with him again.',
+      name: 'Client',
+      role: ''
+    },
+    {
       content: 'It\'d be six stars down the line if I could. Abay is the man - top flight developer and guy.',
       name: 'Client',
-      role: 'Fashion Industry'
+      role: ''
+    },
+    { 
+      content: 'Abay was excellent. This was my second time working with him and I couldn\'t have been happier with his performance. Abay is an expert on Machine Learning and was completely dedicated to the quality of the final product . Beyond that he was highly available and would do whatever it took to make sure the final product was high quality.',
+      name: 'Client',
+      role: ''
     },
   ];
