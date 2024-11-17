@@ -14,6 +14,9 @@
     "@giscus/react": "^3.0.0",
     "@mui/material": "^6.1.7",
     "@next/third-parties": "^15.0.3",
+    "@radix-ui/react-avatar": "^1.1.1",
+    "@radix-ui/react-separator": "^1.1.0",
+    "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^11.11.17",
     "fs": "0.0.1-security",
@@ -37,7 +40,8 @@
     "remark-react": "^10.0.0",
     "shadcn-ui": "^0.9.3",
     "shiki": "^1.23.0",
-    "sst": "3.3.21"
+    "sst": "3.3.21",
+    "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
