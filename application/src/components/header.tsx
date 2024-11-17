@@ -1,3 +1,4 @@
+// src/components/header.tsx
 'use client';
 
 import Link from "next/link";
@@ -10,6 +11,7 @@ export default function Header() {
   const pathname = usePathname();
   const controls = useAnimationControls();
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [showTestimonials, setShowTestimonials] = useState(false);
 
   useEffect(() => {
     controls.start({
@@ -26,6 +28,14 @@ export default function Header() {
       }
     });
   }, [controls]);
+
+  const handleNavMouseEnter = () => {
+    setShowTestimonials(true);
+  };
+
+  const handleNavMouseLeave = () => {
+    setShowTestimonials(false);
+  };
 
   const renderLink = (href: string, label: string) => {
     const isPortfolio = label === 'Portfolio';
@@ -55,7 +65,6 @@ export default function Header() {
             {label}
           </motion.span>
           
-          {/* Active page underline with animation */}
           {pathname === href && (
             <motion.div
               layoutId="underline"
@@ -68,7 +77,6 @@ export default function Header() {
             />
           )}
           
-          {/* Hover underline */}
           <span 
             className={`absolute left-0 bottom-0 h-[1px] bg-gray-900 transition-all duration-200 ${
               hoveredLink === href && pathname !== href ? 'w-full' : 'w-0'
@@ -80,13 +88,37 @@ export default function Header() {
   };
 
   return (
-    <header className="py-6">
+    <header 
+      className="py-6"
+      onMouseLeave={handleNavMouseLeave}
+    >
       <Container>
-        <nav className="flex justify-between items-center">
-          <div className="flex space-x-4">
-            {renderLink('/', 'About')}
-            {renderLink('/posts', 'Posts')}
-            {renderLink('/portfolio', 'Portfolio')}
+        <nav 
+          className="flex justify-between items-center"
+          onMouseEnter={handleNavMouseEnter}
+        >
+          <div className="flex items-center">
+            <div className="flex space-x-4">
+              {renderLink('/', 'About')}
+              {renderLink('/posts', 'Posts')}
+              <div className="relative flex items-center space-x-4">
+                {renderLink('/portfolio', 'Portfolio')}
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{
+                    width: showTestimonials ? 'auto' : 0,
+                    opacity: showTestimonials ? 1 : 0,
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeOut"
+                  }}
+                  className="overflow-hidden"
+                >
+                  {renderLink('/testimonials', 'Testimonials')}
+                </motion.div>
+              </div>
+            </div>
           </div>
         </nav>
       </Container>
