@@ -74,7 +74,7 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
       pixelateImage(pixelationFactor);
     };
 
-    img.onerror = (event: ErrorEvent) => {
+    img.onerror = (event: string | Event) => {
       console.error('Error loading low-res image:', event);
     };
 
@@ -102,7 +102,7 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
       }
     };
 
-    highResImage.onerror = (event: ErrorEvent) => {
+    highResImage.onerror = (event: string | Event) => {
       console.error('Error loading high-res image:', event);
     };
 
