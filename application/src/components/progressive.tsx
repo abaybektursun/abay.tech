@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { type ImageProps } from 'next/image';
+import Image from 'next/image';
 
-interface PixelatedImageProps extends Omit<ImageProps, 'src' | 'alt' | 'width' | 'height'> {
+interface PixelatedImageProps {
   src: string;
+  lowResSrc?: string;
   alt: string;
   width: number;
   height: number;
@@ -13,76 +14,109 @@ interface PixelatedImageProps extends Omit<ImageProps, 'src' | 'alt' | 'width' |
 
 const PixelatedImage: React.FC<PixelatedImageProps> = ({
   src,
+  lowResSrc,
   alt,
   width,
   height,
   className = '',
-  ...props
 }) => {
   const [highResLoaded, setHighResLoaded] = useState(false);
+  const [lowResLoaded, setLowResLoaded] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [pixelationFactor, setPixelationFactor] = useState(64);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const aspectRatio = height / width;
 
   const pixelateImage = (factor: number) => {
-    if (!canvasRef.current || !imageRef.current) return;
+    if (!canvasRef.current || !imageRef.current || !lowResLoaded) return;
     
-    const context = canvasRef.current.getContext('2d');
-    if (!context) return;
+    try {
+      const context = canvasRef.current.getContext('2d');
+      if (!context) return;
 
-    const containerWidth = canvasRef.current.clientWidth;
-    const containerHeight = containerWidth * aspectRatio;
+      const containerWidth = canvasRef.current.clientWidth;
+      const containerHeight = containerWidth * aspectRatio;
 
-    canvasRef.current.width = containerWidth;
-    canvasRef.current.height = containerHeight;
+      canvasRef.current.width = containerWidth;
+      canvasRef.current.height = containerHeight;
 
-    context.drawImage(imageRef.current, 0, 0, containerWidth, containerHeight);
-    const imageData = context.getImageData(0, 0, containerWidth, containerHeight).data;
-    context.clearRect(0, 0, containerWidth, containerHeight);
-    
-    const pixelSize = Math.max(1, Math.floor(factor * (containerWidth / width)));
-    
-    for (let y = 0; y < containerHeight; y += pixelSize) {
-      for (let x = 0; x < containerWidth; x += pixelSize) {
-        const pixelIndex = (Math.floor(x) + Math.floor(y) * containerWidth) * 4;
-        const red = imageData[pixelIndex];
-        const green = imageData[pixelIndex + 1];
-        const blue = imageData[pixelIndex + 2];
-        const alpha = imageData[pixelIndex + 3];
-        
-        context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha / 255})`;
-        context.fillRect(x, y, pixelSize, pixelSize);
+      context.drawImage(imageRef.current, 0, 0, containerWidth, containerHeight);
+      const imageData = context.getImageData(0, 0, containerWidth, containerHeight).data;
+      context.clearRect(0, 0, containerWidth, containerHeight);
+      
+      const pixelSize = Math.max(1, Math.floor(factor * (containerWidth / width)));
+      
+      for (let y = 0; y < containerHeight; y += pixelSize) {
+        for (let x = 0; x < containerWidth; x += pixelSize) {
+          const pixelIndex = (Math.floor(x) + Math.floor(y) * containerWidth) * 4;
+          const red = imageData[pixelIndex];
+          const green = imageData[pixelIndex + 1];
+          const blue = imageData[pixelIndex + 2];
+          const alpha = imageData[pixelIndex + 3];
+          
+          context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha / 255})`;
+          context.fillRect(x, y, pixelSize, pixelSize);
+        }
       }
+    } catch (error) {
+      console.error('Error during pixelation:', error);
     }
   };
 
-  // Initial setup and low-res loading
+  // Initial setup with low-res image
   useEffect(() => {
-    if (!imageRef.current) {
-      imageRef.current = document.createElement('img');
-      imageRef.current.crossOrigin = 'anonymous';
-      imageRef.current.onload = () => pixelateImage(pixelationFactor);
-      imageRef.current.src = src;
-    }
+    const img = document.createElement('img');
+    img.crossOrigin = 'anonymous';
+    
+    img.onload = () => {
+      imageRef.current = img;
+      setLowResLoaded(true);
+      pixelateImage(pixelationFactor);
+    };
 
-    // Start loading high-res version
+    img.onerror = (event: ErrorEvent) => {
+      console.error('Error loading low-res image:', event);
+    };
+
+    // Use the low-res version for initial pixelation if available
+    img.src = lowResSrc || src;
+
+    // Cleanup
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [lowResSrc, src, pixelationFactor]);
+
+  // Load high-res version
+  useEffect(() => {
+    if (!lowResLoaded || !lowResSrc) return;
+
     const highResImage = document.createElement('img');
     highResImage.crossOrigin = 'anonymous';
-    highResImage.onload = () => setHighResLoaded(true);
+    
+    highResImage.onload = () => {
+      if (imageRef.current) {
+        imageRef.current.src = src;
+        setHighResLoaded(true);
+      }
+    };
+
+    highResImage.onerror = (event: ErrorEvent) => {
+      console.error('Error loading high-res image:', event);
+    };
+
     highResImage.src = src;
 
     return () => {
-      if (imageRef.current) {
-        imageRef.current.onload = null;
-      }
       highResImage.onload = null;
+      highResImage.onerror = null;
     };
-  }, [src]);
+  }, [src, lowResLoaded, lowResSrc]);
 
   // Progressive pixelation animation
   useEffect(() => {
-    if (!imageRef.current?.complete) return;
+    if (!lowResLoaded) return;
 
     const steps = [64, 48, 32, 24, 16, 12, 8, 6, 4, 2, 1];
     let currentStep = 0;
@@ -111,38 +145,43 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
         cancelAnimationFrame(animationFrame);
       }
     };
-  }, [imageRef.current?.complete, highResLoaded]);
+  }, [lowResLoaded, highResLoaded]);
 
   // Update pixelation when factor changes
   useEffect(() => {
-    pixelateImage(pixelationFactor);
-  }, [pixelationFactor]);
+    if (lowResLoaded) {
+      pixelateImage(pixelationFactor);
+    }
+  }, [pixelationFactor, lowResLoaded]);
 
   // Handle window resize
   useEffect(() => {
-    const handleResize = () => pixelateImage(pixelationFactor);
+    const handleResize = () => {
+      if (lowResLoaded) {
+        pixelateImage(pixelationFactor);
+      }
+    };
+    
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [pixelationFactor]);
+  }, [pixelationFactor, lowResLoaded]);
 
   return (
     <div className="relative w-full" style={{ aspectRatio: `${width}/${height}` }}>
-      {/* Canvas for pixelated rendering */}
       <canvas
         ref={canvasRef}
         className={`w-full h-full ${className}`}
       />
-
-      {/* Full resolution image (hidden until loaded) */}
       {highResLoaded && (
-        <img
+        <Image
           src={src}
           alt={alt}
-          className={`absolute inset-0 w-full h-full ${className}`}
-          style={{
-            opacity: highResLoaded ? 1 : 0,
-            transition: 'opacity 0.3s ease-in-out'
-          }}
+          width={width}
+          height={height}
+          className={`absolute inset-0 w-full h-full ${className} transition-opacity duration-300 ${
+            highResLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          priority={false}
         />
       )}
     </div>

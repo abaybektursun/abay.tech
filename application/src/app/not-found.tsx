@@ -8,10 +8,15 @@ const NotFound = () => {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    interface MousePosition {
+      x: number;
+      y: number;
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
       
-      const rect = containerRef.current.getBoundingClientRect();
+      const rect = (containerRef.current as HTMLElement).getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
       const y = ((e.clientY - rect.top) / rect.height - 0.5) * 20;
       
@@ -30,8 +35,6 @@ const NotFound = () => {
       >
         {/* Softer, more sophisticated halo effect */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] -z-10">
-          <div className="absolute inset-0 bg-rose-100/40 rounded-full blur-3xl animate-pulse duration-[2000ms]" />
-          <div className="absolute inset-0 bg-indigo-100/10 rounded-full blur-3xl animate-pulse delay-3000" />
         </div>
 
         <motion.div
