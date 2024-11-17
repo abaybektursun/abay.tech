@@ -29,7 +29,7 @@ export const reviews: Review[] = [
     {
       content: 'Abay was the best choice for AI developers. He is extremely fast, and detailed with his work. He was available quickly when any issues occured with our operating environment and was able to develop an efficient and accurate AI. We will be hiring Abay again in the future!',
       name: 'Kevin Cantrell',
-      role: 'CTO'
+      role: 'Founder, Crop Watch'
     },
     {
       content: 'It\'d be six stars down the line if I could. Abay is the man - top flight developer and guy.',
