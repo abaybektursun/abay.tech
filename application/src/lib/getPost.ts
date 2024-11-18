@@ -35,6 +35,7 @@ export function getPostBySlug(slug: string, dir_path: string, fields: string[] =
     if (field === "date") post.date = data.date ? new Date(data.date) : undefined;
     if (field === "title") post.title = data.title;
     if (field === "excerpt") post.excerpt = data.excerpt;
+    if (field === "image") post.image = data.image;
   });
 
   return post;

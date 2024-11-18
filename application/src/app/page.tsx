@@ -26,7 +26,7 @@ export default function HomePage() {
           <PixelatedImage
             src="/DSC07673.jpg"
             lowResSrc={`/_next/image?url=${encodeURIComponent('/DSC07673.jpg')}&w=64&q=75`}
-            alt="Description"
+            alt="Abay"
             width={2048}
             height={1365}
             className="rounded-lg"

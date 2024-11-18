@@ -6,6 +6,7 @@ import Container from "@/components/container";
 import { useState } from 'react'
 import { Check, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import PixelatedImage from "@/components/progressive"
 
 export default function Component() {
     const [openItems, setOpenItems] = useState<number[]>([])
@@ -147,6 +148,16 @@ export default function Component() {
               </li>
             ))}
           </ul>
+            <div className="w-1/2 pt-10 mx-auto">
+            <PixelatedImage
+            src="/locked_in.jpg"
+            lowResSrc={`/_next/image?url=${encodeURIComponent('/locked_in.jpg')}&w=64&q=75`}
+            alt="Description"
+            width={1310}
+            height={1460}
+            className="rounded-lg"
+            />
+            </div>
           </Container>
           </motion.div>
     )
