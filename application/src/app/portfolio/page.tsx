@@ -1,6 +1,7 @@
 // src/app/portfolio/page.tsx
 import { Image as ImageIcon } from 'lucide-react';
 import Link from "next/link";
+import Image from "next/image";
 import Container from "@/components/container";
 import { AutoScrollReviews } from "@/components/AutoScrollTestimonials";
 import distanceToNow from "@/lib/dateRelative";
@@ -16,13 +17,11 @@ interface ProjectPost {
 }
 
 export default async function PortfolioPage() {
-  const allPosts = getAllPosts("src/_portfolio", ["slug", "title", "excerpt", "date"]) as ProjectPost[];
+  const allPosts = getAllPosts("src/_portfolio", ["slug", "title", "excerpt", "date", "image"]) as ProjectPost[];
 
   return (
     <Container>
       <div className="space-y-8">
-        
-        {/* Projects Section */}
         <section id="projects" className="space-y-8">
           {allPosts.length ? (
             <div className="relative -mx-4 px-4">
@@ -31,14 +30,17 @@ export default async function PortfolioPage() {
                   <Link 
                     href={`/portfolio/${post.slug}`}
                     key={post.slug} 
-                    className=""
+                    className="group flex-shrink-0 snap-start w-72 sm:w-80"
                   >
-                    <div className="relative aspect-[4/2] mb-4 bg-gray-100 rounded-lg overflow-hidden">
+                    <div className="relative mb-4 bg-gray-100 rounded-lg overflow-hidden aspect-video">
                       {post.image ? (
-                        <img 
-                          src={post.image} 
-                          alt={post.title} 
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
+                        <Image 
+                          src={post.image}
+                          alt={post.title}
+                          fill
+                          sizes="(max-width: 640px) 288px, 320px"
+                          priority={false}
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
@@ -65,11 +67,10 @@ export default async function PortfolioPage() {
             <p className="text-gray-500 text-center py-8">No projects posted yet</p>
           )}
         </section>
-        {/* Testimonials Section */}
+
         <section id="testimonials" className="space-y-8">
           <AutoScrollReviews reviews={reviews} />
         </section>
-
       </div>
     </Container>
   );
