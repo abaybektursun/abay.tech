@@ -13,7 +13,7 @@ interface AutoScrollReviewsProps {
 const ReviewCard = ({ review }: { review: Review }) => (
   <Link 
     href={`/testimonials?highlight=${encodeURIComponent(review.content)}`} 
-    className="block w-64 h-[140px] p-3 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg"
+    className="block w-64 h-[140px] p-3 cursor-pointer transition-colors hover:bg-gray-50 rounded-lg"
   >
     <div className="flex gap-4 h-full">
       <Avatar className="w-10 h-10 border shrink-0">
@@ -24,12 +24,12 @@ const ReviewCard = ({ review }: { review: Review }) => (
         <div className="flex gap-4 items-start">
           <div className="grid gap-0.5 text-sm">
             <h3 className="font-semibold truncate">{review.name}</h3>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm text-gray-500">
               <p className="truncate">{review.role}</p>
             </div>
           </div>
         </div>
-        <div className="text-sm leading-normal text-gray-500 dark:text-gray-400">
+        <div className="text-sm leading-normal text-gray-500">
           <p className="line-clamp-3">{review.content}</p>
         </div>
       </div>
