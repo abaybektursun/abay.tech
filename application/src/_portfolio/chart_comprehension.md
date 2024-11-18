@@ -1,10 +1,10 @@
 ---
-title: "State-of-the-Art Financial Chart Extraction"
+title: "Unified Vision-Language Model for Financial Document Understanding"
 excerpt: "Building an AI system that automates financial chart and table extraction, saving analysts countless hours of manual work"
 date: "2023-05-05"
 image: "/charts_tables.jpg"
 ---
-Starting this project I had no idea I'd end up building a large scale end-to-end AI model that could look at variety of financial charts or tables and reconstruct it, achieving state-of-the-art performance across multiple benchmarks. What began as a request for a simple stacked bar chart bounding box detection transformed into bleeding-edge approach that changed how my client approached visual data extraction - from handling one specific chart type to automatically understanding wide range of financial charts they encountered.
+Starting this project I had no idea I'd end up building large language model model that could look at variety of financial charts or tables and reconstruct it, achieving state-of-the-art performance across multiple benchmarks. What began as a request for a simple stacked bar chart bounding box detection transformed into bleeding-edge approach that changed how my client approached visual data extraction - from handling one specific chart type to automatically understanding wide range of financial charts they encountered.
 
 ## Starting Small, Thinking Big
 
@@ -20,7 +20,7 @@ After I delivered the requested solution, as predicted, the pipeline approach - 
 
 ## Research-Driven Approach
 
-My experience with multi-modal transformers suggested a different path forward. After conducting [extensive research](https://github.com/Gridlines/chart2table/issues/20) on recent advances in vision-language models, I became convinced that a unified model using cross-attention mechanisms could handle this task more elegantly than traditional pipelines.
+My experience with multi-modal transformers suggested a different path forward. After conducting extensive research on recent advances in vision-language models, I became convinced that a unified model using cross-attention mechanisms could handle this task more elegantly than traditional pipelines.
 
 This wasn't just theoretical - benchmarks in most AI fields were showing this method’s dominance. By treating charts and tables as a structured visual language that could be "decoded" into data, we could leverage recent breakthroughs in transformer architectures. The approach proved more powerful than we expected - our model even achieved better OCR accuracy than specialized systems, despite that being a secondary task.
 

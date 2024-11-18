@@ -13,8 +13,8 @@ export const reviews: Review[] = [
     },
     {
       content: 'Abay was fantastic. He\'s extremely knowledgeable on all things AI & ML. I had him complete a project in competition with some other very strong computer vision programmers, and his submission was by far the best. He\'s very knowledgeable all around, but especially strong with computer vision etc. I consider him a valuable resource and will definitely be working with him again.',
-      name: 'Client',
-      role: ''
+      name: 'Ejike Uzoigwe',
+      role: 'Senior Analyst, Driehaus Capital Management'
     },
     {
       content: "Abay did outstanding work. His skills with code optimization and GPU implementations are exceptional. Highly recommended!",
