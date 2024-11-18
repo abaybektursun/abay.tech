@@ -23,8 +23,8 @@ export function ReviewWithHighlight({ review }: { review: Review }) {
       ref={ref}
       className={`flex gap-4 p-4 rounded-lg transition-colors ${
         isHighlighted
-          ? 'bg-blue-50 dark:bg-blue-900/20 ring-2 ring-blue-200 dark:ring-blue-800'
-          : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+          ? 'bg-blue-50 ring-2 ring-blue-200'
+          : 'hover:bg-gray-50'
       }`}
     >
       <Avatar className="w-10 h-10 border">
@@ -40,12 +40,12 @@ export function ReviewWithHighlight({ review }: { review: Review }) {
         <div className="flex gap-4 items-start">
           <div className="grid gap-0.5 text-sm">
             <h3 className="font-semibold">{review.name}</h3>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm text-gray-500">
               <p>{review.role}</p>
             </div>
           </div>
         </div>
-        <div className="text-sm leading-loose text-gray-500 dark:text-gray-400">
+        <div className="text-sm leading-loose text-gray-500">
           <p>{review.content}</p>
         </div>
       </div>
