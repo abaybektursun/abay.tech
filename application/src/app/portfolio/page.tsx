@@ -7,6 +7,7 @@ import { AutoScrollReviews } from "@/components/AutoScrollTestimonials";
 import distanceToNow from "@/lib/dateRelative";
 import { getAllPosts } from "@/lib/getPost";
 import { reviews } from "@/data/testimonials";
+import VideoBackground from '@/components/video';
 
 interface ProjectPost {
   slug: string;
@@ -14,10 +15,11 @@ interface ProjectPost {
   excerpt: string;
   date?: Date;
   image?: string;
+  video?: string;
 }
 
 export default async function PortfolioPage() {
-  const allPosts = getAllPosts("src/_portfolio", ["slug", "title", "excerpt", "date", "image"]) as ProjectPost[];
+  const allPosts = getAllPosts("src/_portfolio", ["slug", "title", "excerpt", "date", "image", "video"]) as ProjectPost[];
 
   return (
     <Container>
@@ -32,6 +34,15 @@ export default async function PortfolioPage() {
                     key={post.slug} 
                     className="group flex-shrink-0 snap-start w-72 sm:w-80"
                   >
+                  {post.video ? (
+                    <div className="relative mb-4 bg-gray-100 rounded-lg overflow-hidden aspect-video">
+                      <VideoBackground
+                          src={post.video}
+                          className="w-full h-full"
+                          priority={true}
+                        />
+                    </div>
+                  ) : (
                     <div className="relative mb-4 bg-gray-100 rounded-lg overflow-hidden aspect-video">
                       {post.image ? (
                         <Image 
@@ -48,6 +59,7 @@ export default async function PortfolioPage() {
                         </div>
                       )}
                     </div>
+                  )}
                     <div className="space-y-2">
                       <h3 className="font-medium text-lg leading-tight group-hover:text-blue-600 transition-colors">
                         {post.title}
