@@ -1,4 +1,4 @@
-// /src/components/AutoScrollTestimonials.tsx
+// /src/components/AutoScrollTestimonials.tsx 
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
