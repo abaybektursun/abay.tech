@@ -7,6 +7,7 @@ export type Post = {
   content?: string;
   excerpt?: string;
   image?: string;
+  video?: string;
   [key: string]: unknown;
 };
 
