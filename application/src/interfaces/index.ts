@@ -6,6 +6,7 @@ export type Post = {
   date?: Date;
   content?: string;
   excerpt?: string;
+  image?: string;
   [key: string]: unknown;
 };
 
