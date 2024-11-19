@@ -96,6 +96,11 @@ export function ExternalLinks() {
           label="Twitter" 
         />
         <SmartLink 
+          href="mailto:your.email@example.com" 
+          icon={<Mail size={14} />} 
+          label="Email" 
+        />
+        <SmartLink 
           href="https://www.goodreads.com/user/show/69651448-abay-bektursun" 
           icon={<Book size={14} />} 
           label="Books" 
@@ -105,11 +110,6 @@ export function ExternalLinks() {
           icon={<List size={14} />} 
           label="Bucket List" 
           internal={true}
-        />
-        <SmartLink 
-          href="mailto:your.email@example.com" 
-          icon={<Mail size={14} />} 
-          label="Email" 
         />
       </div>
     </div>
