@@ -183,4 +183,4 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
   );
 };
 
-export default PixelatedImage;
+export default PixelatedImage; 
