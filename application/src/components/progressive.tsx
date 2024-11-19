@@ -28,8 +28,8 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
   const aspectRatio = height / width;
 
   const pixelateImage = (factor: number) => {
-    if (!canvasRef.current || !imageRef.current || !lowResLoaded) return;
-    
+    if (!canvasRef.current || !imageRef.current || !lowResLoaded || highResLoaded) return;
+
     try {
       const context = canvasRef.current.getContext('2d');
       if (!context) return;
@@ -43,9 +43,9 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
       context.drawImage(imageRef.current, 0, 0, containerWidth, containerHeight);
       const imageData = context.getImageData(0, 0, containerWidth, containerHeight).data;
       context.clearRect(0, 0, containerWidth, containerHeight);
-      
+
       const pixelSize = Math.max(1, Math.floor(factor * (containerWidth / width)));
-      
+
       for (let y = 0; y < containerHeight; y += pixelSize) {
         for (let x = 0; x < containerWidth; x += pixelSize) {
           const pixelIndex = (Math.floor(x) + Math.floor(y) * containerWidth) * 4;
@@ -53,7 +53,7 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
           const green = imageData[pixelIndex + 1];
           const blue = imageData[pixelIndex + 2];
           const alpha = imageData[pixelIndex + 3];
-          
+
           context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha / 255})`;
           context.fillRect(x, y, pixelSize, pixelSize);
         }
@@ -63,11 +63,10 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
     }
   };
 
-  // Initial setup with low-res image
   useEffect(() => {
     const img = document.createElement('img');
     img.crossOrigin = 'anonymous';
-    
+
     img.onload = () => {
       imageRef.current = img;
       setLowResLoaded(true);
@@ -78,23 +77,20 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
       console.error('Error loading low-res image:', event);
     };
 
-    // Use the low-res version for initial pixelation if available
     img.src = lowResSrc || src;
 
-    // Cleanup
     return () => {
       img.onload = null;
       img.onerror = null;
     };
   }, [lowResSrc, src, pixelationFactor]);
 
-  // Load high-res version
   useEffect(() => {
     if (!lowResLoaded || !lowResSrc) return;
 
     const highResImage = document.createElement('img');
     highResImage.crossOrigin = 'anonymous';
-    
+
     highResImage.onload = () => {
       if (imageRef.current) {
         imageRef.current.src = src;
@@ -114,7 +110,17 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
     };
   }, [src, lowResLoaded, lowResSrc]);
 
-  // Progressive pixelation animation
+  useEffect(() => {
+    if (highResLoaded) {
+      setPixelationFactor(1);
+    }
+  }, [highResLoaded]);
+
+  useEffect(() => {
+    if (!lowResLoaded || highResLoaded) return;
+    pixelateImage(pixelationFactor);
+  }, [pixelationFactor, lowResLoaded, highResLoaded]);
+
   useEffect(() => {
     if (!lowResLoaded) return;
 
@@ -127,7 +133,7 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
         setPixelationFactor(1);
         return;
       }
-      
+
       setPixelationFactor(steps[currentStep]);
       currentStep++;
 
@@ -147,31 +153,20 @@ const PixelatedImage: React.FC<PixelatedImageProps> = ({
     };
   }, [lowResLoaded, highResLoaded]);
 
-  // Update pixelation when factor changes
-  useEffect(() => {
-    if (lowResLoaded) {
-      pixelateImage(pixelationFactor);
-    }
-  }, [pixelationFactor, lowResLoaded]);
-
-  // Handle window resize
   useEffect(() => {
     const handleResize = () => {
-      if (lowResLoaded) {
+      if (lowResLoaded && !highResLoaded) {
         pixelateImage(pixelationFactor);
       }
     };
-    
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [pixelationFactor, lowResLoaded]);
+  }, [pixelationFactor, lowResLoaded, highResLoaded]);
 
   return (
     <div className="relative w-full" style={{ aspectRatio: `${width}/${height}` }}>
-      <canvas
-        ref={canvasRef}
-        className={`w-full h-full ${className}`}
-      />
+      <canvas ref={canvasRef} className={`w-full h-full ${className}`} />
       {highResLoaded && (
         <Image
           src={src}
