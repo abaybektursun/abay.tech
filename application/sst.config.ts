@@ -9,6 +9,8 @@ export default $config({
     };
   },
   async run() {
-    new sst.aws.Nextjs("abay");
+    new sst.aws.Nextjs("abay", {
+      domain: "abay.tech"
+    });
   },
 });
