@@ -1,4 +1,3 @@
-// components/VoiceToText.tsx
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -9,6 +8,7 @@ import { Mic } from 'lucide-react';
 export default function VoiceToText() {
   const [isRecording, setIsRecording] = useState(false);
   const [text, setText] = useState('');
+  const [title, setTitle] = useState('');
   const [error, setError] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -98,10 +98,12 @@ export default function VoiceToText() {
           {/* Title section */}
           <div className="border-b border-gray-100 p-5">
             <div
-              className="outline-none text-xl font-medium text-gray-800 empty:before:content-[attr(placeholder)] empty:before:text-gray-400"
+              className={`outline-none text-xl font-medium text-gray-800 ${!title && 'before:content-["Untitled"] before:text-gray-400'}`}
               contentEditable
-              placeholder="Untitled"
               suppressContentEditableWarning
+              onInput={(e) => setTitle(e.currentTarget.textContent || '')}
+              role="textbox"
+              aria-label="Document title"
             />
           </div>
 
@@ -111,7 +113,7 @@ export default function VoiceToText() {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Start typing... or click the microphone to record"
-              className="w-full min-h-[500px] outline-none resize-none text-gray-700 placeholder:text-gray-400"
+              className="w-full min-h-[300px] outline-none resize-none text-gray-700 placeholder:text-gray-400"
               style={{ 
                 fontSize: '16px',
                 lineHeight: '1.7',
@@ -121,7 +123,7 @@ export default function VoiceToText() {
           </div>
         </div>
 
-        {/* Recording button - now centered and more visible */}
+        {/* Recording button */}
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
           <motion.button
             onClick={isRecording ? stopRecording : startRecording}
