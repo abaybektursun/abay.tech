@@ -21,6 +21,8 @@ export default function VoiceNotesPage() {
         >
           <VoiceToText />
         </motion.div>
+
+
       </div>
     </Container>
   );
