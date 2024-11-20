@@ -21,6 +21,7 @@
     "framer-motion": "^11.11.17",
     "fs": "0.0.1-security",
     "gray-matter": "^4.0.3",
+    "groq-sdk": "^0.8.0",
     "ioredis": "^5.4.1",
     "lucide-react": "^0.459.0",
     "nanoid": "^5.0.8",
