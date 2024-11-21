@@ -4,6 +4,7 @@ import {
   convertToCoreMessages,
   streamObject,
   streamText,
+  CoreMessage,
 } from 'ai';
 import { z } from 'zod';
 
@@ -321,23 +322,23 @@ export async function POST(request: Request) {
         },
       },
     },
-    onFinish: async ({ responseMessages }) => {
+    onFinish: async ({ response }) => {
       if (true) {
         try {
           const responseMessagesWithoutIncompleteToolCalls =
-            sanitizeResponseMessages(responseMessages);
-
+            sanitizeResponseMessages(response.messages);
+ 
           await saveMessages({
             messages: responseMessagesWithoutIncompleteToolCalls.map(
-              (message) => {
+              (message: CoreMessage) => {        
                 const messageId = generateUUID();
-
+ 
                 if (message.role === 'assistant') {
                   streamingData.appendMessageAnnotation({
                     messageIdFromServer: messageId,
                   });
                 }
-
+ 
                 return {
                   id: messageId,
                   chatId: id,
@@ -352,7 +353,7 @@ export async function POST(request: Request) {
           console.error('Failed to save chat');
         }
       }
-
+ 
       streamingData.close();
     },
     experimental_telemetry: {
