@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       const uploadDir = join(process.cwd(), 'public', 'uploads');
       const filePath = join(uploadDir, filename);
 
-      await writeFile(filePath, Buffer.from(fileBuffer));
+      await writeFile(filePath, new Uint8Array(fileBuffer));
 
       return NextResponse.json({ 
         url: `/uploads/${filename}`,
