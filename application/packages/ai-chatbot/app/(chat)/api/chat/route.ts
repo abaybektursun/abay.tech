@@ -248,7 +248,7 @@ export async function POST(request: Request) {
         },
       },
       requestSuggestions: {
-        description: 'Request suggestions for a document',
+        description: 'Reflection on journal',
         parameters: z.object({
           documentId: z
             .string()
@@ -270,15 +270,15 @@ export async function POST(request: Request) {
           const { elementStream } = await streamObject({
             model: customModel(model.apiIdentifier),
             system:
-              'You are a help writing assistant. Given a piece of writing, please offer suggestions to improve the piece of writing and describe the change. It is very important for the edits to contain full sentences instead of just words. Max 5 suggestions.',
+              'Carefully read the journal. Try to map out the belief system of the writer. Suggest an empathetic reflection on the sentence to further uncover unconscious beliefs of the writer',
             prompt: document.content,
             output: 'array',
             schema: z.object({
               originalSentence: z.string().describe('The original sentence'),
-              suggestedSentence: z.string().describe('The suggested sentence'),
+              suggestedSentence: z.string().describe('Reflection on the sentence'),
               description: z
                 .string()
-                .describe('The description of the suggestion'),
+                .describe('The description of reflection'),
             }),
           });
 

@@ -76,7 +76,7 @@ export function Chat({
 
   return (
     <>
-      <div className="flex flex-col min-w-0 h-dvh bg-background">
+      <div className="flex flex-col min-w-0 h-full max-h-[calc(100vh-2rem)] bg-background">
         <ChatHeader selectedModelId={selectedModelId} />
         <div
           ref={messagesContainerRef}
