@@ -57,6 +57,7 @@ export const Suggestion = ({
             </button>
           </div>
           <div>{suggestion.description}</div>
+          {/*
           <Button
             variant="outline"
             className="w-fit py-1.5 px-3 rounded-full"
@@ -64,6 +65,7 @@ export const Suggestion = ({
           >
             Apply
           </Button>
+          */}
         </motion.div>
       )}
     </AnimatePresence>
