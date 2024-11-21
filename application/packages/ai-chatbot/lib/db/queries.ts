@@ -4,7 +4,10 @@ import { writeFile, readFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
 
-const DATA_DIR = join(process.cwd(), 'data');
+const DATA_DIR = process.env.IS_LOCAL 
+  ? join(process.cwd(), 'data')
+  : join('/tmp', 'data');
+
 const PATHS = {
   users: join(DATA_DIR, 'users.json'),
   chats: join(DATA_DIR, 'chats.json'),
