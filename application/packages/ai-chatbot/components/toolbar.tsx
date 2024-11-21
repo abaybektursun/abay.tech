@@ -94,7 +94,7 @@ const Tool = ({
         append({
           role: 'user',
           content:
-            'Analyze the journal. Try to point out some assumed beliefs. Provide prompts for further self reflection.',
+            'Provide feedback',
         });
 
         setSelectedTool(null);
@@ -312,7 +312,7 @@ export const Tools = ({
       */}
       <Tool
         type="request-suggestions"
-        description="Request suggestions"
+        description="Reflect"
         icon={<MessageIcon />}
         selectedTool={selectedTool}
         setSelectedTool={setSelectedTool}
