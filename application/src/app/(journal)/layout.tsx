@@ -12,12 +12,10 @@ export default function JournalLayout({
  return (
   <Container>
   <SidebarProvider>
-   <div className="flex h-screen overflow-hidden dark:bg-zinc-950">
      {children}
     <div className="fixed top-8 right-8 z-50">
       <RecordingButton />
     </div>
-   </div>
   </SidebarProvider>
   </Container>
  );
