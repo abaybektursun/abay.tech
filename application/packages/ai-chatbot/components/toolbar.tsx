@@ -94,7 +94,7 @@ const Tool = ({
         append({
           role: 'user',
           content:
-            'Please add suggestions you have that could improve the writing.',
+            'Analyze the journal. Try to point out some assumed beliefs. Provide prompts for further self reflection.',
         });
 
         setSelectedTool(null);
@@ -122,8 +122,8 @@ const Tool = ({
           }}
           initial={{ scale: 1, opacity: 0 }}
           animate={{ opacity: 1, transition: { delay: 0.1 } }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+          //whileHover={{ scale: 1.1 }}
+          //whileTap={{ scale: 0.95 }}
           exit={{
             scale: 0.9,
             opacity: 0,
@@ -217,8 +217,8 @@ const ReadingLevelSelector = ({
               drag="y"
               dragElastic={0}
               dragMomentum={false}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              //whileHover={{ scale: 1.05 }}
+              //whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.1 }}
               dragConstraints={{ top: -dragConstraints, bottom: 0 }}
               onDragStart={() => {
@@ -283,6 +283,7 @@ export const Tools = ({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
     >
+      {/*
       <AnimatePresence>
         {isToolbarVisible && (
           <>
@@ -308,8 +309,18 @@ export const Tools = ({
           </>
         )}
       </AnimatePresence>
-
+      */}
       <Tool
+        type="request-suggestions"
+        description="Request suggestions"
+        icon={<MessageIcon />}
+        selectedTool={selectedTool}
+        setSelectedTool={setSelectedTool}
+        append={append}
+        isAnimating={isAnimating}
+      />
+
+      {/*<Tool
         type="final-polish"
         description="Add final polish"
         icon={<PenIcon />}
@@ -319,7 +330,7 @@ export const Tools = ({
         setIsToolbarVisible={setIsToolbarVisible}
         append={append}
         isAnimating={isAnimating}
-      />
+      />*/}
     </motion.div>
   );
 };
@@ -410,7 +421,7 @@ export const Toolbar = ({
         }
         exit={{ opacity: 0, y: -20, transition: { duration: 0.1 } }}
         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        onHoverStart={() => {
+        /*onHoverStart={() => {
           if (isLoading) return;
 
           cancelCloseTimer();
@@ -426,7 +437,7 @@ export const Toolbar = ({
         }}
         onAnimationComplete={() => {
           setIsAnimating(false);
-        }}
+        }}*/
         ref={toolbarRef}
       >
         {isLoading ? (
