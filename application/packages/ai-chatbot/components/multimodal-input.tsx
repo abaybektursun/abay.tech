@@ -33,7 +33,7 @@ const suggestedActions = [
   {
     title: 'Start a new Journal',
     label: 'Click here to start journaling',
-    action: 'Start an empty document, title: Journal Entry',
+    action: `Start a new document, title: Journal Entry ${new Date().toLocaleString()}`,
   },
 ];
 
