@@ -133,7 +133,7 @@ export async function POST(request: Request) {
           const { fullStream } = await streamText({
             model: customModel(model.apiIdentifier),
             system:
-              'Write couple short prompts. for the user to start jounraling',
+              'Write a one short prompt. It should help the user to become aware of unconscious thoughts and feelings. Make the text cursive',
             prompt: title,
           });
 

@@ -1,0 +1,1 @@
+export { GET, PATCH } from 'ai-chatbot/app/(chat)/api/vote/route';

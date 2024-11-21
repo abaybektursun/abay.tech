@@ -8,6 +8,7 @@ import type {
 } from 'ai';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
+// eslint-disable-next-line import/default
 import type React from 'react';
 import {
   useRef,
