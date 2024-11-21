@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       await writeFile(filePath, new Uint8Array(fileBuffer));
 
       return NextResponse.json({ 
-        url: `/uploads/${filename}`,
+        url: `/uploads/${filename}`, 
         path: filePath
       });
     } catch (error) {
