@@ -20,11 +20,50 @@ export default function RecordingButton({
   const chunksRef = useRef<Blob[]>([]);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
+  // Add focus event listeners to track the last focused input
   useEffect(() => {
+    const handleFocus = (e: FocusEvent) => {
+      const element = e.target as HTMLElement;
+      if (
+        element instanceof HTMLTextAreaElement ||
+        element instanceof HTMLInputElement ||
+        element.getAttribute('contenteditable') === 'true'
+      ) {
+        setTargetElement(element);
+      }
+    };
+
+    // Track blur events to handle cases where user clicks away from input
+    const handleBlur = (e: FocusEvent) => {
+      const relatedTarget = e.relatedTarget as HTMLElement;
+      // Only clear target if focus isn't moving to another valid input
+      if (!(
+        relatedTarget instanceof HTMLTextAreaElement ||
+        relatedTarget instanceof HTMLInputElement ||
+        relatedTarget?.getAttribute('contenteditable') === 'true'
+      )) {
+        // Small delay to handle focus transitions
+        setTimeout(() => {
+          if (!document.activeElement || document.activeElement === document.body) {
+            setTargetElement(null);
+          }
+        }, 0);
+      }
+    };
+
+    document.addEventListener('focus', handleFocus, true);
+    document.addEventListener('blur', handleBlur, true);
+
+    // Check for MediaRecorder support
     if (!('MediaRecorder' in window)) {
       setError('Your browser doesn\'t support voice recording.');
       onError?.('Your browser doesn\'t support voice recording.');
     }
+
+    return () => {
+      document.removeEventListener('focus', handleFocus, true);
+      document.removeEventListener('blur', handleBlur, true);
+    };
   }, [onError]);
 
   const insertTextAtCursor = (text: string) => {
@@ -66,24 +105,14 @@ export default function RecordingButton({
   };
 
   const startRecording = async (event: React.MouseEvent) => {
-    // Prevent the button from stealing focus
     event.preventDefault();
     
-    // Get the currently focused element before the button click
-    const activeElement = document.activeElement;
-    
-    // Check if a valid input element is focused
-    if (!(activeElement instanceof HTMLTextAreaElement) && 
-        !(activeElement instanceof HTMLInputElement) && 
-        activeElement?.getAttribute('contenteditable') !== 'true') {
+    if (!targetElement) {
       const errorMessage = 'Please select a text input before starting recording.';
       setError(errorMessage);
       onError?.(errorMessage);
       return;
     }
-
-    // Store the target element
-    setTargetElement(activeElement as HTMLElement);
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -124,7 +153,6 @@ export default function RecordingButton({
 
           const data = await response.json();
           if (data.success) {
-            // Restore focus to the target element
             targetElement?.focus();
             insertTextAtCursor(data.text);
           } else {
@@ -149,7 +177,6 @@ export default function RecordingButton({
   };
 
   const stopRecording = (event: React.MouseEvent) => {
-    // Prevent the button from stealing focus
     event.preventDefault();
     
     if (mediaRecorderRef.current && isRecording) {
@@ -160,7 +187,6 @@ export default function RecordingButton({
 
   return (
     <div className="relative">
-      {/* Error message - now positioned above the button */}
       <AnimatePresence>
         {error && (
           <motion.div
@@ -176,7 +202,7 @@ export default function RecordingButton({
 
       <motion.button
         ref={buttonRef}
-        onMouseDown={isRecording ? stopRecording : startRecording} // Changed from onClick to onMouseDown
+        onMouseDown={isRecording ? stopRecording : startRecording}
         className={`
           relative w-14 h-14 rounded-full 
           ${isRecording 
