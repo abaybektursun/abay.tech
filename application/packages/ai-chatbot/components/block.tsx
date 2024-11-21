@@ -36,6 +36,7 @@ import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { useScrollToBottom } from './use-scroll-to-bottom';
 import { VersionFooter } from './version-footer';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 export interface UIBlock {
   title: string;
   documentId: string;
@@ -249,6 +250,8 @@ export function Block({
 
   const [_, copyToClipboard] = useCopyToClipboard();
 
+  const [isChatCollapsed, setIsChatCollapsed] = useState(false);
+
   return (
     <motion.div
       className="flex flex-row h-dvh w-dvw fixed top-0 left-0 z-50 bg-muted"
@@ -256,28 +259,20 @@ export function Block({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { delay: 0.4 } }}
     >
-      {!isMobile && (
-        <motion.div
-          className="relative w-[400px] bg-muted dark:bg-background h-dvh shrink-0"
-          initial={{ opacity: 0, x: 10, scale: 1 }}
-          animate={{
-            opacity: 1,
-            x: 0,
-            scale: 1,
-            transition: {
-              delay: 0.2,
+      
+      <AnimatePresence>
+      {!isChatCollapsed && !isMobile && (
+          <motion.div
+            className="relative w-[400px] bg-muted dark:bg-background h-dvh shrink-0"
+            initial={{ width: 0 }}
+            animate={{ width: '400px' }}
+            exit={{ width: 0 }}
+            transition={{
               type: 'spring',
               stiffness: 200,
               damping: 30,
-            },
-          }}
-          exit={{
-            opacity: 0,
-            x: 0,
-            scale: 0.95,
-            transition: { delay: 0 },
-          }}
-        >
+            }}
+          >
           <AnimatePresence>
             {!isCurrentVersion && (
               <motion.div
@@ -335,6 +330,26 @@ export function Block({
           </div>
         </motion.div>
       )}
+      </AnimatePresence>
+      {!isMobile && (
+        <div 
+          className="absolute z-50 transition-all duration-300" 
+          style={{ 
+            left: isChatCollapsed ? '0px' : '400px',
+            top: '50%',
+            transform: 'translateY(-50%)'
+          }}
+        >
+          <Button
+            variant="ghost"
+            size="icon"
+            className="bg-background/50 hover:bg-background/80 rounded-r-full rounded-l-none h-12 w-6"
+            onClick={() => setIsChatCollapsed(!isChatCollapsed)}
+          >
+            {isChatCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+          </Button>
+        </div>
+      )}
 
       <motion.div
         className="fixed dark:bg-muted bg-background h-dvh flex flex-col shadow-xl overflow-y-scroll"
@@ -375,10 +390,10 @@ export function Block({
               }
             : {
                 opacity: 1,
-                x: 400,
+                x: isChatCollapsed ? 0 : 400,
                 y: 0,
                 height: windowHeight,
-                width: windowWidth ? windowWidth - 400 : 'calc(100dvw-400px)',
+                width: isChatCollapsed ? '100vw' : (windowWidth ? windowWidth - 400 : 'calc(100vw-400px)'),
                 borderRadius: 0,
                 transition: {
                   delay: 0,
