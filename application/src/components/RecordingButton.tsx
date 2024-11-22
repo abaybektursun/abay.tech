@@ -190,10 +190,10 @@ export default function RecordingButton({
       <AnimatePresence>
         {error && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 bg-red-50 text-red-500 px-4 py-2 rounded-lg text-sm shadow-lg whitespace-nowrap"
+            className="absolute top-full mt-4 right-full mr-4 bg-red-50 text-red-500 px-4 py-2 rounded-lg text-sm shadow-lg whitespace-nowrap"
           >
             {error}
           </motion.div>
