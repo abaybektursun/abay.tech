@@ -14,9 +14,5 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
-    "abay": {
-      "type": "sst.aws.Nextjs"
-      "url": string
-    }
   }
 }
