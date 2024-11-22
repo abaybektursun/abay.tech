@@ -6,6 +6,14 @@ import "sst"
 export {}
 declare module "sst" {
   export interface Resource {
+    "GROQ_API_KEY": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "OPENAI_API_KEY": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "abay": {
       "type": "sst.aws.Nextjs"
       "url": string
