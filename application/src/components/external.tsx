@@ -86,7 +86,7 @@ export function ExternalLinks() {
           label="Resume" 
         />
         <SmartLink 
-          href="https://www.instagram.com/yourusername" 
+          href="https://www.instagram.com/abaybtx" 
           icon={<Instagram size={14} />} 
           label="Instagram" 
         />
@@ -96,7 +96,7 @@ export function ExternalLinks() {
           label="Twitter" 
         />
         <SmartLink 
-          href="mailto:your.email@example.com" 
+          href="mailto:villas.cautery-0j@icloud.com" 
           icon={<Mail size={14} />} 
           label="Email" 
         />
