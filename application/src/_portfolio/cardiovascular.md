@@ -85,4 +85,4 @@ Since this project was heavy in signal processing, it made me ponder a lot about
 
 ---
 
-Want to discuss building production ML systems? Let’s chat.
+Want to discuss building production ML systems? [Let’s chat](https://calendar.app.google/MNjtZnQ85BDBKm1b8).
