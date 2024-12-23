@@ -51,4 +51,4 @@ The most important lesson? While model architecture is crucial, data quality and
 
 ---
 
-*Want to discuss your AI challenges? Let's talk.*
+*Want to discuss your AI challenges? [Let's talk.](https://calendar.app.google/MNjtZnQ85BDBKm1b8)*

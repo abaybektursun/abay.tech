@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: Props) {
   const post = getPostBySlug(slug, "src/_portfolio", ["title"]);
 
   return {
-    title: post ? `${post.title} | My awesome blog` : "Post not found",
+    title: post ? `${post.title} | Abay's Portfolio` : "Post not found",
   };
 }
 
