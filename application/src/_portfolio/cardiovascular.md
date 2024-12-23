@@ -76,7 +76,7 @@ Take advantage of CoreML and Metal infrastructure! Specifically, [use latest Cor
 One issue that you might encounter is missing operation (OP) in CoreML. However, this can be overcome without too much difficulty thanks to code generation abilities of Claude and ChatGPT. You just need to: 
 
 1. Get the description of the OP
-2. Tell the AI to generate code of Metal Shared in C++
+2. Tell the AI to generate code of Metal Shader in C++
 3. And then register the OP with PyTorch
 
 ### Philosophy Corner
