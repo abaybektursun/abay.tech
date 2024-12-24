@@ -7,6 +7,7 @@ import { variants, transition } from '@/lib/animations';
 import RotatingText from '@/components/RotatingText';
 import { ExternalLinks } from "@/components/external";
 import PixelatedImage from "@/components/progressive"
+import CompanyLogos from "@/components/CompanyLogos";
 
 
 export default function HomePage() {
@@ -48,12 +49,18 @@ export default function HomePage() {
           >
             👋 I&apos;m <RotatingText />
           </motion.h1>
-          <motion.p
+            <motion.p
             variants={variants.softFadeUp}
             transition={{ ...transition, delay: 0.2 }}
+            >
+            I build computer vision and AI systems. After Apple and HPE, I've helped startups ship complex AI products and provided technical direction to research teams at Cambridge and Columbia. I solve challenging ML problems and get teams unstuck. <br/><br/> <a href="https://calendar.app.google/uCtVm1dzyCeoEBCz9" className="underline hover:text-blue-600" target="_blank" rel="noopener noreferrer">Let's discuss your AI challenges</a> 🚀
+            </motion.p>
+          <motion.div
+            variants={variants.softFadeUp}
+            transition={{ ...transition, delay: 0.3 }}
           >
-            I specialize in ML engineering, computer vision, and application of LLMs.
-          </motion.p>
+            <CompanyLogos />
+          </motion.div>
         </motion.div>
       </div>
       <motion.div
