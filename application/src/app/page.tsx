@@ -53,13 +53,13 @@ export default function HomePage() {
             variants={variants.softFadeUp}
             transition={{ ...transition, delay: 0.2 }}
             >
-            I build computer vision and AI systems. After Apple and HPE, I've helped startups ship complex AI products and provided technical direction to research teams at Cambridge and Columbia. I solve challenging ML problems and get teams unstuck. <br/><br/> <a href="https://calendar.app.google/uCtVm1dzyCeoEBCz9" className="underline hover:text-blue-600" target="_blank" rel="noopener noreferrer">Let's discuss your AI challenges</a> 🚀
+            I build computer vision and AI systems. After Apple and HPE, I've helped startups ship AI products and provided technical direction to research teams at Cambridge and Columbia. I solve challenging ML problems and get teams unstuck. <br/><br/> <a href="https://calendar.app.google/uCtVm1dzyCeoEBCz9" className="underline hover:text-blue-600" target="_blank" rel="noopener noreferrer">Let's discuss your AI challenges.</a> 
             </motion.p>
           <motion.div
             variants={variants.softFadeUp}
             transition={{ ...transition, delay: 0.3 }}
           >
-            <CompanyLogos />
+            <div className="hidden md:flex gap-4 mt-6"> <CompanyLogos /> </div>
           </motion.div>
         </motion.div>
       </div>
