@@ -9,7 +9,7 @@ const CompanyLogos = () => {
   ]
 
   return (
-    <div className="flex gap-4 mt-6">
+    <div className="flex gap-4">
       {logos.map((logo) => (
         <Image
           key={logo.alt}
