@@ -1,15 +1,10 @@
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
+---
+title: "Lessons From a Consulting Call: Mastering AI for Persuasive Copy"
+excerpt: "In a recent consulting session, a client needed to transform their 10–12-page Video Sales Letter (VSL) scripts with AI. These scripts can be notoriously difficult to handle—lengthy, high-stakes, and packed with emotion-driven persuasion. Below, you’ll find the most critical lessons we uncovered, refined with a more technical focus."
+date: "2025-01-17"
+image: "/Writing_img.webp"
+---
 
-import Comment from "@/components/comments";
-
-const MarkdownPost = () => {
-  const markdown = `
-
-# Lessons From a Consulting Call: Mastering AI for Persuasive Copy
-
-In a recent consulting session, a client needed to generate 10–12-page Video Sales Letter (VSL) scripts with AI. These scripts can be notoriously difficult to handle—lengthy, high-stakes, and packed with emotion-driven persuasion. Below, you’ll find the most critical lessons we uncovered, refined with a more technical focus.
-generate
 ### **1. Context Is Key: Keep It Relevant—and Positive**
 
 One major insight from our session is that **context conditions** the model’s direction. Think of each user or system message as nudging the model through a high-dimensional **mathematical embedding space**, where each new token is a “step” shaped by prior input. 
@@ -73,17 +68,3 @@ We briefly touched on “agentic” systems—where an AI autonomously chooses t
 This consulting call highlighted how **context** steers the AI’s path in embedding space—and how crucial it is to keep that path clear and focused. By having the LLM devise a master plan, delegating sections to downstream calls, and editing out any misfires, you ensure each “step” in the model’s walk remains aligned with your end goal.
 
 If you’re confronting similarly hefty marketing content, consider applying one or two of these strategies. You might be surprised by how quickly you can harness the mathematical underpinnings of LLMs to produce persuasive, polished copy—**without** sacrificing time or clarity.
-
-`;
-
-  return (
-    <article className="max-w-4xl mx-auto py-8 px-4">
-      <div className="prose">
-        <ReactMarkdown>{markdown}</ReactMarkdown>
-      </div>
-      <Comment />
-    </article>
-  );
-};
-
-export default MarkdownPost;
