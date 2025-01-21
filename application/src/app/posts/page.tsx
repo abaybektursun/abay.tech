@@ -3,6 +3,7 @@ import { readdir, readFile } from 'fs/promises'
 import path from 'path'
 import Link from 'next/link'
 import matter from 'gray-matter'
+import Container from '@/components/container'
 
 export const metadata: Metadata = {
   title: 'Blog Posts',
@@ -89,10 +90,8 @@ export default async function PostsPage() {
   const posts = await getPosts()
   
   return (
+    <Container>
     <div className="max-w-2xl mx-auto px-4">
-      <p className="text-base text-gray-600 mb-12">
-      Projects, Research, Tutorial, Lessons Learned, and more.
-      </p>
       <div>
         {posts.map((post) => (
           <div key={post.slug} className="border-b border-gray-200 last:border-b-0">
@@ -101,5 +100,6 @@ export default async function PostsPage() {
         ))}
       </div>
     </div>
+    </Container>
   )
 }
