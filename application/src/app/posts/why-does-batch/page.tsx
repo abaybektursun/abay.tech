@@ -2,6 +2,8 @@
 import React from 'react'
 import Script from 'next/script'
 
+import Container from '@/components/container'
+
 // Then add only the custom overrides after all links
 const overrideStyles = `
   :root {
@@ -17,10 +19,9 @@ const overrideStyles = `
   }
 
   body {
-    color: var(--foreground) !important;
-    background: var(--background) !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-    transition: opacity 0.3s ease-out !important;
+    color: var(--foreground) ;
+    background: var(--background) ;
+    transition: opacity 0.3s ease-out ;
   }
 
   .page-enter {
@@ -45,15 +46,15 @@ export default function BatchNormPage() {
       {/* Remove duplicates if desired */}
       <link
         rel="stylesheet"
-        href="https://abaytech.tech/blog/wp-content/uploads/2018/06/c3.e0cdc3fc.css"
+        href="https://abay.tech/css/c3.e0cdc3fc.css"
       />
       <link
         rel="stylesheet"
-        href="https://abaytech.tech/blog/wp-content/uploads/2018/06/style.47b9fe66.css"
+        href="https://abay.tech/css/style.47b9fe66.css"
       />
       <link
         rel="stylesheet"
-        href="https://abaytech.tech/blog/wp-content/uploads/2018/06/bootstrap.min.02d1331c.css"
+        href="https://abay.tech/css/bootstrap.min.02d1331c.css"
       />
 
       {/* ---------- External Scripts ---------- */}
@@ -63,6 +64,7 @@ export default function BatchNormPage() {
         async
       />
 
+      <Container>
       {/* ---------- Page Content ---------- */}
       <h3>Introduction</h3>
       <p>
@@ -105,7 +107,7 @@ export default function BatchNormPage() {
       </p>
 
       <div>
-        <canvas id="canvas" />
+        <canvas id="canvas1" />
         <div style={{ padding: '9px' }}>
           <button id="randomizeData" className="btn btn-block btn-rand">
             Randomize the Data Points
@@ -120,7 +122,7 @@ export default function BatchNormPage() {
                   Calculate batch mean: `\mu_\B &larr; 1/m &Sigma;(x_i)`
                 </p>
                 <p className="card-text">
-                  Subtract the mean: {`\hat{x}_i &larr; x_i - \mu_B`}
+                  Subtract the mean: `\hat&#123;x&#125;_i &larr; x_i - \mu_B`
                 </p>
 
                 <p className="card-text">
@@ -148,7 +150,7 @@ export default function BatchNormPage() {
                 </p>
                 <p className="card-text">
                   Subtract the mean, divide by standard deviation:
-                  {`\\hat{x}_i &larr; (x_i - \\mu_B) / \\sqrt(\\sigma_B^2 + \\epsilon)`}
+                  `\hat&#123;x&#125;_i &larr; (x_i - \mu_B) / \sqrt(\sigma_B^2 + \epsilon)`
                 </p>
                 <p className="card-text">
                   Subtracting the mean and dividing by the square root of
@@ -169,7 +171,7 @@ export default function BatchNormPage() {
       <p style={{ textAlign: 'left' }}>
         Important thing to note is that traditionally, Batch Normalization has
         learnable parameters. After the steps shown above we learn linear
-        transformation: {`y_i &larr; γ * \hat{x_i} + β`} where `γ, β` are the
+        transformation: `y_i &larr; γ * \hat&#123;x_i&#125; + β` where `γ, β` are the
         learned parameters and `y_i` is the output resulting from the BatchNorm
         layer. So in case BatchNorm is actually not needed, these parameters will
         learn the identity function to undo the Batch Normalization. BatchNorm
@@ -190,10 +192,10 @@ export default function BatchNormPage() {
         convolution.
       </p>
 
-      <div className="wp-caption aligncenter" style={{ textAlign: 'center' }}>
+      <div className="wp-caption aligncenter" style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
         <img
           className="wp-image-406 alignnone"
-          src="https://abaytech.tech/blog/wp-content/uploads/2018/06/why_bn_works-1.png"
+          src="https://abay.tech/post_images/why_bn_works-1.png"
           alt=""
           width="502"
           height="639"
@@ -265,17 +267,17 @@ export default function BatchNormPage() {
         curvature and makes the error surface more spherical as oppose to high
         curvature ellipse.
       </p>
-      <div className="wp-caption aligncenter" style={{ textAlign: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
         <img
           className="wp-image-406 alignnone"
-          src="https://abaytech.tech/blog/wp-content/uploads/2018/06/bn_interp.png"
+          src="https://abay.tech/post_images/bn_interp.png"
           alt=""
           width="502"
           height="639"
           style={{ maxWidth: '100%' }}
         />
-        <p className="wp-caption-text">
-          Visualization of the Loss Surface with (top) and without (bottom)
+        <p style={{ textAlign: 'center' }}>
+          Visualization of the Loss Surface with (top) and without (bottom)  
           batch-normalization. Source:{' '}
           <a href="https://arxiv.org/pdf/1612.04010v1.pdf">[2]</a>
         </p>
@@ -422,12 +424,15 @@ export default function BatchNormPage() {
         ; (2 Mar, 2015)
       </span>
       <br />
-      <Script
-        src="https://abaytech.tech/blog/wp-content/uploads/2018/06/why-batchNorm-works.34b1c539.js"
-        strategy="lazyOnload"
-      />
       <style>{overrideStyles}</style>
+      </Container>
+      <Script
+        src="https://abay.tech/js/why-batchNorm-works.34b1c539.js"
+        strategy="afterInteractive"
+      />
+
     </>
+  
   )
 }
 import "@/styles/globals.css";

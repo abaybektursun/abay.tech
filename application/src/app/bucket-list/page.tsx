@@ -15,7 +15,7 @@ export default function Component() {
         { id: 2,  text: "Learn conversational Chinese", completed: false },
         { id: 3,  text: "Run a marathon", completed: false},
         { id: 4,  text: "Author a research paper", completed: false },
-        { id: 5,  text: "Build a profitable business", completed: false },
+        { id: 5,  text: "Build a profitable tech product business", completed: false },
         { id: 6,  text: "Hug Richard Dawkins", completed: false },
         { id: 7,  text: "Thank Michael Dante DiMartino and Bryan Konietzko from the bottom of my heart for creating Avatar: The Last Airbender", completed: false },
         { id: 8,  text: "Go sulfur mining Indonesia and help the workers any way I can", completed: false },

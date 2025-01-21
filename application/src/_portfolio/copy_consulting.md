@@ -1,6 +1,6 @@
 ---
 title: "Lessons From a Consulting Call: Mastering AI for Persuasive Copy"
-excerpt: "In a recent consulting session, a client needed to transform their 10–12-page Video Sales Letter (VSL) scripts with AI. These scripts can be notoriously difficult to handle—lengthy, high-stakes, and packed with emotion-driven persuasion. Below, you’ll find the most critical lessons we uncovered, refined with a more technical focus."
+excerpt: "In a recent consulting session, a client needed to generate 10–12-page Video Sales Letter (VSL) scripts with AI. These scripts can be notoriously difficult to handle—lengthy, high-stakes, and packed with emotion-driven persuasion. Below, you’ll find the most critical lessons we uncovered, refined with a more technical focus."
 date: "2025-01-17"
 image: "/Writing_img.webp"
 ---
@@ -20,7 +20,7 @@ One major insight from our session is that **context conditions** the model’s 
 
 ### **2. Divide and Conquer with a Master Plan**
 
-Instead of feeding the entire VSL to the model in one shot, **use a “divide and conquer” approach**. The key is to have the LLM itself generate a **master plan** outlining sections or tasks, which you can then pass on to downstream LLM calls.
+Instead of generating the entire VSL in one shot, **use a “divide and conquer” approach**. The key is to have the LLM itself generate a **master plan** outlining sections or tasks, which you can then pass on to downstream LLM calls.
 
 1. **Ask the LLM for a Master Outline**  
    - The model proposes how best to break your VSL (or any large text) into sections like Intro, Pain Points, Objections, Proof, Close, etc.
@@ -35,7 +35,7 @@ Instead of feeding the entire VSL to the model in one shot, **use a “divide an
 
 ### **3. The LLM’s Walk in Embedding Space—Why Direction Matters**
 
-Behind the scenes, each token is a small vector in a massive embedding space. The model “walks” from one vector to the next, guided by the **probability distribution** of what it thinks should come next. This walk is sensitive to:
+Behind the scenes, each token is a vector in a massive embedding space. The model “walks” from one vector to the nexgeneratinged by the **probability distribution** of what it thinks should come next. This walk is sensitive to:
 
 1. **The Immediate Prompt**: The final user message exerts a strong pull on the model’s next token choice.  
 2. **The Conversation’s History**: Earlier prompts push or pull the “walk” in subtle ways, especially if they introduced confusion or contradictory instructions.  
