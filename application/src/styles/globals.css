@@ -33,3 +33,16 @@ body {
   opacity: 1;
   transition: opacity 0.3s ease-in;
 }
+
+html {
+  /* still allow scrolling, but hide the scrollbar */
+  overflow-y: auto;              /* or 'scroll'; either is fine */
+  -ms-overflow-style: none;      /* IE and older Edge */
+  scrollbar-width: none;         /* Firefox */
+  -webkit-overflow-scrolling: touch;
+}
+
+html::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;       /* or 'none' */
+}
