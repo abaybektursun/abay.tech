@@ -9,24 +9,37 @@ import { motion, AnimatePresence } from 'framer-motion'
 import PixelatedImage from "@/components/progressive"
 
 export default function Component() {
-    const [openItems, setOpenItems] = useState<number[]>([])
+    const [openItems, setOpenItems] = useState<number[]>([29])
   
     const bucketList = [
         { id: 2,  text: "Learn conversational Chinese", completed: false },
-        { id: 3,  text: "Run a marathon", completed: false},
+        { id: 29, text: "Endurance Sports", completed: false, hasSubItems: true, subItems: [
+          { id: 3,  text: <a 
+            href="/IMG_FDB6FAC46E0A-1.jpeg" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-blue-600 underline"
+          >Complete a half marathon</a>, 
+          completed: true 
+        },
+          { id: 28,  text: "Complete a marathon", completed: false },
+          { id: 27,  text: "Complete a triathlon", completed: false },
+        ]},
+        { id: 18, text: "Complete an Ironman", completed: false },
         { id: 4,  text: "Author a research paper", completed: false },
         { id: 5,  text: "Build a profitable tech product business", completed: false },
         { id: 6,  text: "Hug Richard Dawkins", completed: false },
         { id: 7,  text: "Thank Michael Dante DiMartino and Bryan Konietzko from the bottom of my heart for creating Avatar: The Last Airbender", completed: false },
         { id: 8,  text: "Go sulfur mining Indonesia and help the workers any way I can", completed: false },
+        { id: 9,  text: "True Amazon jungle survival for a week without technology or food", completed: false },
         { id: 15, text: "Meet my childhood friend Vika again", completed: false },
         { id: 16, text: "Win a martial arts tournament", completed: false },
         { id: 17, text: "National Freediving record", completed: true },
-        { id: 18, text: "Complete an Ironman", completed: false },
         { id: 19, text: "Fight in an MMA match", completed: false },
         { id: 25, text: "Work for world's leading AI research lab", completed: false },
         { id: 26, text: "Provide my parents a peaceful and comfortable end of life.", completed: false },
-        { id: 20, text: "Activities" , completed: false, hasSubItems: true, subItems: [
+        { id: 20, text: "Wildin' Activities", completed: false, hasSubItems: true, subItems: [
+            { id: 24, text: "Camp in Amazon rainforest", completed: true },
             { id: 10, text: "Freedive with whales", completed: false },
             { id: 9, text: "See Rammstein Live", completed: false },
             { id: 12, text: "Kiteboard", completed: false },
@@ -48,7 +61,7 @@ export default function Component() {
         ]},
         {
           id: 1,
-          text: "Travel",
+          text: "Travel & Places to visit",
           completed: false,
           hasSubItems: true,
           subItems: [
