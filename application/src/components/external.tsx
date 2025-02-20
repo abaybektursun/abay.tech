@@ -91,7 +91,7 @@ export function ExternalLinks() {
           label="Instagram" 
         />
         <SmartLink 
-          href="https://instagram.com/abaybtx/" 
+          href="https://x.com/Abaybektursun" 
           icon={<X size={14} />} 
           label="Twitter" 
         />
