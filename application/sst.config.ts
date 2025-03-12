@@ -9,6 +9,16 @@ export default $config({
     };
   },
   async run() {
-    new sst.aws.Nextjs("abay");
+    const groqApiKey = new sst.Secret("GROQ_API_KEY");
+    const openaiApiKey = new sst.Secret("OPENAI_API_KEY");
+
+    new sst.aws.Nextjs("abay", {
+      domain: "abay.tech",
+      link: [groqApiKey, openaiApiKey],
+      environment: {
+        GROQ_API_KEY: groqApiKey.value,
+        OPENAI_API_KEY: openaiApiKey.value,
+      }
+    });
   },
-});
+}); 

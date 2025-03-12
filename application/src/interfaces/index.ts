@@ -6,5 +6,13 @@ export type Post = {
   date?: Date;
   content?: string;
   excerpt?: string;
+  image?: string;
+  video?: string;
   [key: string]: unknown;
 };
+
+export interface Review {
+    content: string;
+    name: string;
+    role: string;
+}
