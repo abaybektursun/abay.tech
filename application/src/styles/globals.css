@@ -1,4 +1,48 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  transition: opacity 0.3s ease-out;
+}
+
+/* Optional: Add this if you want a fade-in effect when the new page loads */
+.page-enter {
+  opacity: 0;
+}
+
+.page-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s ease-in;
+}
+
+html {
+  /* still allow scrolling, but hide the scrollbar */
+  overflow-y: auto;              /* or 'scroll'; either is fine */
+  -ms-overflow-style: none;      /* IE and older Edge */
+  scrollbar-width: none;         /* Firefox */
+  -webkit-overflow-scrolling: touch;
+}
+
+html::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;       /* or 'none' */
+}

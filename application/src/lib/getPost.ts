@@ -4,19 +4,20 @@ import path from "path";
 import matter from "gray-matter";
 import { Post } from "@/interfaces";
 
-const postsDirectory = path.join(process.cwd(), "src/_posts");
 
-export function getPostSlugs(): string[] {
+export function getPostSlugs(dir_path: string): string[] {
+  const postsDirectory = path.join(process.cwd(), dir_path);
   return fs.readdirSync(postsDirectory);
 }
 
-export function getAllPosts(fields: string[] = []): Post[] {
-  const slugs = getPostSlugs();
-  const posts = slugs.map((slug) => getPostBySlug(slug, fields));
+export function getAllPosts(dir_path: string, fields: string[] = []): Post[] {
+  const slugs = getPostSlugs(dir_path);
+  const posts = slugs.map((slug) => getPostBySlug(slug, dir_path, fields));
   return posts;
 }
 
-export function getPostBySlug(slug: string, fields: string[] = []): Post {
+export function getPostBySlug(slug: string, dir_path: string, fields: string[] = []): Post {
+  const postsDirectory = path.join(process.cwd(), dir_path);
   const realSlug = slug.replace(/\.md$/, "");
   const fullPath = path.join(postsDirectory, `${realSlug}.md`);
   const fileContents = fs.readFileSync(fullPath, "utf8");
@@ -30,10 +31,13 @@ export function getPostBySlug(slug: string, fields: string[] = []): Post {
   };
 
   fields.forEach((field) => {
+    console.log(field, data[field]);
     if (field === "content") post.content = content;
     if (field === "date") post.date = data.date ? new Date(data.date) : undefined;
     if (field === "title") post.title = data.title;
     if (field === "excerpt") post.excerpt = data.excerpt;
+    if (field === "image") post.image = data.image;
+    if (field === "video") post.video = data.video;
   });
 
   return post;
