@@ -25,13 +25,13 @@ export default function Component() {
           hasSubItems: true, 
           subItems: [
             { 
-              text: <a href="/IMG_FDB6FAC46E0A-1.jpeg" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+              text: <a href="/images/IMG_FDB6FAC46E0A-1.jpeg" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
                 Complete a half marathon
               </a>, 
               completed: true 
             },
             { 
-              text: <a href="/ABCB5B44-D82E-46BC-8CAC-8584A829E4CB.jpg" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+              text: <a href="/images/ABCB5B44-D82E-46BC-8CAC-8584A829E4CB.jpg" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
                 Complete a marathon
               </a>, 
               completed: true 
@@ -152,8 +152,8 @@ export default function Component() {
           </ul>
           <div className="w-1/2 pt-10 mx-auto">
             <PixelatedImage
-              src="/locked_in.jpg"
-              lowResSrc={`/_next/image?url=${encodeURIComponent('/locked_in.jpg')}&w=64&q=75`}
+              src="/images/locked_in.jpg"
+              lowResSrc={`/_next/image?url=${encodeURIComponent('/images/locked_in.jpg')}&w=64&q=75`}
               alt="Description"
               width={1310}
               height={1460}

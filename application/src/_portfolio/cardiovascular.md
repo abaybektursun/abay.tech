@@ -2,7 +2,7 @@
 title: "Building a Medical-Grade Heart Monitor with an iPhone Camera"
 excerpt: "Lessons from the Trenches"
 date: "2024-05-05"
-video: "eulerian.mp4"
+video: "videos/eulerian.mp4"
 ---
 
 Playa Del Carmen, Mexico. Excited, I am walking along the gorgeous beach and Quinta Avenida   back to my Airbnb with a newly purchased blood pressure (BP) cuff. We just deployed the first version of cuff-less heart monitor model on my client’s iPhone app, and when I get to my place, I put on the BP monitor on my arm, and face my iPhone camera. I look at the monitor and then at the app on my phone. Satisfaction and joy: BP and HR values match perfectly! 
