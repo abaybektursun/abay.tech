@@ -10,7 +10,7 @@ import PixelatedImage from "@/components/progressive";
 import CompanyLogos from "@/components/CompanyLogos";
 
 export default function HomePage() {
-    const lowResUrl = `/_next/image?url=${encodeURIComponent('/DSC07673.jpg')}&w=40&q=25`;
+    const lowResUrl = `/_next/image?url=${encodeURIComponent('/images/DSC07673.jpg')}&w=40&q=25`;
 
     return (
         <Container>
@@ -24,8 +24,8 @@ export default function HomePage() {
                 >
                     <div className="relative aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
                         <PixelatedImage
-                            src="/DSC07673.jpg"
-                            lowResSrc={`/_next/image?url=${encodeURIComponent('/DSC07673.jpg')}&w=64&q=75`}
+                            src="/images/DSC07673.jpg"
+                            lowResSrc={`/_next/image?url=${encodeURIComponent('/images/DSC07673.jpg')}&w=64&q=75`}
                             alt="Abay"
                             width={2048}
                             height={1365}
