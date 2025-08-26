@@ -2,7 +2,7 @@
 title: "Unified Vision-Language Model for Financial Document Understanding"
 excerpt: "Building an AI system that automates financial chart and table extraction, saving analysts countless hours of manual work"
 date: "2023-05-05"
-image: "/charts_tables.jpg"
+image: "/images/charts_tables.jpg"
 ---
 Starting this project I had no idea I'd end up building large language model model that could look at variety of financial charts or tables and reconstruct it, achieving state-of-the-art performance across multiple benchmarks. What began as a request for a simple stacked bar chart bounding box detection transformed into bleeding-edge approach that changed how my client approached visual data extraction - from handling one specific chart type to automatically understanding wide range of financial charts they encountered.
 
