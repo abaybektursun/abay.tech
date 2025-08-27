@@ -1,27 +1,3 @@
-{
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1728598022383,
-      "tag": "0000_keen_devos",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1730207363999,
-      "tag": "0001_sparkling_blue_marvel",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1730725226313,
-      "tag": "0002_wandering_riptide",
-      "breakpoints": true
-    }
-  ]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:3106c2edc8f584af799c7bda4ec6618a834763be0991b6b2cff7cd515d80b663
+size 498
