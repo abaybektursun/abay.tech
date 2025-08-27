@@ -370,8 +370,11 @@ Respond with a JSON list of categories:
         }
       `}</style>
 
-      {/* 5) Custom JavaScript for interactive charts would go here */}
-      {/* Note: main.bundle.js was removed as it doesn't exist and was causing JSON parse errors */}
+      {/* 5) Your custom script/bundle (runs after interactive) */}
+      <Script
+        src="/js/main.bundle.js"
+        strategy="afterInteractive"
+      />
     </Container>
   )
 }
