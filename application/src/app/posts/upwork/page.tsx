@@ -9,7 +9,8 @@ export default function Home() {
     <Container>
       {/* 1) Standard HTML head content */}
       <Head>
-        <title>My Next.js Page</title>
+        <title>Unseen Opportunities: Upwork + GPT | Abay Bektursun</title>
+        <meta name="description" content="How I used GPT-4 to analyze 100k+ Upwork job posts and discover startup opportunities in the freelance economy." />
       </Head>
 
       {/* 2) External libraries (load before interactive if needed by your bundle) */}
@@ -35,18 +36,31 @@ export default function Home() {
       />
 
       {/* 3) Page content in JSX */}
-      <main style={{ padding: '20px' }}>
-        <p>
-          <strong>If you are just interested in the data analysis, skip to the end of the article.</strong>
-        </p>
-        <p>
-          Summer, 2022. I quit my lucrative AI job not out of dissatisfaction,
-          but out of exhilaration. My past couple of years were brimming with
-          happiness, which sparked an awakening within me: if I did not leap
-          into the unknown, doing so might eventually become difficult or even
-          impossible. Within two hours of this epiphany, I sent my company
-          2-week notice.
-        </p>
+      <article className="max-w-4xl mx-auto px-6 py-12 prose prose-lg prose-gray">
+        <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-8 rounded-r-lg">
+          <p className="text-blue-800 font-medium mb-0 mt-0">
+            <strong>Quick Navigation:</strong> If you're just interested in the data analysis and visualizations, <a href="#visualizations" className="text-blue-600 hover:text-blue-800 underline">skip to the charts</a>.
+          </p>
+        </div>
+
+        <header className="mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-tight">
+            Unseen Opportunities: Upwork + GPT
+          </h1>
+          <p className="text-xl text-gray-600 leading-relaxed">
+            How I analyzed 100,000+ freelance job posts with AI to uncover hidden startup opportunities
+          </p>
+          <div className="flex items-center gap-4 mt-6 text-sm text-gray-500">
+            <time>July 8, 2023</time>
+            <span>•</span>
+            <span>12 min read</span>
+          </div>
+        </header>
+        <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-8 rounded-xl mb-8 border border-purple-100">
+          <p className="text-lg leading-relaxed text-gray-800 mb-0 mt-0">
+            Summer, 2022. I quit my lucrative AI job not out of dissatisfaction, but out of <em className="text-purple-700 font-medium">exhilaration</em>. My past couple of years were brimming with happiness, which sparked an awakening within me: if I did not leap into the unknown, doing so might eventually become difficult or even impossible. Within two hours of this epiphany, I sent my company 2-week notice.
+          </p>
+        </div>
         <p>
           Prior to my return to AI, I filled various roles - a mover, a
           photographer, a dating coach. While they were entertaining diversions,
@@ -75,49 +89,30 @@ export default function Home() {
           need of a solution. Upwork is a goldmine of business opportunities,
           you just need little help form AI to extract them.
         </p>
-        <h2>Space of Startup Ideas</h2>
-        <p>
-          Job posts, are typically rich in textual data detailing candidate
-          preferences, company profiles, and problem statements, etc. Doing
-          analytics with text has not been very practical, but with the advent
-          of powerful GPTs, we can now extract substantial structured data.
-        </p>
-        <p>
-          I started gathering posts in real time and amassed over 100k job posts
-          in few weeks. It took 2 days to prompt engineer something that could
-          extract the customer pain points accurately. Prompt shown below (few
-          shot examples excluded):
-        </p>
+        <h2 className="text-3xl font-bold text-gray-900 mt-16 mb-8 border-b-2 border-gray-200 pb-4">
+          The Space of Startup Ideas
+        </h2>
+        <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-gray-400 mb-6">
+          <p className="text-gray-800 mb-0 mt-0">
+            Job posts are typically rich in textual data detailing candidate preferences, company profiles, and problem statements. Doing analytics with text has not been very practical, but with the advent of powerful GPTs, we can now extract substantial structured data.
+          </p>
+        </div>
+        <div className="bg-green-50 p-6 rounded-lg mb-8">
+          <h3 className="text-lg font-semibold text-green-800 mb-3 mt-0">Data Collection</h3>
+          <p className="text-green-800 mb-0 mt-0">
+            I started gathering posts in real time and amassed over <strong>100,000 job posts</strong> in just a few weeks. It took 2 days to prompt engineer something that could extract customer pain points accurately.
+          </p>
+        </div>
 
-        {/* Accordion item markup (WordPress style). Just keep as simple HTML */}
-        <div
-          className="c-accordion__item"
-          data-initially-open="false"
-          data-click-to-close="true"
-          data-auto-close="true"
-          data-scroll="false"
-          data-scroll-offset="0"
-          style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '10px' }}
-        >
-          <button
-            style={{
-              fontWeight: 'bold',
-              display: 'block',
-              cursor: 'pointer',
-              marginBottom: '10px',
-            }}
-          >
-            Click here to expand
-          </button>
-          <div>
-            <pre
-              style={{
-                fontSize: '10px',
-                backgroundColor: '#f4f4f4',
-                padding: '10px',
-                overflowX: 'auto',
-              }}
-            >
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">GPT Prompt Engineering</h3>
+        <p className="mb-4">Here's the prompt I used to extract structured data from job posts (few-shot examples excluded):</p>
+
+        <details className="bg-white border border-gray-200 rounded-lg shadow-sm mb-6 overflow-hidden">
+          <summary className="bg-gray-50 px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors font-medium text-gray-800">
+            Click to view the GPT prompt
+          </summary>
+          <div className="p-6">
+            <pre className="bg-gray-800 text-gray-300 p-4 rounded-lg text-sm overflow-x-auto font-mono leading-relaxed">
 {`meta_prompt = """
     Job Post :
     \`\`\`
@@ -141,44 +136,24 @@ export default function Home() {
     """`}
             </pre>
           </div>
+        </details>
+
+        <div className="bg-gray-50 p-6 rounded-lg mb-8 border border-gray-200">
+          <p className="text-gray-700 mb-0 mt-0">
+            <a href="https://openai.com/blog/function-calling-and-other-api-updates" className="text-gray-600 hover:text-gray-800 underline font-medium">
+              OpenAI's API updates
+            </a> came in perfectly! I was able to use their 16k context model to sample large chunks of client problems and start creating taxonomies.
+          </p>
         </div>
 
-        <p>
-          <a href="https://openai.com/blog/function-calling-and-other-api-updates">
-            OpenAI&apos;s API updates
-          </a>{' '}
-          came in perfectly, I was able to use their 16k context model to sample
-          large chunks of the cleint problems and start creating taxonomies:
-        </p>
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">Creating Problem Taxonomies</h3>
 
-        <div
-          className="c-accordion__item"
-          data-initially-open="false"
-          data-click-to-close="true"
-          data-auto-close="true"
-          data-scroll="false"
-          data-scroll-offset="0"
-          style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '10px' }}
-        >
-          <button
-            style={{
-              fontWeight: 'bold',
-              display: 'block',
-              cursor: 'pointer',
-              marginBottom: '10px',
-            }}
-          >
-            Click here to expand
-          </button>
-          <div>
-            <pre
-              style={{
-                fontSize: '10px',
-                backgroundColor: '#f4f4f4',
-                padding: '10px',
-                overflowX: 'auto',
-              }}
-            >
+        <details className="bg-white border border-gray-200 rounded-lg shadow-sm mb-8 overflow-hidden">
+          <summary className="bg-gray-50 px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors font-medium text-gray-800">
+            Click to view the taxonomy creation code
+          </summary>
+          <div className="p-6">
+            <pre className="bg-gray-800 text-gray-300 p-4 rounded-lg text-sm overflow-x-auto font-mono leading-relaxed">
 {`system_message = SystemMessage(content="You are a successful serial entrepreneur.")
 prompt_template = """
 You are tasked with creating high level taxonomy.
@@ -196,23 +171,27 @@ Respond with a JSON list of categories:
 """`}
             </pre>
           </div>
+        </details>
+
+        <div className="bg-gray-50 p-6 rounded-lg mb-8 border border-gray-200">
+          <p className="text-gray-700 mb-0 mt-0">
+            After sampling the majority of the dataset, I further distilled it and requested GPT-4 to provide the final categories. Now we can visualize the categories of problems in relation to volume, investment, and customer budget.
+          </p>
         </div>
 
-        <p>
-          After sampling the majority of the dataset, I further distilled it and
-          requested GPT-4 to provide the final categories. Now, we can utilize
-          these to visualize the categories of problems in relation to volume,
-          investment, and customer budget, as shown below. The size of the
-          bubble corresponds to the count of job postings. The X-axis represents
-          how much the client is willing to pay per hour on average, and the
-          Y-axis represents how much the client spent on Upwork on average. This
-          chart only contains a portion of the full data due to missing values
-          and some filtering. You can approximately see how much people are
-          willing to pay to solve problems in each category.
-        </p>
+        <section id="visualizations" className="mt-16">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-200 pb-4">
+            Data Visualizations
+          </h2>
+          
+          <div className="bg-gray-50 p-6 rounded-lg mb-8">
+            <h3 className="text-xl font-semibold text-gray-800 mb-3 mt-0">Problem Categories by Budget & Volume</h3>
+            <p className="text-gray-700 mb-0 mt-0">
+              The bubble size represents the count of job postings. X-axis shows average hourly pay, Y-axis shows average client spending on Upwork. This reveals how much people are willing to pay to solve problems in each category.
+            </p>
+          </div>
 
-        {/* Spinner styles + bubble chart container */}
-        <div style={{ minWidth: '1000px', width: 'auto', overflow: 'auto' }}>
+          <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 mb-12" style={{ width: '1200px', maxWidth: 'none', overflowX: 'visible', marginLeft: '50%', transform: 'translateX(-50%)' }}>
           <svg
             className="spinner"
             width="65px"
@@ -230,19 +209,17 @@ Respond with a JSON list of categories:
               r="30"
             ></circle>
           </svg>
-          <canvas id="bubbleChart"></canvas>
-        </div>
+            <canvas id="bubbleChart" className="w-full h-96"></canvas>
+          </div>
 
-        <div style={{ minWidth: '1000px', width: 'auto', overflow: 'auto' }}>
-          <p>
-            Next, I created vector embeddings of all the problems and reduced
-            their dimensions using UMAP. The result is shown below. You can
-            explore the semantic space of problems. Hover over the points to
-            read the text:
-          </p>
-        </div>
+          <div className="bg-purple-50 p-6 rounded-lg mb-8">
+            <h3 className="text-xl font-semibold text-purple-800 mb-3 mt-0">Semantic Problem Space</h3>
+            <p className="text-purple-700 mb-0 mt-0">
+              I created vector embeddings of all problems and reduced their dimensions using UMAP. Explore the semantic space below - hover over points to read the problem descriptions.
+            </p>
+          </div>
 
-        <div style={{ minWidth: '1000px', width: 'auto', overflow: 'auto' }}>
+        <div style={{ width: '1200px', maxWidth: 'none', overflowX: 'visible', marginLeft: '50%', transform: 'translateX(-50%)' }}>
           <svg
             className="spinner"
             width="65px"
@@ -260,18 +237,19 @@ Respond with a JSON list of categories:
               r="30"
             ></circle>
           </svg>
-          <div id="embedPlot"></div>
-        </div>
+            <div id="embedPlot" className="w-full" style={{ minHeight: '700px' }}></div>
+          </div>
 
-        <div style={{ minWidth: '1000px', width: 'auto', overflow: 'auto' }}>
-          <p>
-            This market analysis helped me pinpoint the ideal sector for
-            building initial startup startup: financial technology.
-          </p>
-        </div>
+          <div className="bg-green-50 p-8 rounded-lg border border-green-200">
+            <h3 className="text-2xl font-semibold text-green-800 mb-4 mt-0">Key Insight</h3>
+            <p className="text-green-800 text-lg mb-0 mt-0">
+              This market analysis helped me pinpoint the ideal sector for building my initial startup: <strong>financial technology</strong>.
+            </p>
+          </div>
 
-        <div id="classificationChart"></div>
-      </main>
+          <div id="classificationChart" className="mt-8"></div>
+        </section>
+      </article>
 
       {/* 4) Global styles for the spinner */}
       <style jsx global>{`
