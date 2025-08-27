@@ -2,7 +2,7 @@
 title: "Lessons From a Consulting Call: Mastering AI for Persuasive Copy"
 excerpt: "In a recent consulting session, a client needed to generate 10–12-page Video Sales Letter (VSL) scripts with AI. These scripts can be notoriously difficult to handle—lengthy, high-stakes, and packed with emotion-driven persuasion. Below, you’ll find the most critical lessons we uncovered, refined with a more technical focus."
 date: "2025-01-17"
-image: "/Writing_img.webp"
+image: "/images/Writing_img.webp"
 ---
 
 ### **1. Context Is Key: Keep It Relevant—and Positive**
