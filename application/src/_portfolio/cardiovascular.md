@@ -61,13 +61,13 @@ for y in 0..<min(max, height) {
 
 OpenCV decodes video files without alpha channel, however the iOS code missed that, creating a very tricky bug to resolve.
 
-![What model saw with the bug](https://abay.tech/alpha_bug.jpg)
+![What model saw with the bug](/images/alpha_bug.jpg)
 
 [**The dumb reason your fancy Computer Vision app isn’t working: Exif Orientation**](https://medium.com/@ageitgey/the-dumb-reason-your-fancy-computer-vision-app-isnt-working-exif-orientation-73166c7d39da)
 
 When there is an issue with a CV model on mobile, this is the first thing I look for, and more often than not, it is the cause. The camera sensor reads pixels in sequential lines and saves the raw data in fixed landscape orientation. When developer reads it (`cv2.imread()` for example), the orientation is wrong. It's more efficient to just add a small metadata tag saying "rotate this" than to actually rearrange millions of pixels. 
 
-![image.png](https://abay.tech/landscape_bug.jpg)
+![image.png](/images/landscape_bug.jpg)
 
 **How to move the image processing to the model?**
 
