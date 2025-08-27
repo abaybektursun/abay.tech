@@ -25,7 +25,7 @@ export async function GET() {
     const jsonString = JSON.stringify(optimizedData);
     const compressed = await gzipAsync(jsonString);
     
-    return new NextResponse(compressed, {
+    return new NextResponse(new Uint8Array(compressed), {
       headers: {
         'Content-Type': 'application/json',
         'Content-Encoding': 'gzip',
