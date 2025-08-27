@@ -30,7 +30,7 @@ export default function Home() {
         strategy="beforeInteractive"
       />
       <Script
-        src="https://cdn.plot.ly/plotly-latest.min.js"
+        src="https://cdn.plot.ly/plotly-2.26.0.min.js"
         strategy="beforeInteractive"
       />
 
@@ -370,11 +370,8 @@ Respond with a JSON list of categories:
         }
       `}</style>
 
-      {/* 5) Your custom script/bundle (runs after interactive) */}
-      <Script
-        src="https://abaytech.tech/js/main.bundle.js"
-        strategy="afterInteractive"
-      />
+      {/* 5) Custom JavaScript for interactive charts would go here */}
+      {/* Note: main.bundle.js was removed as it doesn't exist and was causing JSON parse errors */}
     </Container>
   )
 }
