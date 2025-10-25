@@ -19,27 +19,33 @@ export default function Component() {
   
     const bucketList: ListItem[] = [
         { text: "Learn conversational Chinese", completed: false },
-        { 
-          text: "Endurance Sports", 
-          completed: false, 
-          hasSubItems: true, 
+        {
+          text: <a href="https://www.instagram.com/p/DQKTritkZgB/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+            Become an Ironman
+          </a>,
+          completed: true,
+          hasSubItems: true,
           subItems: [
-            { 
+            {
               text: <a href="/images/IMG_FDB6FAC46E0A-1.jpeg" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
                 Complete a half marathon
-              </a>, 
-              completed: true 
+              </a>,
+              completed: true
             },
-            { 
+            {
               text: <a href="/images/ABCB5B44-D82E-46BC-8CAC-8584A829E4CB.jpg" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
                 Complete a marathon
-              </a>, 
-              completed: true 
+              </a>,
+              completed: true
             },
-            { text: "Complete a triathlon", completed: false },
+            {
+              text: <a href="/images/first_tri.JPG" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                Complete a triathlon
+              </a>,
+              completed: true
+            },
           ]
         },
-        { text: "Complete an Ironman", completed: false },
         { text: "Author a research paper", completed: false },
         { text: "Build a profitable tech product business", completed: false },
         { text: "Hug Richard Dawkins", completed: false },
@@ -48,7 +54,12 @@ export default function Component() {
         { text: "True Amazon jungle survival for a week without technology or food", completed: false },
         { text: "Meet my childhood friend Vika again", completed: false },
         { text: "Win a martial arts tournament", completed: false },
-        { text: "National Freediving record", completed: true },
+        {
+          text: <a href="/images/AIDA_Abay.png" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+            National Freediving record
+          </a>,
+          completed: true
+        },
         { text: "Fight in an MMA match", completed: false },
         { text: "Work for world's leading AI research lab", completed: false },
         { text: "Provide my parents a peaceful and comfortable end of life.", completed: false },
