@@ -61,6 +61,7 @@ export default function Component() {
           completed: true
         },
         { text: "Fight in an MMA match", completed: false },
+        { text: "Join 1000-pound club", completed: false },
         { text: "Work for world's leading AI research lab", completed: false },
         { text: "Provide my parents a peaceful and comfortable end of life.", completed: false },
         { 
