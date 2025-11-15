@@ -1,5 +1,5 @@
-// src/components/PersonalizedArticle.test.ts
-import { replaceName } from './PersonalizedArticle';
+// tests/unit/PersonalizedArticle.test.ts
+import { replaceName } from '../../src/components/PersonalizedArticle';
 
 /**
  * Comprehensive unit tests for the replaceName function
