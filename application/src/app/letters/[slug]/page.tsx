@@ -2,6 +2,7 @@
 import { notFound } from "next/navigation";
 //import Comment from "@/components/comment";
 import Container from "@/components/container";
+import PersonalizedArticle from "@/components/PersonalizedArticle";
 import distanceToNow from "@/lib/dateRelative";
 import { getAllPosts, getPostBySlug } from "@/lib/getPost";
 import markdownToHtml from "@/lib/markdownToHtml";
@@ -39,7 +40,7 @@ export default async function PostPage({ params }: Props) {
         </time>
       </header>
 
-      <article className="prose prose-slate max-w-none mt-10" dangerouslySetInnerHTML={{ __html: content }} />
+      <PersonalizedArticle html={content} className="prose prose-slate max-w-none mt-10" />
     </Container>
   );
 }
