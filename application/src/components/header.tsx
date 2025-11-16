@@ -7,6 +7,11 @@ import { motion, useAnimationControls } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
+// Choose your preferred animation by uncommenting one:
+import { FloweryText } from '@/components/flowery-text'; // Candy conic gradient (Sarah Fossheim style)
+// import { FloweryTextAlt as FloweryText } from '@/components/flowery-text-alt'; // Soft flowery shimmer
+// import { AuroraText as FloweryText } from '@/components/aurora-text'; // Magical aurora effect
+
 export default function Header() {
   const pathname = usePathname();
   const controls = useAnimationControls();
@@ -39,31 +44,45 @@ export default function Header() {
 
   const renderLink = (href: string, label: string) => {
     const isPortfolio = label === 'Portfolio';
-    
+    const isApps = label === 'Apps';
+
     return (
       <div key={href}>
-        <Link 
+        <Link
           href={href}
           className="relative inline-block"
           onMouseEnter={() => setHoveredLink(href)}
           onMouseLeave={() => setHoveredLink(null)}
         >
-          <motion.span 
-            className={`text-base font-medium ${
-              pathname === href || hoveredLink === href 
-                ? 'text-gray-900' 
-                : 'text-gray-600'
-            } transition-colors duration-200`}
-            animate={isPortfolio ? controls : undefined}
-            style={isPortfolio ? {
-              background: 'linear-gradient(to right, #000000, #434343)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              display: 'inline-block',
-            } : undefined}
-          >
-            {label}
-          </motion.span>
+          {isApps ? (
+            <FloweryText
+              className={`text-base font-medium ${
+                pathname === href || hoveredLink === href
+                  ? 'text-gray-900'
+                  : 'text-gray-600'
+              } transition-colors duration-200`}
+              isActive={pathname === href}
+            >
+              {label}
+            </FloweryText>
+          ) : (
+            <motion.span
+              className={`text-base font-medium ${
+                pathname === href || hoveredLink === href
+                  ? 'text-gray-900'
+                  : 'text-gray-600'
+              } transition-colors duration-200`}
+              animate={isPortfolio ? controls : undefined}
+              style={isPortfolio ? {
+                background: 'linear-gradient(to right, #000000, #434343)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                display: 'inline-block',
+              } : undefined}
+            >
+              {label}
+            </motion.span>
+          )}
           
           {pathname === href && (
             <motion.div
@@ -100,8 +119,8 @@ export default function Header() {
           <div className="flex items-center">
             <div className="flex space-x-4">
               {renderLink('/', 'About')}
-              {renderLink('/posts', 'Posts')}
               {renderLink('/apps', 'Apps')}
+              {renderLink('/posts', 'Posts')}
               <div className="relative flex items-center space-x-4">
                 {renderLink('/portfolio', 'Portfolio')}
                 <motion.div

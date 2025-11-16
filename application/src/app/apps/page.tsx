@@ -28,7 +28,7 @@ export default function AppsPage() {
       description: 'AI-powered conversations for personal growth and self-discovery',
       longDescription: 'An intelligent coaching system that helps you explore your fundamental human needs, set meaningful goals, and track your personal development journey through empathetic AI-guided conversations.',
       icon: Heart,
-      href: '/self-help',
+      href: '/apps/self-help',
       status: 'live',
       features: [
         'Needs Assessment with visual charts',

@@ -61,7 +61,7 @@ export default function NeedsAssessmentPage() {
   const [selectedModel] = useState('gpt-4o');
 
   const { messages, append, input, setInput, isLoading, stop } = useChat({
-    api: '/api/self-help/needs-assessment',
+    api: '/api/apps/self-help/needs-assessment',
     maxSteps: 5,
     body: { model: selectedModel },
     onToolCall: async ({ toolCall }) => {

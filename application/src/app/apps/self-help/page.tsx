@@ -16,7 +16,7 @@ export default function SelfHelpLandingPage() {
       description:
         'Explore your fundamental human needs across physical, emotional, mental, and spiritual dimensions.',
       icon: Heart,
-      href: '/self-help/needs-assessment',
+      href: '/apps/self-help/needs-assessment',
       theme: 'rose', // Semantic theme name
       available: true,
     },
@@ -25,7 +25,7 @@ export default function SelfHelpLandingPage() {
       title: 'Goal Setting',
       description: 'Set meaningful goals aligned with your values and create actionable plans.',
       icon: Sparkles,
-      href: '/self-help/goal-setting',
+      href: '/apps/self-help/goal-setting',
       theme: 'amber',
       available: false,
     },
@@ -34,7 +34,7 @@ export default function SelfHelpLandingPage() {
       title: 'Daily Reflection',
       description: 'Reflect on your day, celebrate wins, and identify areas for growth.',
       icon: Brain,
-      href: '/self-help/daily-reflection',
+      href: '/apps/self-help/daily-reflection',
       theme: 'blue',
       available: false,
     },
