@@ -101,6 +101,7 @@ export default function Header() {
             <div className="flex space-x-4">
               {renderLink('/', 'About')}
               {renderLink('/posts', 'Posts')}
+              {renderLink('/apps', 'Apps')}
               <div className="relative flex items-center space-x-4">
                 {renderLink('/portfolio', 'Portfolio')}
                 <motion.div

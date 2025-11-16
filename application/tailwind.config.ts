@@ -14,6 +14,21 @@ export default {
      sans: ['geist'],
      mono: ['geist-mono'],
    },
+   container: {
+     center: true,
+     padding: {
+       DEFAULT: '1rem',
+       sm: '1.5rem',
+       lg: '2rem',
+     },
+     screens: {
+       sm: '640px',
+       md: '768px',
+       lg: '1024px',
+       xl: '1280px',
+       '2xl': '1024px', // Cap at 1024px (similar to your max-w-4xl)
+     },
+   },
    extend: {
      borderRadius: {
        lg: 'var(--radius)',
