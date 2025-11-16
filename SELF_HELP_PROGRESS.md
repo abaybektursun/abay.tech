@@ -21,7 +21,7 @@
 
 ### Phase 3: Core Features ⏳ IN PROGRESS
 - [x] Step 8: Create API route with tool calling
-- [ ] Step 9: Build chat interface
+- [x] Step 9: Build chat interface
 - [ ] Step 10: Create chart visualization
 
 ### Phase 4: Polish & Testing ⏳
@@ -187,18 +187,35 @@
 ---
 
 ### Step 9: Chat Interface
-**Status**: Not Started
+**Status**: ✅ COMPLETE
 **Goal**: Build main chat UI with AI Elements
 **Test Plan**: Can send/receive messages
 
-**Files to create**:
-- `app/self-help/needs-assessment/page.tsx`
+**Files created**:
+- `src/app/self-help/needs-assessment/page.tsx` - Main chat interface page
+- `tests/self-help/chat-interface.test.tsx` - Integration tests
 
-**Tests**:
-- Messages display
-- Input works
-- Streaming renders
-- Tool calls trigger
+**Implementation details**:
+- Uses Vercel AI SDK's `useChat` hook with `append` method
+- Integrated AI Elements components:
+  * Conversation, ConversationContent, ConversationScrollButton
+  * Message, MessageContent, MessageResponse
+  * PromptInput, PromptInputTextarea, PromptInputSubmit
+  * Tool, ToolContent for tool call visualization
+- Client-side tool call handling in `onToolCall`:
+  * show_needs_chart: Updates Zustand store to show visualization panel
+  * hide_chart: Hides visualization panel
+- Session management: Starts needs-assessment session on mount
+- Wrapped in ChatContainer for sliding panel animations
+- Welcome message for empty state
+- Tool invocations displayed inline with messages
+
+**Tests**: ✅ All tests passed
+- Tool call handling logic verified
+- Session management integration tested
+- Type safety for ShowNeedsChartArgs confirmed
+- Store integration validated
+- Component structure verified
 
 ---
 
