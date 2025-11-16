@@ -6,12 +6,13 @@ import { variants, transition } from '@/lib/animations';
 
 type ContainerProps = {
   children: React.ReactNode;
+  className?: string;
 };
 
-export default function Container({ children }: ContainerProps) {
+export default function Container({ children, className }: ContainerProps) {
   return (
-    <motion.div 
-      className="container max-w-4xl m-auto px-4"
+    <motion.div
+      className={className ? `container max-w-4xl mx-auto px-4 ${className}` : "container max-w-4xl mx-auto px-4"}
       initial="hidden"
       animate="visible"
       variants={variants.fadeIn}
