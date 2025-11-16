@@ -13,10 +13,10 @@ export function ChatContainer({ children, visualizationPanel }: ChatContainerPro
   const showVisualization = useConversationStore((state) => state.showVisualization);
 
   return (
-    <div className="relative flex h-full w-full overflow-hidden">
-      {/* Chat Panel - slides left when visualization appears */}
+    <div className="relative flex h-full w-full gap-4">
+      {/* Chat Panel */}
       <motion.div
-        className="flex h-full flex-col"
+        className="flex flex-col"
         animate={{
           width: showVisualization ? '60%' : '100%',
         }}
@@ -25,19 +25,18 @@ export function ChatContainer({ children, visualizationPanel }: ChatContainerPro
         }}
         transition={{
           type: 'spring',
-          stiffness: 300,
+          stiffness: 400,
           damping: 30,
-          mass: 0.8,
         }}
       >
         {children}
       </motion.div>
 
-      {/* Visualization Panel - slides in from right */}
+      {/* Visualization Panel */}
       <AnimatePresence>
         {showVisualization && (
           <motion.div
-            className="h-full border-l bg-background"
+            className="rounded-xl border bg-background"
             initial={{
               width: 0,
               opacity: 0,
@@ -52,9 +51,8 @@ export function ChatContainer({ children, visualizationPanel }: ChatContainerPro
             }}
             transition={{
               type: 'spring',
-              stiffness: 300,
+              stiffness: 400,
               damping: 30,
-              mass: 0.8,
             }}
           >
             <div className="h-full overflow-auto p-6">
