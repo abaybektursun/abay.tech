@@ -112,10 +112,10 @@ export default function NeedsAssessmentPage() {
   const maxTokens = 128000; // GPT-4o context window
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-full bg-background">
       {/* No custom Container - using standard Tailwind */}
-      <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col h-screen">
+      <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 h-full">
+        <div className="flex flex-col h-full">
           {/* Enhanced Header with Responsive Design */}
           <div className="flex items-center justify-between border-b py-3 lg:py-4 flex-shrink-0">
             <div className="flex items-center gap-2 sm:gap-3">

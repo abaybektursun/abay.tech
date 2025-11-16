@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* Viewport height utilities that account for header */
+  .h-viewport {
+    height: calc(100vh - var(--header-height));
+  }
+
+  .min-h-viewport {
+    min-height: calc(100vh - var(--header-height));
+  }
+
+  .max-h-viewport {
+    max-height: calc(100vh - var(--header-height));
+  }
+}
+
 @layer base {
   :root {
     /* Premium Color System - Inspired by Calm, Headspace, and modern wellness apps */
@@ -41,6 +56,9 @@
     --chart-5: 160 60% 45%; /* Sage green */
 
     --radius: 0.75rem;
+
+    /* Layout measurements */
+    --header-height: 5rem; /* 80px - header with py-6 + content */
   }
 
   .dark {

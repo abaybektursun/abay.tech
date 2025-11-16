@@ -60,9 +60,9 @@ export default function SelfHelpLandingPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-full bg-background">
       {/* Using standard Tailwind container instead of custom Container */}
-      <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 h-full">
         <div className="space-y-12 py-8 sm:py-12 lg:py-16">
           {/* Header - Responsive */}
           <motion.div

@@ -27,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`bg-white text-gray-700 antialiased ${inter.className}`}>
         <Header />
-        <main className="py-8">
+        <main>
           <AnimatePresence mode="wait">
             {children}
           </AnimatePresence>
