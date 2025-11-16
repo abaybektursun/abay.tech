@@ -19,10 +19,10 @@
 - [x] Step 6: Create layout structure
 - [x] Step 7: Build ChatContainer with animations
 
-### Phase 3: Core Features ⏳ IN PROGRESS
+### Phase 3: Core Features ✅ COMPLETE
 - [x] Step 8: Create API route with tool calling
 - [x] Step 9: Build chat interface
-- [ ] Step 10: Create chart visualization
+- [x] Step 10: Create chart visualization
 
 ### Phase 4: Polish & Testing ⏳
 - [ ] Step 11: Add landing page
@@ -220,17 +220,35 @@
 ---
 
 ### Step 10: NeedsChart Component
-**Status**: Not Started
+**Status**: ✅ COMPLETE
 **Goal**: Create radar chart visualization
 **Test Plan**: Chart displays data correctly
 
-**Files to create**:
-- `components/self-help/visualizations/NeedsChart.tsx`
+**Files created**:
+- `src/components/self-help/visualizations/NeedsChart.tsx` - Radar chart component
+- `tests/self-help/needs-chart.test.tsx` - Data transformation and validation tests
 
-**Tests**:
-- Chart renders with mock data
-- Close button works
-- Responsive design
+**Implementation details**:
+- Uses Recharts for radar chart visualization
+- Two overlapping radar series:
+  * Fulfilled level (primary color, 50% opacity fill)
+  * Importance level (secondary color, 30% opacity fill)
+- Responsive container with ResponsiveContainer
+- Custom tooltip showing need name, fulfilled %, importance %, category
+- Close button to hide visualization (calls toggleVisualization)
+- Insights section displaying key observations
+- Legend explaining the two data series
+- Category color mapping for future enhancements
+- Polar grid with polygon shape
+- Custom axis styling with theme colors
+
+**Tests**: ✅ All tests passed
+- Data transformation logic verified
+- Category extraction and uniqueness tested
+- Color mapping validated
+- Props type safety confirmed
+- Data range validation (0-100)
+- Edge case handling tested
 
 ---
 

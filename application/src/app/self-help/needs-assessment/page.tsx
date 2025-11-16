@@ -18,13 +18,18 @@ import {
 } from '@/components/ai-elements/prompt-input';
 import { Tool, ToolContent } from '@/components/ai-elements/tool';
 import { ChatContainer } from '@/components/self-help/ChatContainer';
+import { NeedsChart } from '@/components/self-help/visualizations/NeedsChart';
 import { useConversationStore } from '@/lib/self-help/stores/conversation-store';
 import type { ShowNeedsChartArgs } from '@/lib/self-help/types';
 import { useEffect } from 'react';
 
 export default function NeedsAssessmentPage() {
-  const { toggleVisualization, startSession, updateSessionData } =
-    useConversationStore();
+  const {
+    toggleVisualization,
+    startSession,
+    updateSessionData,
+    visualizationData,
+  } = useConversationStore();
 
   const { messages, append, isLoading } = useChat({
     api: '/api/self-help/needs-assessment',
@@ -55,14 +60,9 @@ export default function NeedsAssessmentPage() {
   return (
     <ChatContainer
       visualizationPanel={
-        <div className="flex h-full flex-col">
-          <h2 className="mb-4 font-semibold text-lg">
-            Your Needs Assessment
-          </h2>
-          <p className="text-muted-foreground text-sm">
-            Chart visualization will appear here
-          </p>
-        </div>
+        visualizationData ? (
+          <NeedsChart data={visualizationData as ShowNeedsChartArgs} />
+        ) : null
       }
     >
       <div className="flex h-screen flex-col">
