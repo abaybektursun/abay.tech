@@ -17,44 +17,44 @@ export function FloweryText({ children, className = '', isActive = false }: Flow
       <svg width="0" height="0" style={{ position: 'absolute' }}>
         <defs>
           <pattern id="flower-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-            {/* Simple 5-petal flower - Hot Pink */}
-            <circle cx="10" cy="8" r="2" fill="#FF1493" opacity="0.9" />
-            <circle cx="10" cy="12" r="2" fill="#FF1493" opacity="0.9" />
-            <circle cx="8" cy="10" r="2" fill="#FF1493" opacity="0.9" />
-            <circle cx="12" cy="10" r="2" fill="#FF1493" opacity="0.9" />
-            <circle cx="10" cy="10" r="1.5" fill="#FFD700" /> {/* Gold center */}
+            {/* Simple 5-petal flower - Rose Pink */}
+            <circle cx="10" cy="8" r="2" fill="#FF69B4" opacity="0.9" />
+            <circle cx="10" cy="12" r="2" fill="#FF69B4" opacity="0.9" />
+            <circle cx="8" cy="10" r="2" fill="#FF69B4" opacity="0.9" />
+            <circle cx="12" cy="10" r="2" fill="#FF69B4" opacity="0.9" />
+            <circle cx="10" cy="10" r="1.5" fill="#FFE55C" /> {/* Soft yellow center */}
 
-            {/* Second flower offset - Purple */}
-            <circle cx="2" cy="2" r="1.5" fill="#9D4EDD" opacity="0.85" />
-            <circle cx="0" cy="2" r="1.5" fill="#9D4EDD" opacity="0.85" />
-            <circle cx="4" cy="2" r="1.5" fill="#9D4EDD" opacity="0.85" />
-            <circle cx="2" cy="0" r="1.5" fill="#9D4EDD" opacity="0.85" />
-            <circle cx="2" cy="4" r="1.5" fill="#9D4EDD" opacity="0.85" />
+            {/* Second flower offset - Coral */}
+            <circle cx="2" cy="2" r="1.5" fill="#FF6B6B" opacity="0.85" />
+            <circle cx="0" cy="2" r="1.5" fill="#FF6B6B" opacity="0.85" />
+            <circle cx="4" cy="2" r="1.5" fill="#FF6B6B" opacity="0.85" />
+            <circle cx="2" cy="0" r="1.5" fill="#FF6B6B" opacity="0.85" />
+            <circle cx="2" cy="4" r="1.5" fill="#FF6B6B" opacity="0.85" />
 
-            {/* Third tiny flower - Turquoise */}
-            <circle cx="17" cy="17" r="1" fill="#00CED1" opacity="0.8" />
-            <circle cx="15" cy="17" r="1" fill="#00CED1" opacity="0.8" />
-            <circle cx="19" cy="17" r="1" fill="#00CED1" opacity="0.8" />
-            <circle cx="17" cy="15" r="1" fill="#00CED1" opacity="0.8" />
-            <circle cx="17" cy="19" r="1" fill="#00CED1" opacity="0.8" />
+            {/* Third tiny flower - Peach */}
+            <circle cx="17" cy="17" r="1" fill="#FFAB91" opacity="0.8" />
+            <circle cx="15" cy="17" r="1" fill="#FFAB91" opacity="0.8" />
+            <circle cx="19" cy="17" r="1" fill="#FFAB91" opacity="0.8" />
+            <circle cx="17" cy="15" r="1" fill="#FFAB91" opacity="0.8" />
+            <circle cx="17" cy="19" r="1" fill="#FFAB91" opacity="0.8" />
           </pattern>
 
           <linearGradient id="flower-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FF1493">
+            <stop offset="0%" stopColor="#FF69B4">
               <animate attributeName="stop-color"
-                values="#FF1493;#FF69B4;#FFB6C1;#FF1493"
+                values="#FF69B4;#FFB6C1;#FF91A4;#FF69B4"
                 dur="4s"
                 repeatCount="indefinite" />
             </stop>
-            <stop offset="50%" stopColor="#9D4EDD">
+            <stop offset="50%" stopColor="#FF6B6B">
               <animate attributeName="stop-color"
-                values="#9D4EDD;#DA70D6;#BA55D3;#9D4EDD"
+                values="#FF6B6B;#FFA07A;#FF8A80;#FF6B6B"
                 dur="4s"
                 repeatCount="indefinite" />
             </stop>
-            <stop offset="100%" stopColor="#00CED1">
+            <stop offset="100%" stopColor="#FFAB91">
               <animate attributeName="stop-color"
-                values="#00CED1;#48D1CC;#40E0D0;#00CED1"
+                values="#FFAB91;#FFDAB9;#FFC0A0;#FFAB91"
                 dur="4s"
                 repeatCount="indefinite" />
             </stop>
@@ -93,12 +93,12 @@ export function FloweryText({ children, className = '', isActive = false }: Flow
             url(#flower-pattern),
             linear-gradient(
               135deg,
-              #FF1493 0%,      /* Deep Pink */
-              #FF69B4 20%,     /* Hot Pink */
-              #DA70D6 40%,     /* Orchid */
-              #9D4EDD 60%,     /* Purple */
-              #00CED1 80%,     /* Dark Turquoise */
-              #40E0D0 100%     /* Turquoise */
+              #FF69B4 0%,      /* Hot Pink */
+              #FFB6C1 20%,     /* Light Pink */
+              #FF6B6B 40%,     /* Coral */
+              #FFA07A 60%,     /* Light Salmon */
+              #FFAB91 80%,     /* Peach */
+              #FFE5B4 100%     /* Peach Puff */
             );
           background-blend-mode: multiply;
           background-size: 20px 20px, 200% 200%;
