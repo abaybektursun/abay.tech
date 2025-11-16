@@ -19,8 +19,8 @@
 - [x] Step 6: Create layout structure
 - [x] Step 7: Build ChatContainer with animations
 
-### Phase 3: Core Features ⏳
-- [ ] Step 8: Create API route with tool calling
+### Phase 3: Core Features ⏳ IN PROGRESS
+- [x] Step 8: Create API route with tool calling
 - [ ] Step 9: Build chat interface
 - [ ] Step 10: Create chart visualization
 
@@ -150,17 +150,39 @@
 ---
 
 ### Step 8: API Route
-**Status**: Not Started
+**Status**: ✅ COMPLETE
 **Goal**: Create needs assessment API with tool definitions
 **Test Plan**: API returns streaming responses
 
-**Files to create**:
-- `app/self-help/api/chat/needs-assessment/route.ts`
+**Files created**:
+- `src/app/api/self-help/needs-assessment/route.ts` - Streaming API route
+- `tests/self-help/api-route.test.ts` - Schema and type validation tests
 
-**Tests**:
-- API endpoint responds
-- Tool definitions are valid
-- Streaming works
+**Implementation details**:
+- Uses Vercel AI SDK `streamText` for streaming responses
+- Model: GPT-4o via `@ai-sdk/openai`
+- Max duration: 30 seconds for streaming
+- Comprehensive system prompt:
+  * Compassionate coaching tone
+  * Four need categories: physical, emotional, mental, spiritual
+  * Structured conversation approach
+  * Clear guidelines for when to show visualization
+
+**Tools defined**:
+1. `show_needs_chart`:
+   - Parameters: needs array + insights array
+   - Zod schema validation
+   - Returns chart data to client for UI rendering
+2. `hide_chart`:
+   - No parameters
+   - Simple toggle to dismiss visualization
+
+**Tests**: ✅ All tests passed
+- Zod schemas validate correctly
+- Type compatibility with frontend types verified
+- Category enum validation works
+- Fulfilled/importance ranges enforced (0-100)
+- Empty arrays handled gracefully
 
 ---
 
