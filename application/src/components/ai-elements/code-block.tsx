@@ -54,11 +54,6 @@ export async function highlightCode(
   language: BundledLanguage,
   showLineNumbers = false
 ) {
-  // Safety check for undefined code
-  if (!code) {
-    return ["", ""];
-  }
-
   const transformers: ShikiTransformer[] = showLineNumbers
     ? [lineNumberTransformer]
     : [];
@@ -90,16 +85,13 @@ export const CodeBlock = ({
   const mounted = useRef(false);
 
   useEffect(() => {
-    // Only highlight if code is provided
-    if (code && language) {
-      highlightCode(code, language, showLineNumbers).then(([light, dark]) => {
-        if (!mounted.current) {
-          setHtml(light);
-          setDarkHtml(dark);
-          mounted.current = true;
-        }
-      });
-    }
+    highlightCode(code, language, showLineNumbers).then(([light, dark]) => {
+      if (!mounted.current) {
+        setHtml(light);
+        setDarkHtml(dark);
+        mounted.current = true;
+      }
+    });
 
     return () => {
       mounted.current = false;

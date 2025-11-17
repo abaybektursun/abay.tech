@@ -1,22 +1,39 @@
 "use client";
 
-import React from "react";
-
-// Import AI-specific input group components
+import { Button } from "@/components/ui/button";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupTextarea,
-} from "@/components/ai-elements/input-group";
-
-// We need basic Radix UI components directly for AI system
-// These should NOT mix with portfolio components
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupTextarea,
+} from "@/components/ui/input-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import type { ChatStatus, FileUIPart } from "ai";
 import {
@@ -265,47 +282,78 @@ export function PromptInputAttachment({
   const attachmentLabel = filename || (isImage ? "Image" : "Attachment");
 
   return (
-    <div
-      className={cn(
-        "group relative flex h-8 cursor-default select-none items-center gap-1.5 rounded-md border border-border px-1.5 font-medium text-sm transition-all hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        className
-      )}
-      key={data.id}
-      title={`${attachmentLabel}${data.mediaType ? ` (${data.mediaType})` : ''}`}
-      {...props}
-    >
-      <div className="relative size-5 shrink-0">
-        <div className="absolute inset-0 flex size-5 items-center justify-center overflow-hidden rounded bg-background transition-opacity group-hover:opacity-0">
-          {isImage ? (
-            <img
-              alt={filename || "attachment"}
-              className="size-5 object-cover"
-              height={20}
-              src={data.url}
-              width={20}
-            />
-          ) : (
-            <div className="flex size-5 items-center justify-center text-muted-foreground">
-              <PaperclipIcon className="size-3" />
+    <PromptInputHoverCard>
+      <HoverCardTrigger asChild>
+        <div
+          className={cn(
+            "group relative flex h-8 cursor-default select-none items-center gap-1.5 rounded-md border border-border px-1.5 font-medium text-sm transition-all hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+            className
+          )}
+          key={data.id}
+          {...props}
+        >
+          <div className="relative size-5 shrink-0">
+            <div className="absolute inset-0 flex size-5 items-center justify-center overflow-hidden rounded bg-background transition-opacity group-hover:opacity-0">
+              {isImage ? (
+                <img
+                  alt={filename || "attachment"}
+                  className="size-5 object-cover"
+                  height={20}
+                  src={data.url}
+                  width={20}
+                />
+              ) : (
+                <div className="flex size-5 items-center justify-center text-muted-foreground">
+                  <PaperclipIcon className="size-3" />
+                </div>
+              )}
+            </div>
+            <Button
+              aria-label="Remove attachment"
+              className="absolute inset-0 size-5 cursor-pointer rounded p-0 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 [&>svg]:size-2.5"
+              onClick={(e) => {
+                e.stopPropagation();
+                attachments.remove(data.id);
+              }}
+              type="button"
+              variant="ghost"
+            >
+              <XIcon />
+              <span className="sr-only">Remove</span>
+            </Button>
+          </div>
+
+          <span className="flex-1 truncate">{attachmentLabel}</span>
+        </div>
+      </HoverCardTrigger>
+      <PromptInputHoverCardContent className="w-auto p-2">
+        <div className="w-auto space-y-3">
+          {isImage && (
+            <div className="flex max-h-96 w-96 items-center justify-center overflow-hidden rounded-md border">
+              <img
+                alt={filename || "attachment preview"}
+                className="max-h-full max-w-full object-contain"
+                height={384}
+                src={data.url}
+                width={448}
+              />
             </div>
           )}
+          <div className="flex items-center gap-2.5">
+            <div className="min-w-0 flex-1 space-y-1 px-0.5">
+              <h4 className="truncate font-semibold text-sm leading-none">
+                {filename || (isImage ? "Image" : "Attachment")}
+              </h4>
+              {data.mediaType && (
+                <p className="truncate font-mono text-muted-foreground text-xs">
+                  {data.mediaType}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
-        <button
-          aria-label="Remove attachment"
-          className="absolute inset-0 size-5 cursor-pointer rounded p-0 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 flex items-center justify-center hover:bg-destructive/20"
-          onClick={(e) => {
-            e.stopPropagation();
-            attachments.remove(data.id);
-          }}
-          type="button"
-        >
-          <XIcon className="size-2.5" />
-          <span className="sr-only">Remove</span>
-        </button>
-      </div>
-
-      <span className="flex-1 truncate">{attachmentLabel}</span>
-    </div>
+      </PromptInputHoverCardContent>
+    </PromptInputHoverCard>
   );
 }
 
@@ -729,7 +777,9 @@ export const PromptInputBody = ({
   <div className={cn("contents", className)} {...props} />
 );
 
-export type PromptInputTextareaProps = React.ComponentProps<typeof InputGroupTextarea>;
+export type PromptInputTextareaProps = ComponentProps<
+  typeof InputGroupTextarea
+>;
 
 export const PromptInputTextarea = ({
   onChange,
@@ -829,7 +879,7 @@ export const PromptInputTextarea = ({
 };
 
 export type PromptInputHeaderProps = Omit<
-  React.ComponentProps<typeof InputGroupAddon>,
+  ComponentProps<typeof InputGroupAddon>,
   "align"
 >;
 
@@ -838,14 +888,14 @@ export const PromptInputHeader = ({
   ...props
 }: PromptInputHeaderProps) => (
   <InputGroupAddon
-    align="block-start"
+    align="block-end"
     className={cn("order-first flex-wrap gap-1", className)}
     {...props}
   />
 );
 
 export type PromptInputFooterProps = Omit<
-  React.ComponentProps<typeof InputGroupAddon>,
+  ComponentProps<typeof InputGroupAddon>,
   "align"
 >;
 
@@ -869,36 +919,27 @@ export const PromptInputTools = ({
   <div className={cn("flex items-center gap-1", className)} {...props} />
 );
 
-export type PromptInputButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "ghost" | "outline" | "secondary";
-  size?: string;
+export type PromptInputButtonProps = ComponentProps<typeof InputGroupButton>;
+
+export const PromptInputButton = ({
+  variant = "ghost",
+  className,
+  size,
+  ...props
+}: PromptInputButtonProps) => {
+  const newSize =
+    size ?? (Children.count(props.children) > 1 ? "sm" : "icon-sm");
+
+  return (
+    <InputGroupButton
+      className={cn(className)}
+      size={newSize}
+      type="button"
+      variant={variant}
+      {...props}
+    />
+  );
 };
-
-export const PromptInputButton = React.forwardRef<HTMLButtonElement, PromptInputButtonProps>(
-  ({ variant = "ghost", className, size, ...props }, ref) => {
-    const newSize =
-      size ?? (Children.count(props.children) > 1 ? "sm" : "icon-sm");
-
-    return (
-      <button
-        ref={ref}
-        className={cn(
-          "inline-flex items-center justify-center gap-2 text-sm font-medium transition-colors",
-          "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-          variant === "ghost" && "hover:bg-accent hover:text-accent-foreground",
-          variant === "outline" && "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-          variant === "secondary" && "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-          className
-        )}
-        data-size={newSize}
-        type="button"
-        {...props}
-      />
-    );
-  }
-);
-
-PromptInputButton.displayName = "PromptInputButton";
 
 export type PromptInputActionMenuProps = ComponentProps<typeof DropdownMenu>;
 export const PromptInputActionMenu = (props: PromptInputActionMenuProps) => (
@@ -1191,7 +1232,34 @@ export const PromptInputSelectValue = ({
   <SelectValue className={cn(className)} {...props} />
 );
 
-// HoverCard components removed - not needed without portfolio dependencies
+export type PromptInputHoverCardProps = ComponentProps<typeof HoverCard>;
+
+export const PromptInputHoverCard = ({
+  openDelay = 0,
+  closeDelay = 0,
+  ...props
+}: PromptInputHoverCardProps) => (
+  <HoverCard closeDelay={closeDelay} openDelay={openDelay} {...props} />
+);
+
+export type PromptInputHoverCardTriggerProps = ComponentProps<
+  typeof HoverCardTrigger
+>;
+
+export const PromptInputHoverCardTrigger = (
+  props: PromptInputHoverCardTriggerProps
+) => <HoverCardTrigger {...props} />;
+
+export type PromptInputHoverCardContentProps = ComponentProps<
+  typeof HoverCardContent
+>;
+
+export const PromptInputHoverCardContent = ({
+  align = "start",
+  ...props
+}: PromptInputHoverCardContentProps) => (
+  <HoverCardContent align={align} {...props} />
+);
 
 export type PromptInputTabsListProps = HTMLAttributes<HTMLDivElement>;
 
