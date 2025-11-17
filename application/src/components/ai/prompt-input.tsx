@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 // We need basic Radix UI components directly for AI system
 // These should NOT mix with portfolio components
 import {
