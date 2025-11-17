@@ -61,13 +61,7 @@ export function PortfolioCard({
 
   return (
     <motion.div
-      className="flex-shrink-0 snap-start"
-      style={{
-        width: 'calc(18rem * 0.85)', // w-72 * 0.85 for mobile
-        '@media (min-width: 640px)': {
-          width: 'calc(20rem * 0.85)' // w-80 * 0.85 for desktop
-        }
-      }}
+      className="flex-shrink-0 snap-start w-[15.3rem] sm:w-[17rem]"
       initial={{ opacity: 0, y: 20 }}
       animate={{
         opacity: 1,
@@ -76,7 +70,7 @@ export function PortfolioCard({
       }}
       transition={{
         opacity: { duration: 0.3 },
-        scale: { type: "spring", stiffness: 300, damping: 25 }
+        scale: { duration: 0.6, ease: [0.4, 0, 0.2, 1] } // Extra smooth, gentle ease
       }}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
