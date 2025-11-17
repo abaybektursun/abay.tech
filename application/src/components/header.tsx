@@ -107,7 +107,7 @@ export default function Header() {
   };
 
   return (
-    <header 
+    <header
       className="py-6"
       onMouseLeave={handleNavMouseLeave}
     >
