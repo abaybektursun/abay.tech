@@ -1,63 +1,84 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Brain, Heart, Sparkles, Activity, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
 
 export default function GrowthToolsLandingPage() {
   const conversations = [
     {
-      id: 'needs-assessment',
-      title: 'Needs Assessment',
+      name: 'Needs Assessment',
       description:
-        'Explore your fundamental human needs across physical, emotional, mental, and spiritual dimensions.',
-      icon: Heart,
+        "Utilize Tony Robbins' framework of the 6 human needs to evaluate where you are right now: what needs are lacking and which are fulfilled.",
       href: '/apps/growth-tools/needs-assessment',
-      theme: 'rose', // Semantic theme name
+      cta: 'Start Assessment',
       available: true,
+      className: 'md:col-span-2', // Featured - spans 2 columns
+      background: <div className="absolute inset-0 bg-gradient-to-br from-rose-500/20 via-pink-500/20 to-purple-500/20" />
     },
     {
-      id: 'goal-setting',
-      title: 'Goal Setting',
+      name: 'Goal Setting',
       description: 'Set meaningful goals aligned with your values and create actionable plans.',
-      icon: Sparkles,
       href: '/apps/growth-tools/goal-setting',
-      theme: 'amber',
+      cta: 'Set Goals',
       available: false,
+      className: 'md:col-span-1',
+      background: <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 via-orange-500/20 to-yellow-500/20" />
     },
     {
-      id: 'daily-reflection',
-      title: 'Daily Reflection',
+      name: 'Daily Reflection',
       description: 'Reflect on your day, celebrate wins, and identify areas for growth.',
-      icon: Brain,
       href: '/apps/growth-tools/daily-reflection',
-      theme: 'blue',
+      cta: 'Start Reflecting',
       available: false,
+      className: 'md:col-span-1',
+      background: <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-cyan-500/20 to-teal-500/20" />
+    },
+    {
+      name: 'Habit Tracking',
+      description: 'Build and maintain positive habits with daily tracking and accountability.',
+      href: '/apps/growth-tools/habit-tracking',
+      cta: 'Track Habits',
+      available: false,
+      className: 'md:col-span-1',
+      background: <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-emerald-500/20 to-teal-500/20" />
+    },
+    {
+      name: 'Values Clarification',
+      description: 'Discover and define your core values to guide decision-making.',
+      href: '/apps/growth-tools/values-clarification',
+      cta: 'Clarify Values',
+      available: false,
+      className: 'md:col-span-1',
+      background: <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-indigo-500/20" />
+    },
+    {
+      name: 'Life Wheel',
+      description: 'Evaluate balance across all areas of your life.',
+      href: '/apps/growth-tools/life-wheel',
+      cta: 'Assess Balance',
+      available: false,
+      className: 'md:col-span-2',
+      background: <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-purple-500/20" />
+    },
+    {
+      name: 'Vision Board',
+      description: 'Create a visual representation of your goals and dreams.',
+      href: '/apps/growth-tools/vision-board',
+      cta: 'Create Vision',
+      available: false,
+      className: 'md:col-span-1',
+      background: <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-rose-500/20 to-orange-500/20" />
+    },
+    {
+      name: 'Gratitude Journal',
+      description: 'Cultivate positivity by documenting what you\'re grateful for.',
+      href: '/apps/growth-tools/gratitude',
+      cta: 'Start Journal',
+      available: false,
+      className: 'md:col-span-1',
+      background: <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/20 via-amber-500/20 to-orange-500/20" />
     },
   ];
-
-  // Theme-based styling using Tailwind utilities only
-  const getThemeClasses = (theme: string) => ({
-    iconBg: {
-      rose: 'bg-rose-100 dark:bg-rose-900/30',
-      amber: 'bg-amber-100 dark:bg-amber-900/30',
-      blue: 'bg-blue-100 dark:bg-blue-900/30',
-    }[theme],
-    iconColor: {
-      rose: 'text-rose-600 dark:text-rose-400',
-      amber: 'text-amber-600 dark:text-amber-400',
-      blue: 'text-blue-600 dark:text-blue-400',
-    }[theme],
-    hoverBorder: {
-      rose: 'hover:border-rose-300 dark:hover:border-rose-700',
-      amber: 'hover:border-amber-300 dark:hover:border-amber-700',
-      blue: 'hover:border-blue-300 dark:hover:border-blue-700',
-    }[theme],
-  });
 
   return (
     <div className="h-full bg-background">
@@ -71,105 +92,31 @@ export default function GrowthToolsLandingPage() {
             transition={{ duration: 0.5 }}
             className="space-y-4"
           >
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-3 mb-6">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30">
-                <Activity className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-              </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                  Growth Tools
-                </h1>
-                <p className="text-sm sm:text-base text-muted-foreground">
-                  AI-powered conversations for personal growth
-                </p>
-              </div>
+            <div className="mb-6">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                Growth Tools
+              </h1>
+              <p className="text-sm sm:text-base text-muted-foreground">
+                Personal transformation through proven frameworks
+              </p>
             </div>
             <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-3xl">
-              Explore your needs, set meaningful goals, and track your progress through guided conversations with an empathetic AI coach.
+              Work through proven exercises and frameworks from master teachers like Tony Robbins and Martha Beck. This companion guides you step by step, keeping you focused and helping you complete the inner work that matters.
             </p>
           </motion.div>
 
-          {/* Conversation Cards - Responsive Grid */}
-          <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
-            {conversations.map((conversation, index) => {
-              const Icon = conversation.icon;
-              const themeClasses = getThemeClasses(conversation.theme);
-
-              return (
-                <motion.div
-                  key={conversation.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: index * 0.1
-                  }}
-                >
-                  <Card
-                    className={cn(
-                      "relative h-full transition-all duration-200",
-                      conversation.available
-                        ? cn(
-                            "hover:shadow-lg hover:-translate-y-1",
-                            themeClasses.hoverBorder
-                          )
-                        : "opacity-60"
-                    )}
-                  >
-                    {/* Coming Soon Badge */}
-                    {!conversation.available && (
-                      <Badge
-                        variant="secondary"
-                        className="absolute top-4 right-4 text-xs"
-                      >
-                        Coming Soon
-                      </Badge>
-                    )}
-
-                    <CardHeader>
-                      {/* Icon - Using theme classes */}
-                      <div className={cn(
-                        "mb-4 flex h-10 w-10 items-center justify-center rounded-lg",
-                        themeClasses.iconBg
-                      )}>
-                        <Icon className={cn("h-5 w-5", themeClasses.iconColor)} />
-                      </div>
-
-                      <CardTitle className="text-lg sm:text-xl">
-                        {conversation.title}
-                      </CardTitle>
-                      <CardDescription className="text-sm sm:text-base">
-                        {conversation.description}
-                      </CardDescription>
-                    </CardHeader>
-
-                    <CardContent>
-                      {/* Action Button */}
-                      {conversation.available ? (
-                        <Link href={conversation.href}>
-                          <Button
-                            variant="ghost"
-                            className="w-full justify-between group"
-                          >
-                            <span>Start Conversation</span>
-                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                          </Button>
-                        </Link>
-                      ) : (
-                        <Button
-                          variant="secondary"
-                          disabled
-                          className="w-full"
-                        >
-                          Coming Soon
-                        </Button>
-                      )}
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
+          {/* Bento Grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <BentoGrid>
+              {conversations.map((item) => (
+                <BentoCard key={item.name} {...item} />
+              ))}
+            </BentoGrid>
+          </motion.div>
         </div>
       </div>
     </div>

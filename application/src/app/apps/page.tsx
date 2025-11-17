@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, Brain, Heart, Sparkles, Activity, ExternalLink, Github, Code2, Zap } from 'lucide-react';
 import Container from '@/components/container';
 
 interface App {
@@ -10,7 +9,6 @@ interface App {
   title: string;
   description: string;
   longDescription: string;
-  icon: React.ElementType;
   href: string;
   external?: boolean;
   github?: string;
@@ -24,10 +22,9 @@ export default function AppsPage() {
   const apps: App[] = [
     {
       id: 'growth-tools',
-      title: 'Growth Tools AI Coach',
-      description: 'AI-powered conversations for personal growth and self-discovery',
-      longDescription: 'An intelligent coaching system that helps you explore your fundamental human needs, set meaningful goals, and track your personal development journey through empathetic AI-guided conversations.',
-      icon: Heart,
+      title: 'Personal Growth Tools',
+      description: 'A personal transformation companion using proven frameworks from master teachers',
+      longDescription: 'This app is a personal transformation companion that uses the exact exercises and frameworks from teachers I respect like Tony Robbins, Martha Beck, and others who speak to me.',
       href: '/apps/growth-tools',
       status: 'live',
       features: [
@@ -97,8 +94,6 @@ export default function AppsPage() {
           {/* Adaptive grid */}
           <div className={getGridClass()}>
             {apps.map((app, index) => {
-              const Icon = app.icon;
-
               return (
                 <motion.div
                   key={app.id}
@@ -114,17 +109,12 @@ export default function AppsPage() {
                     <div className="relative p-6">
                       {/* App Header */}
                       <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800">
-                            <Icon className="h-6 w-6 text-rose-400 dark:text-rose-300" />
-                          </div>
-                          <div>
-                            <h2 className="text-xl font-semibold text-foreground">
-                              {app.title}
-                            </h2>
-                            <div className="mt-1">
-                              {statusBadge(app.status)}
-                            </div>
+                        <div>
+                          <h2 className="text-xl font-semibold text-foreground">
+                            {app.title}
+                          </h2>
+                          <div className="mt-1">
+                            {statusBadge(app.status)}
                           </div>
                         </div>
                       </div>
@@ -136,8 +126,7 @@ export default function AppsPage() {
 
                       {/* Features */}
                       <div className="mb-6">
-                        <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2">
-                          <Sparkles className="h-4 w-4 text-rose-400 dark:text-rose-300" />
+                        <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 mb-3">
                           Features
                         </h3>
                         <ul className="space-y-2">
@@ -158,13 +147,8 @@ export default function AppsPage() {
                               href={app.href}
                               className="flex-1"
                             >
-                              <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 rounded-md hover:bg-stone-800 dark:hover:bg-stone-200 transition-all hover:shadow-sm">
+                              <button className="w-full flex items-center justify-center px-4 py-2 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 rounded-md hover:bg-stone-800 dark:hover:bg-stone-200 transition-all hover:shadow-sm">
                                 <span>Launch App</span>
-                                {app.external ? (
-                                  <ExternalLink className="h-4 w-4" />
-                                ) : (
-                                  <ArrowRight className="h-4 w-4" />
-                                )}
                               </button>
                             </Link>
                             {app.github && (
@@ -173,9 +157,8 @@ export default function AppsPage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
-                                <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-gray-800 rounded-md hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
-                                  <Github className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-                                  <span className="sr-only">View on GitHub</span>
+                                <button className="px-4 py-2 border border-gray-200 dark:border-gray-800 rounded-md hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
+                                  <span>GitHub</span>
                                 </button>
                               </Link>
                             )}
@@ -205,7 +188,6 @@ export default function AppsPage() {
               className="mt-16 text-center"
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50">
-                <Activity className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
                   More apps coming soon...
                 </span>
