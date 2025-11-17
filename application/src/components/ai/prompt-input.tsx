@@ -2,6 +2,13 @@
 
 import React from "react";
 
+// Import AI-specific input group components
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupTextarea,
+} from "@/components/ai/input-group";
+
 // We need basic Radix UI components directly for AI system
 // These should NOT mix with portfolio components
 import {
@@ -699,9 +706,7 @@ export const PromptInput = ({
         onSubmit={handleSubmit}
         {...props}
       >
-        <div className="group/input-group relative flex w-full items-center rounded-md border border-input overflow-hidden transition-[color,box-shadow]">
-          {children}
-        </div>
+        <InputGroup className="overflow-hidden">{children}</InputGroup>
       </form>
     </>
   );
@@ -724,7 +729,7 @@ export const PromptInputBody = ({
   <div className={cn("contents", className)} {...props} />
 );
 
-export type PromptInputTextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+export type PromptInputTextareaProps = React.ComponentProps<typeof InputGroupTextarea>;
 
 export const PromptInputTextarea = ({
   onChange,
@@ -809,12 +814,8 @@ export const PromptInputTextarea = ({
       };
 
   return (
-    <textarea
-      className={cn(
-        "flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0",
-        "field-sizing-content max-h-48 min-h-16",
-        className
-      )}
+    <InputGroupTextarea
+      className={cn("field-sizing-content max-h-48 min-h-16", className)}
       name="message"
       onCompositionEnd={() => setIsComposing(false)}
       onCompositionStart={() => setIsComposing(true)}
@@ -827,26 +828,34 @@ export const PromptInputTextarea = ({
   );
 };
 
-export type PromptInputHeaderProps = HTMLAttributes<HTMLDivElement>;
+export type PromptInputHeaderProps = Omit<
+  React.ComponentProps<typeof InputGroupAddon>,
+  "align"
+>;
 
 export const PromptInputHeader = ({
   className,
   ...props
 }: PromptInputHeaderProps) => (
-  <div
-    className={cn("order-first flex items-center flex-wrap gap-1 px-3 pb-3", className)}
+  <InputGroupAddon
+    align="block-start"
+    className={cn("order-first flex-wrap gap-1", className)}
     {...props}
   />
 );
 
-export type PromptInputFooterProps = HTMLAttributes<HTMLDivElement>;
+export type PromptInputFooterProps = Omit<
+  React.ComponentProps<typeof InputGroupAddon>,
+  "align"
+>;
 
 export const PromptInputFooter = ({
   className,
   ...props
 }: PromptInputFooterProps) => (
-  <div
-    className={cn("flex items-center justify-between gap-1 px-3 pb-3", className)}
+  <InputGroupAddon
+    align="block-end"
+    className={cn("justify-between gap-1", className)}
     {...props}
   />
 );
