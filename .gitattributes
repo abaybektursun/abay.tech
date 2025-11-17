@@ -28,3 +28,7 @@
 *.[pP][sS][dD] filter=lfs diff=lfs merge=lfs -text
 *.[aA][iI] filter=lfs diff=lfs merge=lfs -text
 *.[eE][pP][sS] filter=lfs diff=lfs merge=lfs -text
+
+# 3D models
+*.[gG][lL][bB] filter=lfs diff=lfs merge=lfs -text
+*.[gG][lL][tT][fF] filter=lfs diff=lfs merge=lfs -text
