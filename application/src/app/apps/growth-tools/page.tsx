@@ -13,7 +13,7 @@ export default function GrowthToolsLandingPage() {
       cta: 'Start Assessment',
       available: true,
       className: 'md:col-span-2', // Featured - spans 2 columns
-      background: <div className="absolute inset-0 bg-gradient-to-br from-rose-500/20 via-pink-500/20 to-purple-500/20" />
+      glowColor: 'bg-rose-500/80 dark:bg-rose-400/80'
     },
     {
       name: 'Goal Setting',
@@ -22,7 +22,7 @@ export default function GrowthToolsLandingPage() {
       cta: 'Set Goals',
       available: false,
       className: 'md:col-span-1',
-      background: <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 via-orange-500/20 to-yellow-500/20" />
+      glowColor: 'bg-amber-500/80 dark:bg-amber-400/80'
     },
     {
       name: 'Daily Reflection',
@@ -31,7 +31,7 @@ export default function GrowthToolsLandingPage() {
       cta: 'Start Reflecting',
       available: false,
       className: 'md:col-span-1',
-      background: <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-cyan-500/20 to-teal-500/20" />
+      glowColor: 'bg-blue-500/80 dark:bg-blue-400/80'
     },
     {
       name: 'Habit Tracking',
@@ -40,7 +40,7 @@ export default function GrowthToolsLandingPage() {
       cta: 'Track Habits',
       available: false,
       className: 'md:col-span-1',
-      background: <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-emerald-500/20 to-teal-500/20" />
+      glowColor: 'bg-green-500/80 dark:bg-green-400/80'
     },
     {
       name: 'Values Clarification',
@@ -49,7 +49,7 @@ export default function GrowthToolsLandingPage() {
       cta: 'Clarify Values',
       available: false,
       className: 'md:col-span-1',
-      background: <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-indigo-500/20" />
+      glowColor: 'bg-purple-500/80 dark:bg-purple-400/80'
     },
     {
       name: 'Life Wheel',
@@ -58,7 +58,7 @@ export default function GrowthToolsLandingPage() {
       cta: 'Assess Balance',
       available: false,
       className: 'md:col-span-2',
-      background: <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-purple-500/20" />
+      glowColor: 'bg-indigo-500/80 dark:bg-indigo-400/80'
     },
     {
       name: 'Vision Board',
@@ -67,7 +67,7 @@ export default function GrowthToolsLandingPage() {
       cta: 'Create Vision',
       available: false,
       className: 'md:col-span-1',
-      background: <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-rose-500/20 to-orange-500/20" />
+      glowColor: 'bg-pink-500/80 dark:bg-pink-400/80'
     },
     {
       name: 'Gratitude Journal',
@@ -76,7 +76,7 @@ export default function GrowthToolsLandingPage() {
       cta: 'Start Journal',
       available: false,
       className: 'md:col-span-1',
-      background: <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/20 via-amber-500/20 to-orange-500/20" />
+      glowColor: 'bg-yellow-500/80 dark:bg-yellow-400/80'
     },
   ];
 
