@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import Container from "@/components/container"
-import { Heading } from "@/components/ui/typography"
+import { Heading } from "@/components/portfolio/typography"
 
 interface PageSectionProps {
   children: React.ReactNode

@@ -3,7 +3,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { AvatarImage, AvatarFallback, Avatar } from '@/components/ui/avatar';
+import { AvatarImage, AvatarFallback, Avatar } from '@/components/portfolio/avatar';
 import type { Review } from '@/interfaces';
 
 export function ReviewWithHighlight({ review }: { review: Review }) {

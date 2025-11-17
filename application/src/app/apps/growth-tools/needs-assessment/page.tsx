@@ -14,12 +14,12 @@ import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
-} from '@/components/ai-elements/conversation';
+} from '@/components/ai/conversation';
 import {
   Message,
   MessageContent,
   MessageResponse
-} from '@/components/ai-elements/message';
+} from '@/components/ai/message';
 import {
   PromptInput,
   PromptInputButton,
@@ -27,8 +27,8 @@ import {
   PromptInputTextarea,
   PromptInputTools,
   type PromptInputMessage,
-} from '@/components/ai-elements/prompt-input';
-import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion';
+} from '@/components/ai/prompt-input';
+import { Suggestion, Suggestions } from '@/components/ai/suggestion';
 
 // Icons
 import {
@@ -48,7 +48,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/primitives/dropdown-menu';
 import { toast } from 'sonner';
 
 const suggestions = [
@@ -136,7 +136,7 @@ export default function NeedsAssessmentPage() {
       }}
       className="h-full"
     >
-      <Container className="flex h-full justify-center ai-chat pt-4">
+      <Container className="flex h-full justify-center pt-4">
         {/* Chat demo box */}
         <motion.div
           className="w-full h-[600px] bg-background rounded-lg border shadow-sm overflow-hidden"

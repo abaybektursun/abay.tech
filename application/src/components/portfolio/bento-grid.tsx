@@ -3,8 +3,8 @@
 import { ReactNode } from "react";
 import { ArrowRightIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { SpotlightCard } from "@/components/ui/spotlight-card";
+import { Button } from "@/components/portfolio/button";
+import { SpotlightCard } from "@/components/portfolio/spotlight-card";
 import Link from "next/link";
 
 const BentoGrid = ({
@@ -17,7 +17,7 @@ const BentoGrid = ({
   return (
     <div
       className={cn(
-        "grid w-full auto-rows-[20rem] grid-cols-1 md:grid-cols-3 gap-4",
+        "grid w-full auto-rows-[16rem] grid-cols-1 md:grid-cols-3 gap-4",
         className
       )}
     >

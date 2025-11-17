@@ -1,39 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command";
+// We need basic Radix UI components directly for AI system
+// These should NOT mix with portfolio components
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupTextarea,
-} from "@/components/ui/input-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+} from "@/components/primitives/dropdown-menu";
 import { cn } from "@/lib/utils";
 import type { ChatStatus, FileUIPart } from "ai";
 import {
@@ -919,27 +893,36 @@ export const PromptInputTools = ({
   <div className={cn("flex items-center gap-1", className)} {...props} />
 );
 
-export type PromptInputButtonProps = ComponentProps<typeof InputGroupButton>;
-
-export const PromptInputButton = ({
-  variant = "ghost",
-  className,
-  size,
-  ...props
-}: PromptInputButtonProps) => {
-  const newSize =
-    size ?? (Children.count(props.children) > 1 ? "sm" : "icon-sm");
-
-  return (
-    <InputGroupButton
-      className={cn(className)}
-      size={newSize}
-      type="button"
-      variant={variant}
-      {...props}
-    />
-  );
+export type PromptInputButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: "ghost" | "outline" | "secondary";
+  size?: string;
 };
+
+export const PromptInputButton = React.forwardRef<HTMLButtonElement, PromptInputButtonProps>(
+  ({ variant = "ghost", className, size, ...props }, ref) => {
+    const newSize =
+      size ?? (Children.count(props.children) > 1 ? "sm" : "icon-sm");
+
+    return (
+      <button
+        ref={ref}
+        className={cn(
+          "inline-flex items-center justify-center gap-2 text-sm font-medium transition-colors",
+          "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+          variant === "ghost" && "hover:bg-accent hover:text-accent-foreground",
+          variant === "outline" && "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          variant === "secondary" && "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          className
+        )}
+        data-size={newSize}
+        type="button"
+        {...props}
+      />
+    );
+  }
+);
+
+PromptInputButton.displayName = "PromptInputButton";
 
 export type PromptInputActionMenuProps = ComponentProps<typeof DropdownMenu>;
 export const PromptInputActionMenu = (props: PromptInputActionMenuProps) => (
