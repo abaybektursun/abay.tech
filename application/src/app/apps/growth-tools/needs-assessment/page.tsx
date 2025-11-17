@@ -2,6 +2,7 @@
 
 import { useChat } from '@ai-sdk/react';
 import { useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Container from '@/components/container';
 import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
@@ -125,9 +126,24 @@ export default function NeedsAssessmentPage() {
   }, [append]);
 
   return (
-    <Container className="flex h-full justify-center ai-chat pt-4">
-      {/* Chat demo box */}
-      <div className="w-full h-[600px] bg-background rounded-lg border shadow-sm overflow-hidden">
+    <motion.div
+      layoutId="needs-assessment-card"
+      layout
+      initial={{ borderRadius: 12 }}
+      animate={{ borderRadius: 0 }}
+      transition={{
+        layout: { duration: 0.4, type: "spring", stiffness: 300, damping: 30 }
+      }}
+      className="h-full"
+    >
+      <Container className="flex h-full justify-center ai-chat pt-4">
+        {/* Chat demo box */}
+        <motion.div
+          className="w-full h-[600px] bg-background rounded-lg border shadow-sm overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.3 }}
+        >
         {/* Inner container matching demo structure */}
         <div className="relative flex h-full flex-col divide-y overflow-hidden">
         <Conversation className="flex-1">
@@ -270,7 +286,8 @@ export default function NeedsAssessmentPage() {
             </div>
           )}
         </div>
-      </div>
-    </Container>
+        </motion.div>
+      </Container>
+    </motion.div>
   );
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { ReactNode, useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
@@ -11,6 +12,7 @@ interface SpotlightCardProps {
   className?: string
   glowColor?: string
   available?: boolean
+  layoutId?: string
 }
 
 export const SpotlightCard = ({
@@ -19,7 +21,8 @@ export const SpotlightCard = ({
   children,
   className,
   glowColor = 'bg-sky-600/60 dark:bg-sky-400/60',
-  available = true
+  available = true,
+  layoutId
 }: SpotlightCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null)
 
@@ -76,14 +79,19 @@ export const SpotlightCard = ({
   }, [available])
 
   return (
-    <div
+    <motion.div
       ref={cardRef}
+      layoutId={layoutId}
+      layout
       className={cn(
         'spotlight-card group bg-border relative overflow-hidden rounded-xl p-px transition-all duration-300 ease-in-out h-full',
-        available && 'cursor-pointer hover:scale-[1.01]',
+        available && 'cursor-pointer hover:scale-[1.01] active:scale-[0.98] active:transition-none',
         !available && 'opacity-75',
         className
       )}
+      transition={{
+        layout: { duration: 0.4, type: "spring", stiffness: 300, damping: 30 }
+      }}
     >
       <Card className='group-hover:bg-card/90 h-full border-none transition-all duration-300 ease-in-out group-hover:backdrop-blur-[20px]'>
         <CardHeader>
@@ -101,9 +109,9 @@ export const SpotlightCard = ({
       {available && (
         <>
           <div className={cn('blob absolute top-0 left-0 h-32 w-32 rounded-full opacity-0 blur-3xl transition-all duration-300 ease-in-out', glowColor)} />
-          <div className='fake-blob absolute top-0 left-0 h-20 w-20 rounded-full' />
+          <div className='fake-blob absolute top-0 left-0 h-20 w-20 rounded-full pointer-events-none' />
         </>
       )}
-    </div>
+    </motion.div>
   )
 }

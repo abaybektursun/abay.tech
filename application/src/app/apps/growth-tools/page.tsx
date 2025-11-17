@@ -13,70 +13,19 @@ export default function GrowthToolsLandingPage() {
       cta: 'Start Assessment',
       available: true,
       className: 'md:col-span-2', // Featured - spans 2 columns
-      glowColor: 'bg-rose-500/80 dark:bg-rose-400/80'
+      glowColor: 'bg-rose-500/80 dark:bg-rose-400/80',
+      layoutId: 'needs-assessment-card'
     },
     {
-      name: 'Goal Setting',
-      description: 'Set meaningful goals aligned with your values and create actionable plans.',
-      href: '/apps/growth-tools/goal-setting',
-      cta: 'Set Goals',
-      available: false,
+      name: 'Integrity Alignment',
+      description:
+        "Work through Martha Beck's Way of Integrity exercises to align your actions with your true nature and find your path to authentic living.",
+      href: '/apps/growth-tools/integrity-alignment',
+      cta: 'Begin Journey',
+      available: true,
       className: 'md:col-span-1',
-      glowColor: 'bg-amber-500/80 dark:bg-amber-400/80'
-    },
-    {
-      name: 'Daily Reflection',
-      description: 'Reflect on your day, celebrate wins, and identify areas for growth.',
-      href: '/apps/growth-tools/daily-reflection',
-      cta: 'Start Reflecting',
-      available: false,
-      className: 'md:col-span-1',
-      glowColor: 'bg-blue-500/80 dark:bg-blue-400/80'
-    },
-    {
-      name: 'Habit Tracking',
-      description: 'Build and maintain positive habits with daily tracking and accountability.',
-      href: '/apps/growth-tools/habit-tracking',
-      cta: 'Track Habits',
-      available: false,
-      className: 'md:col-span-1',
-      glowColor: 'bg-green-500/80 dark:bg-green-400/80'
-    },
-    {
-      name: 'Values Clarification',
-      description: 'Discover and define your core values to guide decision-making.',
-      href: '/apps/growth-tools/values-clarification',
-      cta: 'Clarify Values',
-      available: false,
-      className: 'md:col-span-1',
-      glowColor: 'bg-purple-500/80 dark:bg-purple-400/80'
-    },
-    {
-      name: 'Life Wheel',
-      description: 'Evaluate balance across all areas of your life.',
-      href: '/apps/growth-tools/life-wheel',
-      cta: 'Assess Balance',
-      available: false,
-      className: 'md:col-span-2',
-      glowColor: 'bg-indigo-500/80 dark:bg-indigo-400/80'
-    },
-    {
-      name: 'Vision Board',
-      description: 'Create a visual representation of your goals and dreams.',
-      href: '/apps/growth-tools/vision-board',
-      cta: 'Create Vision',
-      available: false,
-      className: 'md:col-span-1',
-      glowColor: 'bg-pink-500/80 dark:bg-pink-400/80'
-    },
-    {
-      name: 'Gratitude Journal',
-      description: 'Cultivate positivity by documenting what you\'re grateful for.',
-      href: '/apps/growth-tools/gratitude',
-      cta: 'Start Journal',
-      available: false,
-      className: 'md:col-span-1',
-      glowColor: 'bg-yellow-500/80 dark:bg-yellow-400/80'
+      glowColor: 'bg-emerald-500/80 dark:bg-emerald-400/80',
+      layoutId: 'integrity-alignment-card'
     },
   ];
 

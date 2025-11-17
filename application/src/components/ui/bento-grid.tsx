@@ -35,6 +35,7 @@ const BentoCard = ({
   cta,
   available = true,
   glowColor,
+  layoutId,
 }: {
   name: string;
   className?: string;
@@ -44,13 +45,15 @@ const BentoCard = ({
   cta?: string;
   available?: boolean;
   glowColor?: string;
-}) => (
-  <div className={cn("h-full", className)}>
+  layoutId?: string;
+}) => {
+  const content = (
     <SpotlightCard
       title={name}
       description={description}
       available={available}
       glowColor={glowColor}
+      layoutId={layoutId}
     >
       {/* Coming Soon Badge */}
       {!available && (
@@ -60,20 +63,20 @@ const BentoCard = ({
           </span>
         </div>
       )}
-
-      {/* CTA Button */}
-      {available && href && cta && (
-        <div className="flex justify-center pt-4">
-          <Button variant="ghost" size="sm" asChild>
-            <Link href={href}>
-              {cta}
-              <ArrowRightIcon className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      )}
     </SpotlightCard>
-  </div>
-);
+  );
+
+  return (
+    <div className={cn("h-full", className)}>
+      {available && href ? (
+        <Link href={href} className="block h-full">
+          {content}
+        </Link>
+      ) : (
+        content
+      )}
+    </div>
+  );
+};
 
 export { BentoCard, BentoGrid };
