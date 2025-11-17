@@ -2,6 +2,7 @@
 import { notFound } from "next/navigation";
 //import Comment from "@/components/comment";
 import Container from "@/components/container";
+import { AnimatedSection } from "@/components/AnimatedPageWrapper";
 import PersonalizedArticle from "@/components/PersonalizedArticle";
 import distanceToNow from "@/lib/dateRelative";
 import { getAllPosts, getPostBySlug } from "@/lib/getPost";
@@ -32,15 +33,19 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <Container>
-      <header>
-        <h1 className="text-4xl font-bold">{post.title}</h1>
-        {post.excerpt && <p className="mt-2 text-xl">{post.excerpt}</p>}
-        <time className="flex mt-2 text-gray-400">
-          {post.date ? distanceToNow(new Date(post.date)): "!BROKEN DATE! src/app/port../[slug]/page.tsx"}
-        </time>
-      </header>
+      <AnimatedSection variant="gentleScale" delay={0.1}>
+        <header>
+          <h1 className="text-4xl font-bold">{post.title}</h1>
+          {post.excerpt && <p className="mt-2 text-xl">{post.excerpt}</p>}
+          <time className="flex mt-2 text-gray-400">
+            {post.date ? distanceToNow(new Date(post.date)): "!BROKEN DATE! src/app/port../[slug]/page.tsx"}
+          </time>
+        </header>
+      </AnimatedSection>
 
-      <PersonalizedArticle html={content} className="prose prose-slate max-w-none mt-10" />
+      <AnimatedSection variant="softFadeUp" delay={0.3}>
+        <PersonalizedArticle html={content} className="prose prose-slate max-w-none mt-10" />
+      </AnimatedSection>
     </Container>
   );
 }
