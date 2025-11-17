@@ -4,7 +4,7 @@ import path from 'path'
 import Link from 'next/link'
 import matter from 'gray-matter'
 import Container from '@/components/container'
-import AnimatedPostsList, { AnimatedPostCard } from '@/components/AnimatedPostsList'
+import { AnimatedSection } from '@/components/AnimatedPageWrapper'
 
 export const metadata: Metadata = {
   title: 'Blog Posts',
@@ -92,17 +92,15 @@ export default async function PostsPage() {
   
   return (
     <Container>
-      <AnimatedPostsList>
+      <AnimatedSection className="max-w-2xl mx-auto px-4" variant="softFadeUp">
         <div>
           {posts.map((post) => (
-            <AnimatedPostCard key={post.slug}>
-              <div className="border-b border-gray-200 last:border-b-0">
-                <PostCard post={post} />
-              </div>
-            </AnimatedPostCard>
+            <div key={post.slug} className="border-b border-gray-200 last:border-b-0">
+              <PostCard post={post} />
+            </div>
           ))}
         </div>
-      </AnimatedPostsList>
+      </AnimatedSection>
     </Container>
   )
 }
