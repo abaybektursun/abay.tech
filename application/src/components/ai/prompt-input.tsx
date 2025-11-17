@@ -699,7 +699,7 @@ export const PromptInput = ({
         onSubmit={handleSubmit}
         {...props}
       >
-        <div className="group/input-group relative flex w-full items-center rounded-md border border-input overflow-hidden transition-[color,box-shadow] focus-within:ring-1 focus-within:ring-ring">
+        <div className="group/input-group relative flex w-full items-center rounded-md border border-input overflow-hidden transition-[color,box-shadow]">
           {children}
         </div>
       </form>
