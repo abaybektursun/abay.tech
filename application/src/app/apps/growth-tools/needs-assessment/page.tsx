@@ -14,12 +14,12 @@ import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
-} from '@/components/ai/conversation';
+} from '@/components/ai-elements/conversation';
 import {
   Message,
   MessageContent,
   MessageResponse
-} from '@/components/ai/message';
+} from '@/components/ai-elements/message';
 import {
   PromptInput,
   PromptInputButton,
@@ -27,8 +27,8 @@ import {
   PromptInputTextarea,
   PromptInputTools,
   type PromptInputMessage,
-} from '@/components/ai/prompt-input';
-import { Suggestion, Suggestions } from '@/components/ai/suggestion';
+} from '@/components/ai-elements/prompt-input';
+import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion';
 
 // Icons
 import {
@@ -48,7 +48,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/primitives/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 
 const suggestions = [

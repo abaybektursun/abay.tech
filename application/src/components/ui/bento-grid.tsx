@@ -3,8 +3,8 @@
 import { ReactNode } from "react";
 import { ArrowRightIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/portfolio/button";
-import { SpotlightCard } from "@/components/portfolio/spotlight-card";
+import { Button } from "@/components/ui/button";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 import Link from "next/link";
 
 const BentoGrid = ({

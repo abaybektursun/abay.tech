@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BentoGrid, BentoCard } from '@/components/portfolio/bento-grid';
+import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
 
 export default function GrowthToolsLandingPage() {
   const conversations = [

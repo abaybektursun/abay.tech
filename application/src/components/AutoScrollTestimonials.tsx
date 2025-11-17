@@ -3,7 +3,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/portfolio/avatar";
+import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import type { Review } from "@/interfaces";
 
 interface AutoScrollReviewsProps {

@@ -8,13 +8,13 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "@/components/portfolio/command";
+} from "@/components/ui/command";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
-} from "@/components/portfolio/dialog";
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import type { ReactNode, ComponentProps } from "react";
 

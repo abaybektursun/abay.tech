@@ -15,8 +15,8 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '@/components/portfolio/chart';
-import type { ChartConfig } from '@/components/portfolio/chart';
+} from '@/components/ui/chart';
+import type { ChartConfig } from '@/components/ui/chart';
 import {
   Artifact,
   ArtifactHeader,
@@ -26,7 +26,7 @@ import {
   ArtifactActions,
   ArtifactAction,
   ArtifactClose,
-} from '@/components/ai/artifact';
+} from '@/components/ai-elements/artifact';
 import { cn } from '@/lib/utils';
 
 interface NeedsChartProps {
