@@ -5,8 +5,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Sparkles, ArrowLeft, CopyIcon, RefreshCwIcon, X } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { NeedsChart } from '@/components/self-help/visualizations/NeedsChart';
-import type { ShowNeedsChartArgs } from '@/lib/self-help/types';
+import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
+import type { ShowNeedsChartArgs } from '@/lib/growth-tools/types';
 
 // AI Elements components - Full utilization
 import {
@@ -61,7 +61,7 @@ export default function NeedsAssessmentPage() {
   const [selectedModel] = useState('gpt-4o');
 
   const { messages, append, input, setInput, isLoading, stop } = useChat({
-    api: '/api/apps/self-help/needs-assessment',
+    api: '/api/apps/growth-tools/needs-assessment',
     maxSteps: 5,
     body: { model: selectedModel },
     onToolCall: async ({ toolCall }) => {

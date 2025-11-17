@@ -5,7 +5,7 @@
  * state management and persistence logic.
  */
 
-import type { ConversationSession, Need } from '../../src/lib/self-help/types';
+import type { ConversationSession, Need } from '../../src/lib/growth-tools/types';
 
 // Mock crypto.randomUUID for consistent testing
 if (typeof crypto === 'undefined') {
@@ -164,7 +164,7 @@ function testLocalStoragePersistence() {
   };
 
   console.log('✅ State persisted to localStorage');
-  console.log('   - Key: self-help-conversation-storage');
+  console.log('   - Key: growth-tools-conversation-storage');
   console.log('   - Sessions saved: 1');
   console.log('   - UI state NOT persisted (as expected)');
 }

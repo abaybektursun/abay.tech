@@ -1,7 +1,7 @@
 /**
- * Self-Help Application Types
+ * Growth Tools Application Types
  *
- * Core type definitions for the self-help chat application,
+ * Core type definitions for the growth tools chat application,
  * including needs assessment, conversation sessions, and visualizations.
  */
 
@@ -46,7 +46,7 @@ export interface NeedsAssessment {
 }
 
 /**
- * Types of self-help conversations available
+ * Types of growth tools conversations available
  */
 export type ConversationType =
   | 'needs-assessment'

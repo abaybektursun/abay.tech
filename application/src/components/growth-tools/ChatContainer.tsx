@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useConversationStore } from '@/lib/self-help/stores/conversation-store';
+import { useConversationStore } from '@/lib/growth-tools/stores/conversation-store';
 import { type ReactNode } from 'react';
 
 interface ChatContainerProps {

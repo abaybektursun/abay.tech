@@ -23,12 +23,12 @@ interface App {
 export default function AppsPage() {
   const apps: App[] = [
     {
-      id: 'self-help',
-      title: 'Self-Help AI Coach',
+      id: 'growth-tools',
+      title: 'Growth Tools AI Coach',
       description: 'AI-powered conversations for personal growth and self-discovery',
       longDescription: 'An intelligent coaching system that helps you explore your fundamental human needs, set meaningful goals, and track your personal development journey through empathetic AI-guided conversations.',
       icon: Heart,
-      href: '/apps/self-help',
+      href: '/apps/growth-tools',
       status: 'live',
       features: [
         'Needs Assessment with visual charts',
@@ -44,9 +44,9 @@ export default function AppsPage() {
 
   const statusBadge = (status: App['status']) => {
     const styles = {
-      'live': 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-      'beta': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-      'coming-soon': 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400',
+      'live': 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400',
+      'beta': 'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400',
+      'coming-soon': 'bg-stone-50 text-stone-500 dark:bg-stone-950/30 dark:text-stone-400',
     };
 
     const labels = {
@@ -56,38 +56,46 @@ export default function AppsPage() {
     };
 
     return (
-      <span className={`px-2 py-1 text-xs font-medium rounded-full ${styles[status]}`}>
+      <span className={`px-2 py-1 text-xs font-medium rounded-md ${styles[status]}`}>
         {labels[status]}
       </span>
     );
   };
 
-  return (
-    <div className="min-h-screen">
-      <Container>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="py-12 sm:py-16"
-        >
-          {/* Header */}
-          <div className="mb-12">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30">
-                <Code2 className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
-                Apps
-              </h1>
-            </div>
-            <p className="text-lg text-muted-foreground max-w-3xl">
-              Interactive web applications and tools I've built to explore ideas, solve problems, and help people.
-            </p>
-          </div>
+  // Determine grid layout based on number of apps
+  const getGridClass = () => {
+    if (apps.length === 1) {
+      // Single app: centered, reasonable width
+      return 'flex justify-center';
+    } else if (apps.length === 2) {
+      // Two apps: side by side on large screens
+      return 'grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto';
+    } else if (apps.length === 3) {
+      // Three apps: 3 columns on large screens
+      return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto';
+    } else {
+      // 4+ apps: responsive grid
+      return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6';
+    }
+  };
 
-          {/* Apps Grid */}
-          <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
+  const getCardWidth = () => {
+    if (apps.length === 1) {
+      return 'w-full max-w-md';
+    }
+    return 'w-full';
+  };
+
+  return (
+    <Container>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="pb-16"
+      >
+          {/* Adaptive grid */}
+          <div className={getGridClass()}>
             {apps.map((app, index) => {
               const Icon = app.icon;
 
@@ -100,23 +108,18 @@ export default function AppsPage() {
                     duration: 0.5,
                     delay: index * 0.1
                   }}
-                  className="group"
+                  className={getCardWidth()}
                 >
-                  <div className="relative overflow-hidden rounded-2xl border bg-card hover:shadow-xl transition-all duration-300 h-full">
-                    {/* Gradient Background */}
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${app.gradient} opacity-5 group-hover:opacity-10 transition-opacity`}
-                    />
-
-                    <div className="relative p-6 sm:p-8">
+                  <div className="relative overflow-hidden rounded-2xl border-[0.5px] border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-950 hover:border-stone-300 dark:hover:border-stone-700 hover:shadow-lg transition-all duration-300 h-full">
+                    <div className="relative p-6">
                       {/* App Header */}
-                      <div className="flex items-start justify-between mb-6">
-                        <div className="flex items-center gap-4">
-                          <div className={`flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${app.gradient} shadow-lg`}>
-                            <Icon className="h-7 w-7 text-white" />
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800">
+                            <Icon className="h-6 w-6 text-rose-400 dark:text-rose-300" />
                           </div>
                           <div>
-                            <h2 className="text-xl sm:text-2xl font-semibold text-foreground">
+                            <h2 className="text-xl font-semibold text-foreground">
                               {app.title}
                             </h2>
                             <div className="mt-1">
@@ -127,53 +130,35 @@ export default function AppsPage() {
                       </div>
 
                       {/* Description */}
-                      <p className="text-muted-foreground mb-6 leading-relaxed">
+                      <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
                         {app.longDescription}
                       </p>
 
                       {/* Features */}
                       <div className="mb-6">
-                        <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                          <Sparkles className="h-4 w-4" />
+                        <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2">
+                          <Sparkles className="h-4 w-4 text-rose-400 dark:text-rose-300" />
                           Features
                         </h3>
                         <ul className="space-y-2">
                           {app.features.map((feature) => (
-                            <li key={feature} className="text-sm text-muted-foreground flex items-start gap-2">
-                              <span className="text-primary mt-0.5">•</span>
+                            <li key={feature} className="text-sm text-stone-600 dark:text-stone-400 flex items-start gap-2">
+                              <span className="text-rose-300 dark:text-rose-400 mt-0.5">•</span>
                               <span>{feature}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
 
-                      {/* Tech Stack */}
-                      <div className="mb-6">
-                        <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                          <Zap className="h-4 w-4" />
-                          Built with
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                          {app.tech.map((tech) => (
-                            <span
-                              key={tech}
-                              className="px-2.5 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-md"
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
                       {/* Actions */}
-                      <div className="flex items-center gap-3 pt-4 border-t">
+                      <div className="flex items-center gap-3 pt-4">
                         {app.status === 'live' ? (
                           <>
                             <Link
                               href={app.href}
                               className="flex-1"
                             >
-                              <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+                              <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 rounded-md hover:bg-stone-800 dark:hover:bg-stone-200 transition-all hover:shadow-sm">
                                 <span>Launch App</span>
                                 {app.external ? (
                                   <ExternalLink className="h-4 w-4" />
@@ -188,8 +173,8 @@ export default function AppsPage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
-                                <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-secondary transition-colors">
-                                  <Github className="h-4 w-4" />
+                                <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-gray-800 rounded-md hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
+                                  <Github className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                                   <span className="sr-only">View on GitHub</span>
                                 </button>
                               </Link>
@@ -211,22 +196,23 @@ export default function AppsPage() {
             })}
           </div>
 
-          {/* Future Apps Teaser */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-16 text-center"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50">
-              <Activity className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">
-                More apps coming soon...
-              </span>
-            </div>
-          </motion.div>
-        </motion.div>
-      </Container>
-    </div>
+          {/* Coming soon section - only show if we have less than 4 apps */}
+          {apps.length < 4 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="mt-16 text-center"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50">
+                <Activity className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">
+                  More apps coming soon...
+                </span>
+              </div>
+            </motion.div>
+          )}
+      </motion.div>
+    </Container>
   );
 }

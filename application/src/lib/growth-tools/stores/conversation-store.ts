@@ -1,7 +1,7 @@
 /**
  * Conversation Store
  *
- * Zustand store for managing self-help conversation state
+ * Zustand store for managing growth tools conversation state
  * with localStorage persistence for session data.
  */
 
@@ -120,7 +120,7 @@ export const useConversationStore = create<ConversationStore>()(
       },
     }),
     {
-      name: 'self-help-conversation-storage',
+      name: 'growth-tools-conversation-storage',
       // Only persist sessions, not UI state
       partialize: (state) => ({
         sessions: state.sessions,

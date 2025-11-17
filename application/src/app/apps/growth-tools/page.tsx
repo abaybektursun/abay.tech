@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-export default function SelfHelpLandingPage() {
+export default function GrowthToolsLandingPage() {
   const conversations = [
     {
       id: 'needs-assessment',
@@ -16,7 +16,7 @@ export default function SelfHelpLandingPage() {
       description:
         'Explore your fundamental human needs across physical, emotional, mental, and spiritual dimensions.',
       icon: Heart,
-      href: '/apps/self-help/needs-assessment',
+      href: '/apps/growth-tools/needs-assessment',
       theme: 'rose', // Semantic theme name
       available: true,
     },
@@ -25,7 +25,7 @@ export default function SelfHelpLandingPage() {
       title: 'Goal Setting',
       description: 'Set meaningful goals aligned with your values and create actionable plans.',
       icon: Sparkles,
-      href: '/apps/self-help/goal-setting',
+      href: '/apps/growth-tools/goal-setting',
       theme: 'amber',
       available: false,
     },
@@ -34,7 +34,7 @@ export default function SelfHelpLandingPage() {
       title: 'Daily Reflection',
       description: 'Reflect on your day, celebrate wins, and identify areas for growth.',
       icon: Brain,
-      href: '/apps/self-help/daily-reflection',
+      href: '/apps/growth-tools/daily-reflection',
       theme: 'blue',
       available: false,
     },
@@ -63,7 +63,7 @@ export default function SelfHelpLandingPage() {
     <div className="h-full bg-background">
       {/* Using standard Tailwind container instead of custom Container */}
       <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 h-full">
-        <div className="space-y-12 py-8 sm:py-12 lg:py-16">
+        <div className="space-y-8">
           {/* Header - Responsive */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -77,7 +77,7 @@ export default function SelfHelpLandingPage() {
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                  Self-Help Tools
+                  Growth Tools
                 </h1>
                 <p className="text-sm sm:text-base text-muted-foreground">
                   AI-powered conversations for personal growth
@@ -170,18 +170,6 @@ export default function SelfHelpLandingPage() {
               );
             })}
           </div>
-
-          {/* Footer - Responsive */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="pt-8 border-t border-border"
-          >
-            <p className="text-xs sm:text-sm text-muted-foreground text-center">
-              Powered by GPT-4 • Your data is private and secure
-            </p>
-          </motion.div>
         </div>
       </div>
     </div>

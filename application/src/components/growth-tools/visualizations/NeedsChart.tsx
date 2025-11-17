@@ -1,6 +1,6 @@
 'use client';
 
-import type { ShowNeedsChartArgs } from '@/lib/self-help/types';
+import type { ShowNeedsChartArgs } from '@/lib/growth-tools/types';
 import { Download, Share2, X } from 'lucide-react';
 import {
   PolarAngleAxis,

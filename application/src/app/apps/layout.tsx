@@ -23,5 +23,5 @@ export default function AppsLayout({ children }: AppsLayoutProps) {
   }
 
   // For the apps index page, use normal flow
-  return <>{children}</>;
+  return <div>{children}</div>;
 }

@@ -1,5 +1,5 @@
 /**
- * Type Tests for Self-Help Application
+ * Type Tests for Growth Tools Application
  *
  * These tests verify that TypeScript types are correctly defined
  * and can be used without compilation errors.
@@ -13,7 +13,7 @@ import type {
   ConversationType,
   VisualizationType,
   ShowNeedsChartArgs,
-} from '../../src/lib/self-help/types';
+} from '../../src/lib/growth-tools/types';
 
 // Test: Need type can be instantiated with valid data
 const validNeed: Need = {
