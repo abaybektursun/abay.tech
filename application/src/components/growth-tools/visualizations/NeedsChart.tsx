@@ -8,9 +8,15 @@ import {
   PolarRadiusAxis,
   Radar,
   RadarChart,
-  ResponsiveContainer,
-  Tooltip,
 } from 'recharts';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from '@/components/ui/chart';
+import type { ChartConfig } from '@/components/ui/chart';
 import {
   Artifact,
   ArtifactHeader,
@@ -36,6 +42,18 @@ export function NeedsChart({ data, onClose }: NeedsChartProps) {
     importance: need.importance,
     category: need.category,
   }));
+
+  // Chart configuration for Shadcn UI
+  const chartConfig = {
+    fulfilled: {
+      label: 'Fulfilled',
+      color: 'hsl(var(--primary))',
+    },
+    importance: {
+      label: 'Importance',
+      color: 'hsl(var(--secondary))',
+    },
+  } satisfies ChartConfig;
 
   // Get unique categories for color coding
   const categories = Array.from(new Set(data.needs.map((n) => n.category)));
@@ -104,78 +122,78 @@ export function NeedsChart({ data, onClose }: NeedsChartProps) {
 
       <ArtifactContent className="flex flex-col">
         {/* Chart - Responsive heights */}
-        <div className={cn(
-          "relative flex-shrink-0",
-          "h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]",
-          "px-2 sm:px-4"
-        )}>
-          <ResponsiveContainer width="100%" height="100%">
-            <RadarChart data={chartData}>
-              <PolarGrid gridType="polygon" stroke="hsl(var(--border))" />
-              <PolarAngleAxis
-                dataKey="need"
-                className="text-[10px] sm:text-xs"
-                tick={{
-                  fill: 'hsl(var(--muted-foreground))',
-                  fontSize: '10px',
-                }}
-              />
-              <PolarRadiusAxis
-                angle={90}
-                domain={[0, 100]}
-                className="text-[10px]"
-                tick={{
-                  fill: 'hsl(var(--muted-foreground))',
-                  fontSize: '10px',
-                }}
-              />
-              <Radar
-                dataKey="fulfilled"
-                fill="hsl(var(--primary))"
-                fillOpacity={0.5}
-                name="Fulfilled"
-                stroke="hsl(var(--primary))"
-                strokeWidth={2}
-              />
-              <Radar
-                dataKey="importance"
-                fill="hsl(var(--secondary))"
-                fillOpacity={0.3}
-                name="Importance"
-                stroke="hsl(var(--secondary))"
-                strokeWidth={2}
-              />
-              <Tooltip
-                content={({ payload }) => {
-                  if (!payload || payload.length === 0) return null;
-                  const data = payload[0]?.payload;
+        <ChartContainer
+          config={chartConfig}
+          className={cn(
+            "relative flex-shrink-0",
+            "h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]",
+            "px-2 sm:px-4",
+            "w-full"
+          )}
+        >
+          <RadarChart data={chartData}>
+            <PolarGrid gridType="polygon" stroke="hsl(var(--border))" />
+            <PolarAngleAxis
+              dataKey="need"
+              className="text-[10px] sm:text-xs"
+              tick={{
+                fill: 'hsl(var(--muted-foreground))',
+                fontSize: '10px',
+              }}
+            />
+            <PolarRadiusAxis
+              angle={90}
+              domain={[0, 100]}
+              className="text-[10px]"
+              tick={{
+                fill: 'hsl(var(--muted-foreground))',
+                fontSize: '10px',
+              }}
+            />
+            <Radar
+              dataKey="fulfilled"
+              fill="var(--color-fulfilled)"
+              fillOpacity={0.5}
+              name="Fulfilled"
+              stroke="var(--color-fulfilled)"
+              strokeWidth={2}
+            />
+            <Radar
+              dataKey="importance"
+              fill="var(--color-importance)"
+              fillOpacity={0.3}
+              name="Importance"
+              stroke="var(--color-importance)"
+              strokeWidth={2}
+            />
+            <ChartTooltip
+              content={<ChartTooltipContent
+                indicator="dot"
+                formatter={(value, name, item) => {
+                  const data = item.payload;
                   return (
-                    <div className="rounded-lg border bg-background p-2 sm:p-3 shadow-md">
-                      <p className="mb-1 sm:mb-2 font-medium text-sm">{data.need}</p>
-                      <div className="space-y-0.5 sm:space-y-1 text-xs sm:text-sm">
-                        <p>
-                          <span className="text-muted-foreground">
-                            Fulfilled:{' '}
-                          </span>
-                          <span className="font-medium">{data.fulfilled}%</span>
-                        </p>
-                        <p>
-                          <span className="text-muted-foreground">
-                            Importance:{' '}
-                          </span>
-                          <span className="font-medium">{data.importance}%</span>
-                        </p>
-                        <p className="capitalize text-muted-foreground text-xs">
-                          {data.category}
-                        </p>
+                    <div className="space-y-0.5">
+                      <p className="font-medium text-sm">{data.need}</p>
+                      <div className="text-xs">
+                        <span className="text-muted-foreground">
+                          {name}: {' '}
+                        </span>
+                        <span className="font-medium">{value}%</span>
                       </div>
+                      <p className="capitalize text-muted-foreground text-xs">
+                        {data.category}
+                      </p>
                     </div>
                   );
                 }}
-              />
-            </RadarChart>
-          </ResponsiveContainer>
-        </div>
+              />}
+            />
+            <ChartLegend
+              verticalAlign="bottom"
+              content={<ChartLegendContent />}
+            />
+          </RadarChart>
+        </ChartContainer>
 
         {/* Insights - Responsive text sizes */}
         {data.insights && data.insights.length > 0 && (
@@ -191,18 +209,6 @@ export function NeedsChart({ data, onClose }: NeedsChartProps) {
             </ul>
           </div>
         )}
-
-        {/* Legend - Responsive */}
-        <div className="mt-4 flex items-center gap-3 sm:gap-4 border-t pt-3 sm:pt-4 px-2 sm:px-4 text-xs sm:text-sm flex-shrink-0">
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-primary" />
-            <span className="text-muted-foreground">Fulfilled</span>
-          </div>
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-secondary" />
-            <span className="text-muted-foreground">Importance</span>
-          </div>
-        </div>
       </ArtifactContent>
     </Artifact>
   );
