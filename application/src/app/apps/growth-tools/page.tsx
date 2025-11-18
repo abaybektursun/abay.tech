@@ -1,9 +1,15 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Button } from '@/components/ui/button';
+import { LayoutGrid, MessagesSquare, ChevronDown } from 'lucide-react';
 
 export default function GrowthToolsLandingPage() {
+  // State for sidebar
+  const [isChatsOpen, setIsChatsOpen] = useState(true);
   const conversations = [
     {
       name: 'Needs Assessment',
@@ -30,10 +36,65 @@ export default function GrowthToolsLandingPage() {
   ];
 
   return (
-    <div className="h-full bg-background">
-      {/* Using standard Tailwind container instead of custom Container */}
-      <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 h-full">
-        <div className="space-y-8">
+    <div className="container max-w-6xl mx-auto px-4">
+      <div className="flex gap-8">
+        {/* Enhanced sidebar menu */}
+        <nav className="hidden md:block w-48 flex-shrink-0">
+          <div className="sticky top-24 space-y-2">
+            {/* Exercises button */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-sm hover:bg-accent/50 transition-all duration-200"
+                onClick={() => window.location.href = '/apps/growth-tools'}
+              >
+                <LayoutGrid className="mr-2 h-4 w-4" />
+                Exercises
+              </Button>
+            </motion.div>
+
+            {/* Collapsible Chats section */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              <Collapsible open={isChatsOpen} onOpenChange={setIsChatsOpen}>
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-between text-sm hover:bg-accent/50 transition-all duration-200"
+                  >
+                    <span className="flex items-center">
+                      <MessagesSquare className="mr-2 h-4 w-4" />
+                      Chats
+                    </span>
+                    <motion.div
+                      animate={{ rotate: isChatsOpen ? 180 : 0 }}
+                      transition={{ duration: 0.2, ease: "easeInOut" }}
+                    >
+                      <ChevronDown className="h-4 w-4" />
+                    </motion.div>
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <div className="mt-2 pl-6 space-y-1">
+                    <div className="text-xs text-muted-foreground py-2">
+                      No saved chats
+                    </div>
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            </motion.div>
+          </div>
+        </nav>
+
+        {/* Main content */}
+        <div className="flex-1 space-y-8">
           {/* Header - Responsive */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
