@@ -1,13 +1,21 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import { LayoutGrid, MessagesSquare, ChevronDown } from 'lucide-react';
+import { NeedsAssessmentView } from '@/components/growth-tools/NeedsAssessmentView';
 
 export default function GrowthToolsLandingPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // Get exercise from URL
+  const exercise = searchParams.get('exercise');
+
   // State for sidebar
   const [isChatsOpen, setIsChatsOpen] = useState(true);
   const conversations = [
@@ -15,7 +23,7 @@ export default function GrowthToolsLandingPage() {
       name: 'Needs Assessment',
       description:
         "Utilize Tony Robbins' framework of the 6 human needs to evaluate where you are right now: what needs are lacking and which are fulfilled.",
-      href: '/apps/growth-tools/needs-assessment',
+      onClick: () => router.push('/apps/growth-tools?exercise=needs-assessment'),
       cta: 'Start Assessment',
       available: true,
       className: 'md:col-span-2', // Featured - spans 2 columns
@@ -26,7 +34,7 @@ export default function GrowthToolsLandingPage() {
       name: 'Integrity Alignment',
       description:
         "Work through Martha Beck's Way of Integrity exercises to align your actions with your true nature and find your path to authentic living.",
-      href: '/apps/growth-tools/integrity-alignment',
+      onClick: () => router.push('/apps/growth-tools?exercise=integrity-alignment'),
       cta: 'Begin Journey',
       available: true,
       className: 'md:col-span-1',
@@ -94,39 +102,50 @@ export default function GrowthToolsLandingPage() {
         </nav>
 
         {/* Main content */}
-        <div className="flex-1 space-y-8">
-          {/* Header - Responsive */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-4"
-          >
-            <div className="mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                Growth Tools
-              </h1>
-              <p className="text-sm sm:text-base text-muted-foreground">
-                Personal transformation through proven frameworks
-              </p>
-            </div>
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-3xl">
-              Work through proven exercises and frameworks from master teachers like Tony Robbins and Martha Beck. This companion guides you step by step, keeping you focused and helping you complete the inner work that matters.
-            </p>
-          </motion.div>
+        <div className="flex-1">
+          {exercise === 'needs-assessment' ? (
+            <NeedsAssessmentView />
+          ) : (
+            <div className="space-y-8">
+              {/* Header - Responsive */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="space-y-4"
+              >
+                <div className="mb-6">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                    Growth Tools
+                  </h1>
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    Personal transformation through proven frameworks
+                  </p>
+                </div>
+                <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-3xl">
+                  Work through proven exercises and frameworks from master teachers like Tony Robbins and Martha Beck. This companion guides you step by step, keeping you focused and helping you complete the inner work that matters.
+                </p>
+              </motion.div>
 
-          {/* Bento Grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <BentoGrid>
-              {conversations.map((item) => (
-                <BentoCard key={item.name} {...item} />
-              ))}
-            </BentoGrid>
-          </motion.div>
+              {/* Bento Grid */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                <BentoGrid>
+                  {conversations.map((item) => {
+                    const { onClick, ...cardProps } = item;
+                    return (
+                      <div key={item.name} onClick={onClick} className="cursor-pointer">
+                        <BentoCard {...cardProps} />
+                      </div>
+                    );
+                  })}
+                </BentoGrid>
+              </motion.div>
+            </div>
+          )}
         </div>
       </div>
     </div>
