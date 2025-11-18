@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  transpilePackages: ['three'],
   webpack: (config) => {
     // Add custom webpack configuration
     config.resolve.alias = {

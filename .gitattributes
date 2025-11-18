@@ -1,30 +1,4 @@
-*.json filter=lfs diff=lfs merge=lfs -text
-*.jpg filter=lfs diff=lfs merge=lfs -text
-*.jpeg filter=lfs diff=lfs merge=lfs -text
-*.png filter=lfs diff=lfs merge=lfs -text
-*.gif filter=lfs diff=lfs merge=lfs -text
-*.bmp filter=lfs diff=lfs merge=lfs -text
-*.tif filter=lfs diff=lfs merge=lfs -text
-*.tiff filter=lfs diff=lfs merge=lfs -text
-*.heic filter=lfs diff=lfs merge=lfs -text
-*.heif filter=lfs diff=lfs merge=lfs -text
-*.webp filter=lfs diff=lfs merge=lfs -text
-*.svg filter=lfs diff=lfs merge=lfs -text
-*.ico filter=lfs diff=lfs merge=lfs -text
-*.mp4 filter=lfs diff=lfs merge=lfs -text
-*.mov filter=lfs diff=lfs merge=lfs -text
-*.avi filter=lfs diff=lfs merge=lfs -text
-*.mkv filter=lfs diff=lfs merge=lfs -text
-*.webm filter=lfs diff=lfs merge=lfs -text
-*.mp3 filter=lfs diff=lfs merge=lfs -text
-*.wav filter=lfs diff=lfs merge=lfs -text
-*.flac filter=lfs diff=lfs merge=lfs -text
-*.ogg filter=lfs diff=lfs merge=lfs -text
-*.m4a filter=lfs diff=lfs merge=lfs -text
-*.pdf filter=lfs diff=lfs merge=lfs -text
-*.psd filter=lfs diff=lfs merge=lfs -text
-*.ai filter=lfs diff=lfs merge=lfs -text
-*.eps filter=lfs diff=lfs merge=lfs -text
+# Repository-wide LFS tracking for any binary media/design artifacts
 *.[jJ][pP][gG] filter=lfs diff=lfs merge=lfs -text
 *.[jJ][pP][eE][gG] filter=lfs diff=lfs merge=lfs -text
 *.[pP][nN][gG] filter=lfs diff=lfs merge=lfs -text
@@ -37,6 +11,8 @@
 *.[wW][eE][bB][pP] filter=lfs diff=lfs merge=lfs -text
 *.[sS][vV][gG] filter=lfs diff=lfs merge=lfs -text
 *.[iI][cC][oO] filter=lfs diff=lfs merge=lfs -text
+
+# Video + audio
 *.[mM][pP]4 filter=lfs diff=lfs merge=lfs -text
 *.[mM][oO][vV] filter=lfs diff=lfs merge=lfs -text
 *.[aA][vV][iI] filter=lfs diff=lfs merge=lfs -text
@@ -47,7 +23,12 @@
 *.[fF][lL][aA][cC] filter=lfs diff=lfs merge=lfs -text
 *.[oO][gG][gG] filter=lfs diff=lfs merge=lfs -text
 *.[mM]4[aA] filter=lfs diff=lfs merge=lfs -text
+# Docs & design exports
 *.[pP][dD][fF] filter=lfs diff=lfs merge=lfs -text
 *.[pP][sS][dD] filter=lfs diff=lfs merge=lfs -text
 *.[aA][iI] filter=lfs diff=lfs merge=lfs -text
 *.[eE][pP][sS] filter=lfs diff=lfs merge=lfs -text
+
+# 3D models
+*.[gG][lL][bB] filter=lfs diff=lfs merge=lfs -text
+*.[gG][lL][tT][fF] filter=lfs diff=lfs merge=lfs -text
