@@ -638,16 +638,22 @@ export const PromptInput = ({
     };
   }, [add, globalDrop]);
 
-  useEffect(
-    () => () => {
+useEffect(
+  () => {
+    // This cleanup function will run only on component unmount.
+    return () => {
       if (!usingProvider) {
-        for (const f of files) {
+        // `items` is the state variable for local files.
+        // The closure will capture the last rendered value of `items`.
+        for (const f of items) {
           if (f.url) URL.revokeObjectURL(f.url);
         }
       }
-    },
-    [usingProvider, files]
-  );
+    }
+  },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [usingProvider] // Depends on `usingProvider` to re-evaluate if it changes. `items` is intentionally omitted.
+);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.currentTarget.files) {
