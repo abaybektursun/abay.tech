@@ -132,7 +132,12 @@ export function NeedsAssessmentView() {
     <div className="h-full">
       <Container className="flex h-full justify-center pt-4">
         {/* Chat container matching ChatGPT demo structure */}
-        <div className="w-full h-[600px] bg-background rounded-lg border shadow-sm overflow-hidden">
+        <motion.div
+          className="w-full h-[600px] bg-background rounded-lg border shadow-sm overflow-hidden"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
           <div className="relative flex size-full flex-col divide-y overflow-hidden">
             <Conversation>
               <ConversationContent>
@@ -289,7 +294,7 @@ export function NeedsAssessmentView() {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       </Container>
     </div>
   );

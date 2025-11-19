@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
@@ -58,7 +58,7 @@ export default function GrowthToolsLandingPage() {
               <Button
                 variant="ghost"
                 className="w-full justify-start text-sm hover:bg-accent/50 transition-all duration-200"
-                onClick={() => window.location.href = '/apps/growth-tools'}
+                onClick={() => router.push('/apps/growth-tools')}
               >
                 <LayoutGrid className="mr-2 h-4 w-4" />
                 Exercises
@@ -103,11 +103,27 @@ export default function GrowthToolsLandingPage() {
 
         {/* Main content */}
         <div className="flex-1">
-          {exercise === 'needs-assessment' ? (
-            <NeedsAssessmentView />
-          ) : (
-            <div className="space-y-8">
-              {/* Header - Responsive */}
+          <AnimatePresence mode="wait">
+            {exercise === 'needs-assessment' ? (
+              <motion.div
+                key="needs-assessment"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <NeedsAssessmentView />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="exercise-list"
+                className="space-y-8"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                {/* Header - Responsive */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -144,8 +160,9 @@ export default function GrowthToolsLandingPage() {
                   })}
                 </BentoGrid>
               </motion.div>
-            </div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>
