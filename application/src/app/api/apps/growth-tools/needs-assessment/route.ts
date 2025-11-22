@@ -14,6 +14,8 @@ const SYSTEM_PROMPT = fs.readFileSync(
 );
 
 export async function POST(req: Request) {
+  console.log('[NeedsAssessmentAPI] - POST endpoint hit');
+
   if (!process.env.OPENAI_API_KEY) {
     console.error(
       '[NeedsAssessmentAPI] OPENAI_API_KEY is not configured. Unable to fulfil request.'
@@ -66,6 +68,10 @@ export async function POST(req: Request) {
           parameters: z.object({}),
           // No execute function - this will be handled client-side
         }),
+      },
+      // Correct, documented way to catch streaming errors
+      onError: (error) => {
+        console.error("[NeedsAssessmentAPI] A streaming error occurred:", error);
       },
     });
 

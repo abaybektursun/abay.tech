@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useChat } from '@ai-sdk/react';
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
@@ -7,6 +8,7 @@ import { cn } from '@/lib/utils';
 import Container from '@/components/container';
 import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
 import type { ShowNeedsChartArgs } from '@/lib/growth-tools/types';
+import { saveChat } from '@/lib/actions'
 import '@/styles/ai-chat.css';
 
 // AI Elements components
@@ -82,7 +84,14 @@ const suggestions = [
   },
 ];
 
-export function NeedsAssessmentView() {
+export function NeedsAssessmentView({
+  id,
+  initialMessages,
+}: {
+  id?: string;
+  initialMessages?: any[];
+}) {
+  const router = useRouter();
   const [showVisualization, setShowVisualization] = useState(false);
   const [visualizationData, setVisualizationData] = useState<ShowNeedsChartArgs | null>(null);
   const [text, setText] = useState("");
@@ -90,6 +99,8 @@ export function NeedsAssessmentView() {
   const [useMicrophone, setUseMicrophone] = useState(false);
 
   const { messages, append, isLoading } = useChat({
+    id,
+    initialMessages,
     api: '/api/apps/growth-tools/needs-assessment',
     maxSteps: 5,
     body: { model: 'gpt-4o' },
@@ -104,9 +115,27 @@ export function NeedsAssessmentView() {
         return { success: true, message: 'Chart hidden' };
       }
     },
+    onError: (error) => {
+      console.error("Chat hook error:", error);
+    },
+    onFinish: async (message) => {
+        if (!messages.length) {
+            const newMessages = [
+                ...messages,
+                message,
+            ]
+            const chat = await saveChat({
+                messages: newMessages,
+                title: 'Needs Assessment',
+                userId: '1' // Hardcoded userId for now
+            });
+            router.push(`/apps/growth-tools/needs-assessment/${chat.id}`);
+        }
+    }
   });
 
   const handleSubmit = useCallback((message: PromptInputMessage) => {
+    console.log("Submitting message:", message);
     const hasText = Boolean(message.text);
     const hasAttachments = Boolean(message.files?.length);
 

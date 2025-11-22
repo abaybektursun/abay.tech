@@ -12,12 +12,25 @@ export default $config({
     const groqApiKey = new sst.Secret("GROQ_API_KEY");
     const openaiApiKey = new sst.Secret("OPENAI_API_KEY");
 
+    const table = new sst.aws.Dynamo("chats", {
+      fields: {
+        userId: "string",
+        id: "string",
+      },
+      primaryIndex: {
+        hashKey: "userId",
+        rangeKey: "id",
+      },
+    });
+
     new sst.aws.Nextjs("abay", {
-      domain: "abay.tech",
-      link: [groqApiKey, openaiApiKey],
+      link: [groqApiKey, openaiApiKey, table],
+      // Set the domain only for the production stage
+      domain: $app.stage === "production" ? "abay.tech" : undefined,
       environment: {
         GROQ_API_KEY: groqApiKey.value,
         OPENAI_API_KEY: openaiApiKey.value,
+        DYNAMODB_TABLE: table.name,
       }
     });
   },
