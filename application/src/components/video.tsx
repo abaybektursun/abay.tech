@@ -17,7 +17,6 @@ const VideoBackground: React.FC<VideoBackgroundProps> = ({
   priority = false,
   quality = 'high'
 }) => {
-  console.log("VIDEO!")
   return (
     <div className={`relative overflow-hidden ${className}`}>
       <video
