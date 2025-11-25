@@ -1,0 +1,287 @@
+/* AI Elements Chat Theme - Complete CSS from original demo */
+/* Use by wrapping components with className="ai-chat" */
+
+.ai-chat {
+  /* Core radius values */
+  --radius: 0.625rem; /* 10px */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Light mode - HSL values for Tailwind compatibility */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 9%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 9%;
+  --primary: 230 70% 46%; /* Blue primary like demo */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96.1%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 96.1%;
+  --muted-foreground: 0 0% 45.1%;
+  --accent: 0 0% 96.1%;
+  --accent-foreground: 0 0% 9%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 89.8%;  /* Subtle light gray */
+  --input: 0 0% 89.8%;   /* Matching border */
+  --ring: 0 0% 63.9%;    /* Neutral gray ring */
+
+  /* Chart colors */
+  --chart-1: 25 95% 53%;
+  --chart-2: 197 37% 48%;
+  --chart-3: 213 27% 36%;
+  --chart-4: 86 59% 64%;
+  --chart-5: 43 59% 61%;
+
+  /* Sidebar (if needed) */
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 0 0% 9%;
+  --sidebar-primary: 0 0% 9%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 0 0% 96.1%;
+  --sidebar-accent-foreground: 0 0% 9%;
+  --sidebar-border: 0 0% 89.8%;
+  --sidebar-ring: 0 0% 63.9%;
+
+  /* Secondary offset */
+  --secondary-offset: 0 0% 97%;
+}
+
+.ai-chat.dark {
+  /* Dark mode - HSL values for Tailwind compatibility */
+  --background: 0 0% 9%;
+  --foreground: 0 0% 95%;
+  --card: 0 0% 13%;
+  --card-foreground: 0 0% 95%;
+  --popover: 0 0% 13%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 230 70% 46%; /* Blue primary like demo */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 16%;
+  --secondary-foreground: 0 0% 95%;
+  --muted: 0 0% 16%;
+  --muted-foreground: 0 0% 63.9%;
+  --accent: 0 0% 16%;
+  --accent-foreground: 0 0% 95%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 95%;
+  --border: 0 0% 14.9%;  /* Subtle dark borders */
+  --input: 0 0% 14.9%;   /* Matching input borders */
+  --ring: 0 0% 40%;      /* Neutral dark gray ring */
+
+  /* Chart colors for dark mode */
+  --chart-1: 223 70% 50%;
+  --chart-2: 160 60% 60%;
+  --chart-3: 43 59% 61%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 10 70% 56%;
+
+  /* Sidebar (if needed) */
+  --sidebar-background: 0 0% 13%;
+  --sidebar-foreground: 0 0% 95%;
+  --sidebar-primary: 223 70% 50%;
+  --sidebar-primary-foreground: 0 0% 95%;
+  --sidebar-accent: 0 0% 16%;
+  --sidebar-accent-foreground: 0 0% 95%;
+  --sidebar-border: 0 0% 14.9%;
+  --sidebar-ring: 0 0% 40%;
+
+  /* Secondary offset */
+  --secondary-offset: 0 0% 12%;
+}
+
+/* Base resets from original */
+.ai-chat * {
+  min-width: 0;
+  border-color: hsl(var(--border));
+  outline-color: hsl(var(--ring) / 0.5);
+}
+
+.ai-chat ::after,
+.ai-chat ::before,
+.ai-chat ::backdrop,
+.ai-chat ::file-selector-button {
+  border-color: hsl(var(--border));
+}
+
+/* Text rendering optimization */
+.ai-chat {
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Input and textarea placeholders */
+.ai-chat input::placeholder,
+.ai-chat textarea::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Button cursor */
+.ai-chat button:not(:disabled),
+.ai-chat [role="button"]:not(:disabled) {
+  cursor: pointer;
+}
+
+/* Border styles */
+.ai-chat .border {
+  border-width: 1px;
+  border-style: solid;
+}
+
+.ai-chat .border-input {
+  border-color: hsl(var(--input));
+}
+
+/* Focus states - matching demo's subtle style */
+.ai-chat .focus-visible\:ring-ring:focus-visible {
+  --tw-ring-color: hsl(var(--ring));
+}
+
+.ai-chat .focus-visible\:ring-1:focus-visible {
+  --tw-ring-width: 1px;
+}
+
+/* Shadow styles */
+.ai-chat .shadow-xs {
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.ai-chat .shadow-sm {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+/* Button specific fixes for AI Elements buttons */
+.ai-chat button[data-size="sm"] {
+  height: 2rem;           /* 32px height */
+  padding: 0 0.625rem;    /* 10px horizontal padding */
+  font-size: 0.875rem;    /* 14px font */
+  gap: 0.25rem;          /* 4px gap between icon and text */
+  line-height: 1;
+}
+
+/* Icon sizing in buttons */
+.ai-chat button[data-size="sm"] svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Input footer spacing */
+.ai-chat [data-slot="input-group-addon"] {
+  padding: 0.375rem 0.5rem;  /* 6px vertical, 8px horizontal */
+  gap: 0.375rem;             /* 6px gap */
+}
+
+/* Button group spacing */
+.ai-chat .flex.items-center.gap-1 {
+  gap: 0.25rem;  /* 4px between buttons in a group */
+}
+
+/* Rounded corners matching demo */
+.ai-chat .rounded-md {
+  border-radius: calc(var(--radius) - 2px);
+}
+
+.ai-chat .rounded-lg {
+  border-radius: var(--radius);
+}
+
+.ai-chat .rounded-full {
+  border-radius: 9999px;
+}
+
+.ai-chat .rounded-\[28px\] {
+  border-radius: 28px;
+}
+
+/* Transition for smooth interactions */
+.ai-chat button,
+.ai-chat input,
+.ai-chat textarea {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Hover states for buttons */
+.ai-chat button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* Disabled states */
+.ai-chat button:disabled,
+.ai-chat input:disabled,
+.ai-chat textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Message styles */
+.ai-chat .group-\[\.is-user\]\:rounded-\[24px\].is-user {
+  border-radius: 24px;
+}
+
+/* Scrollbar styles for conversation */
+.ai-chat [role="log"] {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted)) transparent;
+}
+
+.ai-chat [role="log"]::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ai-chat [role="log"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ai-chat [role="log"]::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--muted));
+  border-radius: 3px;
+}
+
+/* Touch target minimum size */
+.ai-chat .touch-target {
+  min-height: 2.75rem;  /* 44px - WCAG AA */
+  min-width: 2.75rem;   /* 44px - WCAG AA */
+}
+
+/* Ensure proper text color inheritance */
+.ai-chat .text-foreground {
+  color: hsl(var(--foreground));
+}
+
+.ai-chat .text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Background colors */
+.ai-chat .bg-background {
+  background-color: hsl(var(--background));
+}
+
+.ai-chat .bg-secondary {
+  background-color: hsl(var(--secondary));
+}
+
+.ai-chat .bg-accent {
+  background-color: hsl(var(--accent));
+}
+
+/* Hover backgrounds */
+.ai-chat .hover\:bg-accent:hover {
+  background-color: hsl(var(--accent));
+}
+
+.ai-chat .hover\:bg-secondary\/80:hover {
+  background-color: hsl(var(--secondary) / 0.8);
+}
+
+/* Text colors on hover */
+.ai-chat .hover\:text-accent-foreground:hover {
+  color: hsl(var(--accent-foreground));
+}

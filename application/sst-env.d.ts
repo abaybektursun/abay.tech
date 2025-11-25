@@ -5,17 +5,33 @@
 
 declare module "sst" {
   export interface Resource {
-    "GROQ_API_KEY": {
+    "AUTH_GITHUB_ID": {
       "type": "sst.sst.Secret"
       "value": string
     }
-    "OPENAI_API_KEY": {
+    "AUTH_GITHUB_SECRET": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "AUTH_GOOGLE_ID": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "AUTH_GOOGLE_SECRET": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "AUTH_SECRET": {
       "type": "sst.sst.Secret"
       "value": string
     }
     "abay": {
       "type": "sst.aws.Nextjs"
       "url": string
+    }
+    "chats": {
+      "name": string
+      "type": "sst.aws.Dynamo"
     }
   }
 }

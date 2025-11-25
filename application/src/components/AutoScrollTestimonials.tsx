@@ -42,14 +42,14 @@ export function AutoScrollReviews({ reviews }: AutoScrollReviewsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isScrolling, setIsScrolling] = useState(true);
-  const animationRef = useRef<number>();
-  const previousTimeRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
+  const previousTimeRef = useRef<number | null>(null);
   const scrollPositionRef = useRef(0);
-  const autoScrollTimeoutRef = useRef<NodeJS.Timeout>();
+  const autoScrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const SCROLL_SPEED = 0.05; // pixels per millisecond
 
   const animate = useCallback((currentTime: number) => {
-    if (previousTimeRef.current === undefined) {
+    if (previousTimeRef.current === null) {
       previousTimeRef.current = currentTime;
     }
 
@@ -75,7 +75,7 @@ export function AutoScrollReviews({ reviews }: AutoScrollReviewsProps) {
   const startScrolling = useCallback(() => {
     setIsScrolling(true);
     if (!animationRef.current) {
-      previousTimeRef.current = undefined;
+      previousTimeRef.current = null;
       animationRef.current = requestAnimationFrame(animate);
     }
   }, [animate]);
@@ -84,7 +84,7 @@ export function AutoScrollReviews({ reviews }: AutoScrollReviewsProps) {
     setIsScrolling(false);
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
-      animationRef.current = undefined;
+      animationRef.current = null;
     }
   }, []);
 
