@@ -1,5 +1,5 @@
 import { openai } from '@ai-sdk/openai';
-import { streamText, tool } from 'ai';
+import { streamText, tool, convertToModelMessages } from 'ai';
 import { z } from 'zod';
 import fs from 'fs';
 import path from 'path';
@@ -14,7 +14,6 @@ const SYSTEM_PROMPT = fs.readFileSync(
 );
 
 export async function POST(req: Request) {
-  console.log('[NeedsAssessmentAPI] - POST endpoint hit');
 
   if (!process.env.OPENAI_API_KEY) {
     console.error(
@@ -32,10 +31,13 @@ export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
 
+    // Convert UIMessage[] to ModelMessage[] for streamText
+    const modelMessages = convertToModelMessages(messages);
+
     const result = streamText({
       model: openai('gpt-4o'),
       system: SYSTEM_PROMPT,
-      messages,
+      messages: modelMessages,
       tools: {
         show_needs_chart: tool({
           description:
@@ -57,11 +59,13 @@ export async function POST(req: Request) {
               .describe('Array of needs identified during the conversation'),
             insights: z.array(z.string()).describe('Key insights or patterns you noticed (2-4 brief observations)'),
           }),
+          execute: async (input) => input,
         }),
         hide_chart: tool({
           description:
             'Hide the needs visualization and return to full chat view. Use this when the user wants to dismiss the chart or continue the conversation without the visual.',
           inputSchema: z.object({}),
+          execute: async () => ({}),
         }),
       },
       // Correct, documented way to catch streaming errors
@@ -71,7 +75,7 @@ export async function POST(req: Request) {
     });
 
     return result.toUIMessageStreamResponse();
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('[NeedsAssessmentAPI] Failed to process chat request', error);
     return Response.json(
       {

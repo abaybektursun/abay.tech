@@ -1,8 +1,25 @@
 'use client';
 
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
-import { useState, useCallback, useEffect } from 'react';
+/**
+ * AI SDK v5 Chat Implementation - Key Lessons Learned:
+ *
+ * 1. useChat hook from @ai-sdk/react has known issues in v5 where messages
+ *    don't update and status stays "ready" (GitHub issues #8247, #8549)
+ *
+ * 2. The API (streamText + toUIMessageStreamResponse) works correctly -
+ *    verified via curl. The issue is client-side stream consumption.
+ *
+ * 3. Solution: Manual SSE parsing instead of useChat. Parse the stream
+ *    directly from fetch response.body using ReadableStream API.
+ *
+ * 4. Stream format from toUIMessageStreamResponse():
+ *    - data: {"type":"text-delta","delta":"Hello"} - text chunks
+ *    - data: {"type":"start"} / {"type":"finish"} - lifecycle events
+ *    - data: [DONE] - stream end marker
+ */
+
+import { type UIMessage, type TextUIPart } from 'ai';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Container from '@/components/container';
@@ -33,11 +50,9 @@ import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion';
 
 // Icons
 import {
-  AudioWaveform as AudioWaveformIcon,
   BarChart as BarChartIcon,
   Box as BoxIcon,
   FileText as FileIcon,
-  Globe as GlobeIcon,
   Lightbulb as LightbulbIcon,
   Paperclip as PaperclipIcon,
   Code2 as CodeIcon,
@@ -54,6 +69,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
+import { nanoid } from 'nanoid';
 
 const suggestions = [
   {
@@ -83,28 +99,137 @@ const suggestions = [
   },
 ];
 
+type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
+
 export function NeedsAssessmentView({
   id,
   initialMessages,
 }: {
   id?: string;
-  initialMessages?: any[];
+  initialMessages?: UIMessage[];
 }) {
   const [showVisualization, setShowVisualization] = useState(false);
   const [visualizationData, setVisualizationData] = useState<ShowNeedsChartArgs | null>(null);
   const [text, setText] = useState("");
-  const [useWebSearch, setUseWebSearch] = useState(false);
-  const [useMicrophone, setUseMicrophone] = useState(false);
-
-  const { messages, sendMessage, status } = useChat({
-    id,
-    messages: initialMessages,
-    transport: new DefaultChatTransport({
-      api: '/api/apps/growth-tools/needs-assessment',
-    }),
-  });
+  const [messages, setMessages] = useState<UIMessage[]>(initialMessages ?? []);
+  const [status, setStatus] = useState<ChatStatus>('ready');
+  const [error, setError] = useState<Error | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const isLoading = status === 'streaming' || status === 'submitted';
+
+  const sendMessage = useCallback(async (userText: string) => {
+    if (!userText.trim()) return;
+
+    // Create user message
+    const userMessage: UIMessage = {
+      id: nanoid(),
+      role: 'user',
+      parts: [{ type: 'text', text: userText }],
+    };
+
+    // Add user message immediately
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
+    setStatus('submitted');
+    setError(null);
+
+    // Abort any ongoing request
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = new AbortController();
+
+    // Prepare the request body
+    const body = {
+      id: id ?? nanoid(),
+      messages: newMessages.map(msg => ({
+        id: msg.id,
+        role: msg.role,
+        parts: msg.parts,
+      })),
+      trigger: 'submit-message',
+    };
+
+    const response = await fetch('/api/apps/growth-tools/needs-assessment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: abortControllerRef.current.signal,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('[Chat] API error:', errorText);
+      setError(new Error(errorText));
+      setStatus('error');
+      return;
+    }
+
+    if (!response.body) {
+      console.error('[Chat] No response body');
+      setError(new Error('No response body'));
+      setStatus('error');
+      return;
+    }
+
+    setStatus('streaming');
+
+
+    // Create assistant message placeholder
+    const assistantMessageId = nanoid();
+    let currentText = '';
+
+    // Add placeholder assistant message
+    setMessages(prev => [...prev, {
+      id: assistantMessageId,
+      role: 'assistant',
+      parts: [],
+    }]);
+
+    // Manual SSE parsing - bypasses buggy useChat hook
+    // SSE format: "data: {json}\n\n" with [DONE] as end marker
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || ''; // Keep incomplete line in buffer
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+
+        const data = line.slice(6);
+        if (data === '[DONE]') continue;
+
+        const chunk = JSON.parse(data);
+
+        // Only handle text-delta chunks for streaming text
+        if (chunk.type === 'text-delta') {
+          currentText += chunk.delta;
+          const textPart: TextUIPart = { type: 'text', text: currentText };
+
+          setMessages(prev => {
+            const updated = [...prev];
+            const lastIndex = updated.length - 1;
+            if (updated[lastIndex]?.role === 'assistant') {
+              updated[lastIndex] = {
+                id: assistantMessageId,
+                role: 'assistant',
+                parts: [textPart],
+              };
+            }
+            return updated;
+          });
+        }
+      }
+    }
+
+    setStatus('ready');
+  }, [messages, id]);
 
   // Handle tool invocations via effect
   useEffect(() => {
@@ -128,11 +253,8 @@ export function NeedsAssessmentView({
     const hasText = Boolean(message.text);
     const hasAttachments = Boolean(message.files?.length);
 
-    if (!(hasText || hasAttachments)) {
-      return;
-    }
-
-    sendMessage({ text: message.text || "Sent with attachments" });
+    if (!(hasText || hasAttachments)) return;
+    sendMessage(message.text || "Sent with attachments");
     setText("");
   }, [sendMessage]);
 
@@ -143,7 +265,7 @@ export function NeedsAssessmentView({
   }, []);
 
   const handleSuggestionClick = useCallback((suggestion: string) => {
-    sendMessage({ text: suggestion });
+    sendMessage(suggestion);
   }, [sendMessage]);
 
   return (
@@ -175,7 +297,7 @@ export function NeedsAssessmentView({
                                 "group-[.is-assistant]:bg-transparent group-[.is-assistant]:p-0 group-[.is-assistant]:text-foreground"
                               )}
                             >
-                              <MessageResponse>{part.text}</MessageResponse>
+                              <MessageResponse>{(part as TextUIPart).text}</MessageResponse>
                             </MessageContent>
                           );
                         }
@@ -198,7 +320,7 @@ export function NeedsAssessmentView({
                 ))}
 
                 {/* Loading state */}
-                {isLoading && (
+                {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
                   <Message from="assistant">
                     <div className="flex items-center gap-2">
                       <div className="flex gap-1">
@@ -208,6 +330,13 @@ export function NeedsAssessmentView({
                       </div>
                     </div>
                   </Message>
+                )}
+
+                {/* Error state */}
+                {error && (
+                  <div className="text-red-500 p-4 text-sm">
+                    Error: {error.message}
+                  </div>
                 )}
               </ConversationContent>
               <ConversationScrollButton />
@@ -263,23 +392,7 @@ export function NeedsAssessmentView({
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                    <PromptInputButton
-                      className="rounded-full border font-medium"
-                      onClick={() => setUseWebSearch(!useWebSearch)}
-                      variant="outline"
-                    >
-                      <GlobeIcon size={16} />
-                      <span>Search</span>
-                    </PromptInputButton>
                   </PromptInputTools>
-                  <PromptInputButton
-                    className="rounded-full font-medium text-foreground"
-                    onClick={() => setUseMicrophone(!useMicrophone)}
-                    variant="secondary"
-                  >
-                    <AudioWaveformIcon size={16} />
-                    <span>Voice</span>
-                  </PromptInputButton>
                 </PromptInputFooter>
               </PromptInput>
 
