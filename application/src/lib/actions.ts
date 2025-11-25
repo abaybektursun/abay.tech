@@ -9,10 +9,8 @@ import {
   PutCommand,
   BatchWriteCommand,
 } from '@aws-sdk/lib-dynamodb'
-import { nanoid } from 'nanoid'
-
 import { db } from '@/lib/db'
-import { CoreMessage } from 'ai'
+import type { UIMessage } from 'ai'
 
 const TableName = process.env.DYNAMODB_TABLE
 
@@ -27,7 +25,10 @@ export async function getChats(userId?: string | null) {
     ExpressionAttributeValues: {
       ':userId': userId,
     },
-    ProjectionExpression: 'id, title, path', // Only fetch necessary fields
+    ExpressionAttributeNames: {
+      '#p': 'path',
+    },
+    ProjectionExpression: 'id, title, #p',
   })
 
   const response = await db.send(command)
@@ -102,31 +103,74 @@ export async function clearChats(userId?: string | null) {
 }
 
 export async function saveChat(chat: {
-  title: string
-  messages: CoreMessage[]
+  id: string
+  messages: UIMessage[]
   userId: string
 }) {
-  // Extract title from first message content
-  const firstContent = chat.messages[0]?.content
-  const title = typeof firstContent === 'string'
-    ? firstContent.substring(0, 100)
-    : chat.title
+  // Extract title from first user message
+  const firstUserMessage = chat.messages.find(m => m.role === 'user')
+  const firstTextPart = firstUserMessage?.parts.find(p => p.type === 'text')
+  const title = firstTextPart && 'text' in firstTextPart
+    ? firstTextPart.text.substring(0, 100)
+    : 'New Chat'
 
-  const newChat = {
+  const item = {
     userId: chat.userId,
-    id: nanoid(),
+    id: chat.id,
     title,
     createdAt: Date.now(),
-    path: `/apps/growth-tools/needs-assessment/${nanoid()}`,
+    path: `/apps/growth-tools/needs-assessment/${chat.id}`,
     messages: JSON.stringify(chat.messages),
   }
 
   const command = new PutCommand({
     TableName,
-    Item: newChat,
+    Item: item,
   })
 
   await db.send(command)
-  revalidatePath(`/apps/growth-tools/needs-assessment/${newChat.id}`)
-  return newChat
+  revalidatePath('/apps/growth-tools')
+}
+
+// Batch migrate chats from localStorage to DynamoDB
+// Messages are stored as-is (JSON stringified) - format is UIMessage[]
+export async function migrateChats(chats: {
+  id: string
+  title: string
+  createdAt: number
+  messages: unknown[]
+}[], userId: string) {
+  if (!userId || chats.length === 0) return { success: false }
+
+  // DynamoDB BatchWrite supports max 25 items per request
+  const batches = []
+  for (let i = 0; i < chats.length; i += 25) {
+    batches.push(chats.slice(i, i + 25))
+  }
+
+  for (const batch of batches) {
+    const putRequests = batch.map(chat => ({
+      PutRequest: {
+        Item: {
+          userId,
+          id: chat.id,
+          title: chat.title,
+          createdAt: chat.createdAt,
+          path: `/apps/growth-tools/needs-assessment/${chat.id}`,
+          messages: JSON.stringify(chat.messages),
+        },
+      },
+    }))
+
+    const command = new BatchWriteCommand({
+      RequestItems: {
+        [TableName!]: putRequests,
+      },
+    })
+
+    await db.send(command)
+  }
+
+  revalidatePath('/apps/growth-tools')
+  return { success: true }
 }

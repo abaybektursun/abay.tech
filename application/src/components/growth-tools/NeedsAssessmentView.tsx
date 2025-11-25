@@ -20,11 +20,14 @@
 
 import { type UIMessage, type TextUIPart } from 'ai';
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Container from '@/components/container';
 import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
 import type { ShowNeedsChartArgs } from '@/lib/growth-tools/types';
+import { getLocalChat, saveLocalChat, getLocalChats, clearLocalChats } from '@/lib/growth-tools/local-storage';
+import { getChat, getChats, migrateChats, saveChat } from '@/lib/actions';
 import '@/styles/ai-chat.css';
 
 // AI Elements components
@@ -102,12 +105,14 @@ const suggestions = [
 type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
 
 export function NeedsAssessmentView({
-  id,
+  id: propId,
   initialMessages,
 }: {
   id?: string;
   initialMessages?: UIMessage[];
 }) {
+  const { data: session, status: sessionStatus } = useSession();
+  const [chatId] = useState(() => propId ?? nanoid());
   const [showVisualization, setShowVisualization] = useState(false);
   const [visualizationData, setVisualizationData] = useState<ShowNeedsChartArgs | null>(null);
   const [text, setText] = useState("");
@@ -115,8 +120,78 @@ export function NeedsAssessmentView({
   const [status, setStatus] = useState<ChatStatus>('ready');
   const [error, setError] = useState<Error | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const migrationDone = useRef(false);
 
   const isLoading = status === 'streaming' || status === 'submitted';
+  const isAuthenticated = sessionStatus === 'authenticated' && session?.user;
+
+  // Load existing chat on mount
+  useEffect(() => {
+    if (sessionStatus === 'loading') return;
+    if (initialMessages && initialMessages.length > 0) return; // Already have messages
+
+    const loadChat = async () => {
+      if (isAuthenticated && session?.user?.email) {
+        // Load from DB for authenticated users
+        const dbChat = await getChat(chatId, session.user.email);
+        if (dbChat?.messages) {
+          setMessages(JSON.parse(dbChat.messages as string));
+        }
+      } else {
+        // Load from localStorage for anonymous users
+        const localChat = getLocalChat(chatId);
+        if (localChat && localChat.messages.length > 0) {
+          setMessages(localChat.messages);
+        }
+      }
+    };
+
+    loadChat();
+  }, [chatId, sessionStatus, isAuthenticated, session?.user?.email, initialMessages]);
+
+  // Migration: When user logs in, migrate localStorage chats to DB
+  useEffect(() => {
+    if (migrationDone.current) return;
+    if (sessionStatus !== 'authenticated' || !session?.user?.email) return;
+
+    const runMigration = async () => {
+      migrationDone.current = true;
+      const userId = session.user!.email!;
+
+      // Check if user already has chats in DB
+      const dbChats = await getChats(userId);
+      if (dbChats.length > 0) {
+        // User has existing chats - discard localStorage
+        clearLocalChats();
+        return;
+      }
+
+      // User is new - migrate localStorage chats
+      const localChats = getLocalChats();
+      if (localChats.length > 0) {
+        await migrateChats(localChats, userId);
+        clearLocalChats();
+      }
+    };
+
+    runMigration();
+  }, [session, sessionStatus]);
+
+  // Save to localStorage for anonymous users when messages change
+  useEffect(() => {
+    if (isAuthenticated) return; // Skip for logged-in users
+    if (messages.length === 0) return;
+
+    const firstTextPart = messages[0]?.parts.find(p => p.type === 'text') as TextUIPart | undefined;
+    const title = firstTextPart?.text?.substring(0, 100) ?? 'New Chat';
+
+    saveLocalChat({
+      id: chatId,
+      title,
+      createdAt: Date.now(),
+      messages,
+    });
+  }, [messages, chatId, isAuthenticated]);
 
   const sendMessage = useCallback(async (userText: string) => {
     if (!userText.trim()) return;
@@ -140,7 +215,7 @@ export function NeedsAssessmentView({
 
     // Prepare the request body
     const body = {
-      id: id ?? nanoid(),
+      id: chatId,
       messages: newMessages.map(msg => ({
         id: msg.id,
         role: msg.role,
@@ -228,8 +303,27 @@ export function NeedsAssessmentView({
       }
     }
 
+    // Build final messages array for saving
+    const finalMessages: UIMessage[] = [
+      ...newMessages,
+      {
+        id: assistantMessageId,
+        role: 'assistant',
+        parts: [{ type: 'text', text: currentText }],
+      },
+    ];
+
+    // Save to DB for authenticated users
+    if (isAuthenticated && session?.user?.email) {
+      saveChat({
+        id: chatId,
+        messages: finalMessages,
+        userId: session.user.email,
+      });
+    }
+
     setStatus('ready');
-  }, [messages, id]);
+  }, [messages, chatId, isAuthenticated, session?.user?.email]);
 
   // Handle tool invocations via effect
   useEffect(() => {

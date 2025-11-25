@@ -3,6 +3,8 @@
 import { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
+import { SessionProvider } from 'next-auth/react';
+import { AuthButton } from '@/components/auth/auth-button';
 import '@/styles/ai-chat.css';
 
 interface AppsLayoutProps {
@@ -18,20 +20,30 @@ export default function AppsLayout({ children }: AppsLayoutProps) {
   if (isInApp) {
     // For actual apps, provide a full-height container minus header
     return (
-      <div className="h-viewport ai-chat">
-        <AnimatePresence mode="wait">
-          {children}
-        </AnimatePresence>
-      </div>
+      <SessionProvider>
+        <div className="h-viewport ai-chat">
+          <div className="absolute top-4 right-4 z-50">
+            <AuthButton />
+          </div>
+          <AnimatePresence mode="wait">
+            {children}
+          </AnimatePresence>
+        </div>
+      </SessionProvider>
     );
   }
 
   // For the apps index page, use normal flow
   return (
-    <div className="ai-chat">
-      <AnimatePresence mode="wait">
-        {children}
-      </AnimatePresence>
-    </div>
+    <SessionProvider>
+      <div className="ai-chat">
+        <div className="absolute top-4 right-4 z-50">
+          <AuthButton />
+        </div>
+        <AnimatePresence mode="wait">
+          {children}
+        </AnimatePresence>
+      </div>
+    </SessionProvider>
   );
 }

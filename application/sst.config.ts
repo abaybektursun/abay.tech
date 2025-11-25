@@ -11,6 +11,11 @@ export default $config({
   async run() {
     const groqApiKey = new sst.Secret("GROQ_API_KEY");
     const openaiApiKey = new sst.Secret("OPENAI_API_KEY");
+    const authSecret = new sst.Secret("AUTH_SECRET");
+    const authGithubId = new sst.Secret("AUTH_GITHUB_ID");
+    const authGithubSecret = new sst.Secret("AUTH_GITHUB_SECRET");
+    const authGoogleId = new sst.Secret("AUTH_GOOGLE_ID");
+    const authGoogleSecret = new sst.Secret("AUTH_GOOGLE_SECRET");
 
     const table = new sst.aws.Dynamo("chats", {
       fields: {
@@ -31,6 +36,11 @@ export default $config({
         GROQ_API_KEY: groqApiKey.value,
         OPENAI_API_KEY: openaiApiKey.value,
         DYNAMODB_TABLE: table.name,
+        AUTH_SECRET: authSecret.value,
+        AUTH_GITHUB_ID: authGithubId.value,
+        AUTH_GITHUB_SECRET: authGithubSecret.value,
+        AUTH_GOOGLE_ID: authGoogleId.value,
+        AUTH_GOOGLE_SECRET: authGoogleSecret.value,
       }
     });
   },

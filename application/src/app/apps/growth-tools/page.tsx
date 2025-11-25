@@ -1,23 +1,56 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
-import { LayoutGrid, MessagesSquare, ChevronDown } from 'lucide-react';
+import { LayoutGrid, MessagesSquare, ChevronDown, MessageCircle } from 'lucide-react';
 import { NeedsAssessmentView } from '@/components/growth-tools/NeedsAssessmentView';
+import { getLocalChats, type LocalChat } from '@/lib/growth-tools/local-storage';
+import { getChats } from '@/lib/actions';
+
+interface ChatItem {
+  id: string;
+  title: string;
+}
 
 function GrowthToolsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { data: session, status: sessionStatus } = useSession();
 
-  // Get exercise from URL
+  // Get exercise and chatId from URL
   const exercise = searchParams.get('exercise');
+  const chatId = searchParams.get('chatId');
 
   // State for sidebar
   const [isChatsOpen, setIsChatsOpen] = useState(true);
+  const [savedChats, setSavedChats] = useState<ChatItem[]>([]);
+
+  const isAuthenticated = sessionStatus === 'authenticated' && session?.user;
+
+  // Load chats based on auth state
+  useEffect(() => {
+    if (sessionStatus === 'loading') return;
+
+    const loadChats = async () => {
+      if (isAuthenticated && session?.user?.email) {
+        // Fetch from DB for authenticated users
+        const dbChats = await getChats(session.user.email);
+        setSavedChats(dbChats.map((c) => ({ id: c.id as string, title: c.title as string })));
+      } else {
+        // Load from localStorage for anonymous users
+        const localChats = getLocalChats();
+        setSavedChats(localChats.map((c) => ({ id: c.id, title: c.title })));
+      }
+    };
+
+    loadChats();
+  }, [sessionStatus, isAuthenticated, session?.user?.email]);
+
   const conversations = [
     {
       name: 'Needs Assessment',
@@ -91,9 +124,24 @@ function GrowthToolsContent() {
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="mt-2 pl-6 space-y-1">
-                    <div className="text-xs text-muted-foreground py-2">
-                      No saved chats
-                    </div>
+                    {savedChats.length === 0 ? (
+                      <div className="text-xs text-muted-foreground py-2">
+                        No saved chats
+                      </div>
+                    ) : (
+                      savedChats.map((chat) => (
+                        <Button
+                          key={chat.id}
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start text-xs font-normal truncate"
+                          onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
+                        >
+                          <MessageCircle className="mr-2 h-3 w-3 flex-shrink-0" />
+                          <span className="truncate">{chat.title}</span>
+                        </Button>
+                      ))
+                    )}
                   </div>
                 </CollapsibleContent>
               </Collapsible>
@@ -106,13 +154,13 @@ function GrowthToolsContent() {
           <AnimatePresence mode="wait">
             {exercise === 'needs-assessment' ? (
               <motion.div
-                key="needs-assessment"
+                key={`needs-assessment-${chatId ?? 'new'}`}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
-                <NeedsAssessmentView />
+                <NeedsAssessmentView id={chatId ?? undefined} />
               </motion.div>
             ) : (
               <motion.div
