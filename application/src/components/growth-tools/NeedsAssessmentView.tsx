@@ -1,14 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useChat } from '@ai-sdk/react';
-import { useState, useCallback } from 'react';
+import { DefaultChatTransport } from 'ai';
+import { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Container from '@/components/container';
 import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
 import type { ShowNeedsChartArgs } from '@/lib/growth-tools/types';
-import { saveChat } from '@/lib/actions'
 import '@/styles/ai-chat.css';
 
 // AI Elements components
@@ -91,51 +90,41 @@ export function NeedsAssessmentView({
   id?: string;
   initialMessages?: any[];
 }) {
-  const router = useRouter();
   const [showVisualization, setShowVisualization] = useState(false);
   const [visualizationData, setVisualizationData] = useState<ShowNeedsChartArgs | null>(null);
   const [text, setText] = useState("");
   const [useWebSearch, setUseWebSearch] = useState(false);
   const [useMicrophone, setUseMicrophone] = useState(false);
 
-  const { messages, append, isLoading } = useChat({
+  const { messages, sendMessage, status } = useChat({
     id,
-    initialMessages,
-    api: '/api/apps/growth-tools/needs-assessment',
-    maxSteps: 5,
-    body: { model: 'gpt-4o' },
-    onToolCall: async ({ toolCall }) => {
-      if (toolCall.toolName === 'show_needs_chart') {
-        const args = toolCall.args as ShowNeedsChartArgs;
-        setVisualizationData(args);
-        setShowVisualization(true);
-        return { success: true, message: 'Chart displayed successfully' };
-      } else if (toolCall.toolName === 'hide_chart') {
-        setShowVisualization(false);
-        return { success: true, message: 'Chart hidden' };
-      }
-    },
-    onError: (error) => {
-      console.error("Chat hook error:", error);
-    },
-    onFinish: async (message) => {
-        if (!messages.length) {
-            const newMessages = [
-                ...messages,
-                message,
-            ]
-            const chat = await saveChat({
-                messages: newMessages,
-                title: 'Needs Assessment',
-                userId: '1' // Hardcoded userId for now
-            });
-            router.push(`/apps/growth-tools/needs-assessment/${chat.id}`);
-        }
-    }
+    messages: initialMessages,
+    transport: new DefaultChatTransport({
+      api: '/api/apps/growth-tools/needs-assessment',
+    }),
   });
 
+  const isLoading = status === 'streaming' || status === 'submitted';
+
+  // Handle tool invocations via effect
+  useEffect(() => {
+    for (const message of messages) {
+      for (const part of message.parts) {
+        if (part.type.startsWith('tool-')) {
+          const toolPart = part as { type: string; toolName?: string; state?: string; input?: unknown };
+          if (toolPart.toolName === 'show_needs_chart' && toolPart.state === 'result' && !showVisualization) {
+            setVisualizationData(toolPart.input as ShowNeedsChartArgs);
+            setShowVisualization(true);
+          }
+          if (toolPart.toolName === 'hide_chart' && toolPart.state === 'result' && showVisualization) {
+            setShowVisualization(false);
+          }
+        }
+      }
+    }
+  }, [messages, showVisualization]);
+
   const handleSubmit = useCallback((message: PromptInputMessage) => {
-    console.log("Submitting message:", message);
     const hasText = Boolean(message.text);
     const hasAttachments = Boolean(message.files?.length);
 
@@ -143,9 +132,9 @@ export function NeedsAssessmentView({
       return;
     }
 
-    append({ role: 'user', content: message.text || "Sent with attachments" });
+    sendMessage({ text: message.text || "Sent with attachments" });
     setText("");
-  }, [append]);
+  }, [sendMessage]);
 
   const handleFileAction = useCallback((action: string) => {
     toast.success("File action", {
@@ -154,8 +143,8 @@ export function NeedsAssessmentView({
   }, []);
 
   const handleSuggestionClick = useCallback((suggestion: string) => {
-    append({ role: 'user', content: suggestion });
-  }, [append]);
+    sendMessage({ text: suggestion });
+  }, [sendMessage]);
 
   return (
     <div className="h-full">
@@ -176,25 +165,34 @@ export function NeedsAssessmentView({
                     from={message.role === 'user' ? 'user' : 'assistant'}
                   >
                     <div>
-                      <MessageContent
-                        className={cn(
-                          "group-[.is-user]:rounded-[24px] group-[.is-user]:bg-secondary group-[.is-user]:text-foreground",
-                          "group-[.is-assistant]:bg-transparent group-[.is-assistant]:p-0 group-[.is-assistant]:text-foreground"
-                        )}
-                      >
-                        <MessageResponse>{message.content}</MessageResponse>
-                      </MessageContent>
-
-                      {/* Tool invocations */}
-                      {message.toolInvocations?.map((toolInvocation) => (
-                        <div key={toolInvocation.toolCallId} className="mt-2">
-                          <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-md text-xs">
-                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                            {toolInvocation.toolName === 'show_needs_chart' && 'Generating needs visualization...'}
-                            {toolInvocation.state === 'result' && ' ✓'}
-                          </div>
-                        </div>
-                      ))}
+                      {message.parts.map((part, index) => {
+                        if (part.type === 'text') {
+                          return (
+                            <MessageContent
+                              key={index}
+                              className={cn(
+                                "group-[.is-user]:rounded-[24px] group-[.is-user]:bg-secondary group-[.is-user]:text-foreground",
+                                "group-[.is-assistant]:bg-transparent group-[.is-assistant]:p-0 group-[.is-assistant]:text-foreground"
+                              )}
+                            >
+                              <MessageResponse>{part.text}</MessageResponse>
+                            </MessageContent>
+                          );
+                        }
+                        if (part.type.startsWith('tool-')) {
+                          const toolPart = part as { type: string; toolCallId: string; toolName?: string; state?: string };
+                          return (
+                            <div key={toolPart.toolCallId} className="mt-2">
+                              <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-md text-xs">
+                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                {toolPart.toolName === 'show_needs_chart' && 'Generating needs visualization...'}
+                                {toolPart.state === 'result' && ' ✓'}
+                              </div>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })}
                     </div>
                   </Message>
                 ))}

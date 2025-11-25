@@ -2,13 +2,13 @@
 'use client'
 
 import Container from "@/components/container";
-import { useState } from 'react'
+import { useState, ReactNode } from 'react'
 import { Check, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import PixelatedImage from "@/components/progressive"
 
 type ListItem = {
-  text: string | JSX.Element;
+  text: string | ReactNode;
   completed: boolean;
   hasSubItems?: boolean;
   subItems?: ListItem[];

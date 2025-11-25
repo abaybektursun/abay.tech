@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { LayoutGrid, MessagesSquare, ChevronDown } from 'lucide-react';
 import { NeedsAssessmentView } from '@/components/growth-tools/NeedsAssessmentView';
 
-export default function GrowthToolsLandingPage() {
+function GrowthToolsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -166,5 +166,13 @@ export default function GrowthToolsLandingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function GrowthToolsLandingPage() {
+  return (
+    <Suspense fallback={<div className="container max-w-6xl mx-auto px-4">Loading...</div>}>
+      <GrowthToolsContent />
+    </Suspense>
   );
 }

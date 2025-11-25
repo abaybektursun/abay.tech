@@ -106,10 +106,16 @@ export async function saveChat(chat: {
   messages: CoreMessage[]
   userId: string
 }) {
+  // Extract title from first message content
+  const firstContent = chat.messages[0]?.content
+  const title = typeof firstContent === 'string'
+    ? firstContent.substring(0, 100)
+    : chat.title
+
   const newChat = {
     userId: chat.userId,
     id: nanoid(),
-    title: chat.messages[0].content.substring(0, 100),
+    title,
     createdAt: Date.now(),
     path: `/apps/growth-tools/needs-assessment/${nanoid()}`,
     messages: JSON.stringify(chat.messages),

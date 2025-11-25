@@ -5,9 +5,10 @@ import { notFound } from 'next/navigation'
 export default async function NeedsAssessmentChatPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const chat = await getChat(params.id, '1') // Hardcoded userId for now
+  const { id } = await params
+  const chat = await getChat(id, '1') // Hardcoded userId for now
 
   if (!chat) {
     notFound()

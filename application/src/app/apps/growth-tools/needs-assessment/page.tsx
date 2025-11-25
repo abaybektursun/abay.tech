@@ -1,8 +1,8 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { DefaultChatTransport } from 'ai';
+import { useState, useCallback, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import Container from '@/components/container';
 import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
@@ -89,22 +89,31 @@ export default function NeedsAssessmentPage() {
   const [useWebSearch, setUseWebSearch] = useState(false);
   const [useMicrophone, setUseMicrophone] = useState(false);
 
-  const { messages, append, isLoading } = useChat({
-    api: '/api/apps/growth-tools/needs-assessment',
-    maxSteps: 5,
-    body: { model: 'gpt-4o' },
-    onToolCall: async ({ toolCall }) => {
-      if (toolCall.toolName === 'show_needs_chart') {
-        const args = toolCall.args as ShowNeedsChartArgs;
-        setVisualizationData(args);
-        setShowVisualization(true);
-        return { success: true, message: 'Chart displayed successfully' };
-      } else if (toolCall.toolName === 'hide_chart') {
-        setShowVisualization(false);
-        return { success: true, message: 'Chart hidden' };
-      }
-    },
+  const { messages, sendMessage, status } = useChat({
+    transport: new DefaultChatTransport({
+      api: '/api/apps/growth-tools/needs-assessment',
+    }),
   });
+
+  const isLoading = status === 'streaming' || status === 'submitted';
+
+  // Handle tool invocations via effect (not in render)
+  useEffect(() => {
+    for (const message of messages) {
+      for (const part of message.parts) {
+        if (part.type.startsWith('tool-')) {
+          const toolPart = part as { type: string; toolName?: string; state?: string; input?: unknown };
+          if (toolPart.toolName === 'show_needs_chart' && toolPart.state === 'result' && !showVisualization) {
+            setVisualizationData(toolPart.input as ShowNeedsChartArgs);
+            setShowVisualization(true);
+          }
+          if (toolPart.toolName === 'hide_chart' && toolPart.state === 'result' && showVisualization) {
+            setShowVisualization(false);
+          }
+        }
+      }
+    }
+  }, [messages, showVisualization]);
 
   const handleSubmit = useCallback((message: PromptInputMessage) => {
     const hasText = Boolean(message.text);
@@ -114,9 +123,9 @@ export default function NeedsAssessmentPage() {
       return;
     }
 
-    append({ role: 'user', content: message.text || "Sent with attachments" });
+    sendMessage({ text: message.text || "Sent with attachments" });
     setText("");
-  }, [append]);
+  }, [sendMessage]);
 
   const handleFileAction = useCallback((action: string) => {
     toast.success("File action", {
@@ -125,8 +134,8 @@ export default function NeedsAssessmentPage() {
   }, []);
 
   const handleSuggestionClick = useCallback((suggestion: string) => {
-    append({ role: 'user', content: suggestion });
-  }, [append]);
+    sendMessage({ text: suggestion });
+  }, [sendMessage]);
 
   return (
     <div className="h-full">
@@ -142,25 +151,34 @@ export default function NeedsAssessmentPage() {
                     from={message.role === 'user' ? 'user' : 'assistant'}
                   >
                     <div>
-                      <MessageContent
-                        className={cn(
-                          "group-[.is-user]:rounded-[24px] group-[.is-user]:bg-secondary group-[.is-user]:text-foreground",
-                          "group-[.is-assistant]:bg-transparent group-[.is-assistant]:p-0 group-[.is-assistant]:text-foreground"
-                        )}
-                      >
-                        <MessageResponse>{message.content}</MessageResponse>
-                      </MessageContent>
-
-                      {/* Tool invocations */}
-                      {message.toolInvocations?.map((toolInvocation) => (
-                        <div key={toolInvocation.toolCallId} className="mt-2">
-                          <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-md text-xs">
-                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                            {toolInvocation.toolName === 'show_needs_chart' && 'Generating needs visualization...'}
-                            {toolInvocation.state === 'result' && ' ✓'}
-                          </div>
-                        </div>
-                      ))}
+                      {message.parts.map((part, index) => {
+                        if (part.type === 'text') {
+                          return (
+                            <MessageContent
+                              key={index}
+                              className={cn(
+                                "group-[.is-user]:rounded-[24px] group-[.is-user]:bg-secondary group-[.is-user]:text-foreground",
+                                "group-[.is-assistant]:bg-transparent group-[.is-assistant]:p-0 group-[.is-assistant]:text-foreground"
+                              )}
+                            >
+                              <MessageResponse>{part.text}</MessageResponse>
+                            </MessageContent>
+                          );
+                        }
+                        if (part.type.startsWith('tool-')) {
+                          const toolPart = part as { type: string; toolCallId: string; toolName?: string; state?: string };
+                          return (
+                            <div key={toolPart.toolCallId} className="mt-2">
+                              <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-md text-xs">
+                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                {toolPart.toolName === 'show_needs_chart' && 'Generating needs visualization...'}
+                                {toolPart.state === 'result' && ' ✓'}
+                              </div>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })}
                     </div>
                   </Message>
                 ))}

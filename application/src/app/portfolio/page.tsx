@@ -26,7 +26,7 @@ export default async function PortfolioPage() {
   return (
     <Container>
       <AnimatedSection className="space-y-8" variant="fadeIn">
-        <AnimatedSection id="projects" className="space-y-8" variant="gentleScale" delay={0.1}>
+        <AnimatedSection className="space-y-8" variant="gentleScale" delay={0.1}>
           {allPosts.length ? (
             <div className="relative -mx-4 px-4">
               <PortfolioGrid>
@@ -82,7 +82,7 @@ export default async function PortfolioPage() {
           )}
         </AnimatedSection>
 
-        <AnimatedSection id="testimonials" className="space-y-8" variant="softFadeUp" delay={0.3}>
+        <AnimatedSection className="space-y-8" variant="softFadeUp" delay={0.3}>
           <AutoScrollReviews reviews={reviews} />
         </AnimatedSection>
       </AnimatedSection>

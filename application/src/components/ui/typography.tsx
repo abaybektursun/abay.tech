@@ -48,7 +48,7 @@ interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement>,
 
 export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   ({ className, level = "h2", as, responsive, children, ...props }, ref) => {
-    const Component = as || level
+    const Component = as || level || "h2"
 
     return React.createElement(
       Component,

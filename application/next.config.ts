@@ -2,15 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ['three'],
-  webpack: (config) => {
-    // Add custom webpack configuration
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      'ai-chatbot': './packages/ai-chatbot'
-    };
-
-    return config;
-  },
   async redirects() {
     return [
       {
