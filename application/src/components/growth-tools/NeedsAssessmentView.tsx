@@ -260,8 +260,12 @@ export function NeedsAssessmentView({
       parts: [],
     }]);
 
-    // Manual SSE parsing - bypasses buggy useChat hook
-    // SSE format: "data: {json}\n\n" with [DONE] as end marker
+    // Manual SSE parsing - bypasses buggy useChat hook in AI SDK v5
+    // Stream format from toUIMessageStreamResponse():
+    //   - text-delta: { type: "text-delta", delta: "..." }
+    //   - tool-input-available: { type: "tool-input-available", toolCallId, toolName, input }
+    //   - tool-output-available: { type: "tool-output-available", toolCallId, output } (no toolName!)
+    // Note: tool-output-available lacks toolName, so we track it from tool-input-available
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let buffer = '';
@@ -282,19 +286,70 @@ export function NeedsAssessmentView({
 
         const chunk = JSON.parse(data);
 
-        // Only handle text-delta chunks for streaming text
+        // Handle text-delta chunks for streaming text
         if (chunk.type === 'text-delta') {
           currentText += chunk.delta;
-          const textPart: TextUIPart = { type: 'text', text: currentText };
+        }
 
+        // Handle tool input available - part type must be `tool-${toolName}` (e.g., "tool-show_needs_chart")
+        if (chunk.type === 'tool-input-available') {
+          setMessages(prev => {
+            const updated = [...prev];
+            const lastIndex = updated.length - 1;
+            if (updated[lastIndex]?.role === 'assistant') {
+              const existingParts = (updated[lastIndex].parts as any[]).filter(
+                (p: any) => p.toolCallId !== chunk.toolCallId
+              );
+              updated[lastIndex] = {
+                id: assistantMessageId,
+                role: 'assistant',
+                parts: [
+                  ...existingParts,
+                  {
+                    type: `tool-${chunk.toolName}`,
+                    toolCallId: chunk.toolCallId,
+                    state: 'input-available',
+                    input: chunk.input,
+                  },
+                ] as any,
+              };
+            }
+            return updated;
+          });
+        }
+
+        // Handle tool output (when tool execution completes)
+        if (chunk.type === 'tool-output-available') {
           setMessages(prev => {
             const updated = [...prev];
             const lastIndex = updated.length - 1;
             if (updated[lastIndex]?.role === 'assistant') {
               updated[lastIndex] = {
+                ...updated[lastIndex],
+                parts: (updated[lastIndex].parts as any[]).map((p: any) =>
+                  p.toolCallId === chunk.toolCallId
+                    ? { ...p, state: 'output-available', output: chunk.output }
+                    : p
+                ) as any,
+              };
+            }
+            return updated;
+          });
+        }
+
+        // Update message with current text (only if text changed)
+        if (chunk.type === 'text-delta') {
+          setMessages(prev => {
+            const updated = [...prev];
+            const lastIndex = updated.length - 1;
+            if (updated[lastIndex]?.role === 'assistant') {
+              const nonTextParts = updated[lastIndex].parts.filter(
+                (p: { type: string }) => p.type !== 'text'
+              );
+              updated[lastIndex] = {
                 id: assistantMessageId,
                 role: 'assistant',
-                parts: [textPart],
+                parts: [{ type: 'text' as const, text: currentText }, ...nonTextParts],
               };
             }
             return updated;
@@ -326,16 +381,19 @@ export function NeedsAssessmentView({
   }, [messages, chatId, isAuthenticated, session?.user?.email]);
 
   // Handle tool invocations via effect
+  // Tool part type encodes the tool name: "tool-show_needs_chart" -> toolName = "show_needs_chart"
+  // State is "output-available" when tool execution completes (not "result" as you might expect)
   useEffect(() => {
     for (const message of messages) {
       for (const part of message.parts) {
         if (part.type.startsWith('tool-')) {
-          const toolPart = part as { type: string; toolName?: string; state?: string; input?: unknown };
-          if (toolPart.toolName === 'show_needs_chart' && toolPart.state === 'result' && !showVisualization) {
+          const toolPart = part as { type: string; state?: string; input?: unknown; output?: unknown };
+          const toolName = part.type.replace('tool-', '');
+          if (toolName === 'show_needs_chart' && toolPart.state === 'output-available' && !showVisualization) {
             setVisualizationData(toolPart.input as ShowNeedsChartArgs);
             setShowVisualization(true);
           }
-          if (toolPart.toolName === 'hide_chart' && toolPart.state === 'result' && showVisualization) {
+          if (toolName === 'hide_chart' && toolPart.state === 'output-available' && showVisualization) {
             setShowVisualization(false);
           }
         }
