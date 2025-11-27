@@ -459,7 +459,7 @@ export function NeedsAssessmentView({
 
                   return (
                     <div key={message.id} className={cn("flex items-start gap-2 md:gap-3", isUser && "flex-row-reverse")}>
-                      <Avatar className="h-8 w-8 shrink-0 -mt-1">
+                      <Avatar className={cn("h-8 w-8 shrink-0", !isUser && "mt-0.5")}>
                         {isUser ? (
                           <>
                             <AvatarImage src={session?.user?.image ?? undefined} />
@@ -561,7 +561,7 @@ export function NeedsAssessmentView({
                 {/* Loading state */}
                 {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
                   <div className="flex items-start gap-2 md:gap-3">
-                    <Avatar className="h-8 w-8 shrink-0 -mt-1">
+                    <Avatar className="h-8 w-8 shrink-0 mt-0.5">
                       <AvatarFallback className="bg-muted">
                         <Loader size={16} />
                       </AvatarFallback>
