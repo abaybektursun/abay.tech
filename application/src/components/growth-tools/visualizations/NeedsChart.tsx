@@ -91,7 +91,7 @@ export function NeedsChart({ data, onClose }: NeedsChartProps) {
   };
 
   return (
-    <Artifact className="h-full">
+    <Artifact className="h-full shadow-2xl border-0 bg-background/95 backdrop-blur-sm">
       <ArtifactHeader>
         <div>
           <ArtifactTitle>Your Needs Assessment</ArtifactTitle>

@@ -121,6 +121,7 @@ export function NeedsAssessmentView({
   const [error, setError] = useState<Error | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const migrationDone = useRef(false);
+  const handledToolCalls = useRef<Set<string>>(new Set());
 
   const isLoading = status === 'streaming' || status === 'submitted';
   const isAuthenticated = sessionStatus === 'authenticated' && session?.user;
@@ -383,23 +384,31 @@ export function NeedsAssessmentView({
   // Handle tool invocations via effect
   // Tool part type encodes the tool name: "tool-show_needs_chart" -> toolName = "show_needs_chart"
   // State is "output-available" when tool execution completes (not "result" as you might expect)
+  // IMPORTANT: Track handled toolCallIds to prevent infinite loop. Without this, closing the
+  // visualization triggers re-render, effect re-runs, finds the same tool call, reopens it.
   useEffect(() => {
     for (const message of messages) {
       for (const part of message.parts) {
         if (part.type.startsWith('tool-')) {
-          const toolPart = part as { type: string; state?: string; input?: unknown; output?: unknown };
+          const toolPart = part as { type: string; toolCallId?: string; state?: string; input?: unknown; output?: unknown };
           const toolName = part.type.replace('tool-', '');
-          if (toolName === 'show_needs_chart' && toolPart.state === 'output-available' && !showVisualization) {
+          const toolCallId = toolPart.toolCallId;
+
+          if (!toolCallId || handledToolCalls.current.has(toolCallId)) continue;
+
+          if (toolName === 'show_needs_chart' && toolPart.state === 'output-available') {
+            handledToolCalls.current.add(toolCallId);
             setVisualizationData(toolPart.input as ShowNeedsChartArgs);
             setShowVisualization(true);
           }
-          if (toolName === 'hide_chart' && toolPart.state === 'output-available' && showVisualization) {
+          if (toolName === 'hide_chart' && toolPart.state === 'output-available') {
+            handledToolCalls.current.add(toolCallId);
             setShowVisualization(false);
           }
         }
       }
     }
-  }, [messages, showVisualization]);
+  }, [messages]);
 
   const handleSubmit = useCallback((message: PromptInputMessage) => {
     const hasText = Boolean(message.text);
@@ -567,17 +576,14 @@ export function NeedsAssessmentView({
 
             {/* Visualization Modal */}
             {showVisualization && visualizationData && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-                <div className="w-full max-w-2xl bg-white dark:bg-gray-950 rounded-xl shadow-2xl p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-semibold">Your Needs Profile</h2>
-                    <button
-                      onClick={() => setShowVisualization(false)}
-                      className="text-gray-400 hover:text-gray-600"
-                    >
-                      ✕
-                    </button>
-                  </div>
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+                onClick={() => setShowVisualization(false)}
+              >
+                <div
+                  className="w-full max-w-2xl animate-in fade-in zoom-in-95 duration-200"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <NeedsChart
                     data={visualizationData}
                     onClose={() => setShowVisualization(false)}
