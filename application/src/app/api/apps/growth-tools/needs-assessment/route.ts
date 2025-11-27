@@ -7,11 +7,16 @@ import path from 'path';
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
-// Load the system prompt from the markdown file
-const SYSTEM_PROMPT = fs.readFileSync(
+// Load the system prompt and framework (framework is large but only sent once as system prompt)
+const PROMPT = fs.readFileSync(
   path.join(process.cwd(), 'src/app/api/apps/growth-tools/needs-assessment/prompt.md'),
   'utf-8'
 );
+const FRAMEWORK = fs.readFileSync(
+  path.join(process.cwd(), 'src/app/api/apps/growth-tools/needs-assessment/human_needs_framework.md'),
+  'utf-8'
+);
+const SYSTEM_PROMPT = `${PROMPT}\n\n---\n\n# Reference: Human Needs Framework\n\n${FRAMEWORK}`;
 
 export async function POST(req: Request) {
 
@@ -35,7 +40,7 @@ export async function POST(req: Request) {
     const modelMessages = convertToModelMessages(messages);
 
     const result = streamText({
-      model: openai('gpt-4o'),
+      model: openai('gpt-5.1'),
       system: SYSTEM_PROMPT,
       messages: modelMessages,
       tools: {
