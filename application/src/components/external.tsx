@@ -15,9 +15,9 @@ interface SmartLinkProps {
 
 const SmartLink = ({ href, icon, label, internal = false }: SmartLinkProps) => {
   const pathname = usePathname();
-  
-  const sharedClassName = "inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-secondary/50 hover:bg-secondary/80 transition-colors";
-  
+
+  const sharedClassName = "inline-flex items-center gap-2 px-3 py-1.5 hover:text-foreground transition-colors";
+
   const content = (
     <>
       <span className="w-3.5 h-3.5 text-muted-foreground">
@@ -43,7 +43,7 @@ const SmartLink = ({ href, icon, label, internal = false }: SmartLinkProps) => {
   if (internal) {
     return (
       <div className="relative">
-        <Link 
+        <Link
           href={href}
           className={sharedClassName}
         >
@@ -68,51 +68,51 @@ const SmartLink = ({ href, icon, label, internal = false }: SmartLinkProps) => {
 export function ExternalLinks() {
   return (
     <Container>
-    <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
-        <SmartLink 
-          href="https://linkedin.com/in/abay" 
-          icon={<Linkedin size={14} />} 
-          label="LinkedIn" 
-        />
-        <SmartLink 
-          href="https://github.com/abaybektursun/" 
-          icon={<Github size={14} />} 
-          label="GitHub" 
-        />
-        <SmartLink 
-          href="/resume.pdf" 
-          icon={<FileText size={14} />} 
-          label="Resume" 
-        />
-        <SmartLink 
-          href="https://www.instagram.com/abaybtx" 
-          icon={<Instagram size={14} />} 
-          label="Instagram" 
-        />
-        <SmartLink 
-          href="https://x.com/Abaybektursun" 
-          icon={<X size={14} />} 
-          label="Twitter" 
-        />
-        <SmartLink 
-          href="mailto:villas.cautery-0j@icloud.com" 
-          icon={<Mail size={14} />} 
-          label="Email" 
-        />
-        <SmartLink 
-          href="https://www.goodreads.com/user/show/69651448-abay-bektursun" 
-          icon={<Book size={14} />} 
-          label="Books" 
-        />
-        <SmartLink 
-          href="/bucket-list" 
-          icon={<List size={14} />} 
-          label="Bucket List" 
-          internal={true}
-        />
+      <div className="space-y-4">
+        <div className="flex flex-wrap gap-2">
+          <SmartLink
+            href="https://linkedin.com/in/abay"
+            icon={<Linkedin size={14} />}
+            label="LinkedIn"
+          />
+          <SmartLink
+            href="https://github.com/abaybektursun/"
+            icon={<Github size={14} />}
+            label="GitHub"
+          />
+          <SmartLink
+            href="/resume.pdf"
+            icon={<FileText size={14} />}
+            label="Resume"
+          />
+          <SmartLink
+            href="https://www.instagram.com/abaybtx"
+            icon={<Instagram size={14} />}
+            label="Instagram"
+          />
+          <SmartLink
+            href="https://x.com/Abaybektursun"
+            icon={<X size={14} />}
+            label="Twitter"
+          />
+          <SmartLink
+            href="mailto:villas.cautery-0j@icloud.com"
+            icon={<Mail size={14} />}
+            label="Email"
+          />
+          <SmartLink
+            href="https://www.goodreads.com/user/show/69651448-abay-bektursun"
+            icon={<Book size={14} />}
+            label="Books"
+          />
+          <SmartLink
+            href="/bucket-list"
+            icon={<List size={14} />}
+            label="Bucket List"
+            internal={true}
+          />
+        </div>
       </div>
-    </div>
     </Container>
   );
 }
