@@ -39,8 +39,19 @@ import {
 import {
   Message,
   MessageContent,
-  MessageResponse
+  MessageResponse,
+  MessageActions,
+  MessageAction,
 } from '@/components/ai-elements/message';
+import { Loader } from '@/components/ai-elements/loader';
+import { Shimmer } from '@/components/ai-elements/shimmer';
+import {
+  Artifact,
+  ArtifactHeader,
+  ArtifactTitle,
+  ArtifactDescription,
+  ArtifactContent,
+} from '@/components/ai-elements/artifact';
 import {
   PromptInput,
   PromptInputButton,
@@ -62,6 +73,8 @@ import {
   Camera as CameraIcon,
   Image as ImageIcon,
   ScreenShare as ScreenShareIcon,
+  Copy as CopyIcon,
+  Check as CheckIcon,
 } from 'lucide-react';
 
 // UI components
@@ -71,8 +84,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
 import { nanoid } from 'nanoid';
+import { Bot, User, BarChart2, ExternalLink } from 'lucide-react';
 
 const suggestions = [
   {
@@ -381,34 +397,26 @@ export function NeedsAssessmentView({
     setStatus('ready');
   }, [messages, chatId, isAuthenticated, session?.user?.email]);
 
-  // Handle tool invocations via effect
-  // Tool part type encodes the tool name: "tool-show_needs_chart" -> toolName = "show_needs_chart"
-  // State is "output-available" when tool execution completes (not "result" as you might expect)
-  // IMPORTANT: Track handled toolCallIds to prevent infinite loop. Without this, closing the
-  // visualization triggers re-render, effect re-runs, finds the same tool call, reopens it.
+  // Handle hide_chart tool - closes the visualization modal
   useEffect(() => {
     for (const message of messages) {
       for (const part of message.parts) {
-        if (part.type.startsWith('tool-')) {
-          const toolPart = part as { type: string; toolCallId?: string; state?: string; input?: unknown; output?: unknown };
-          const toolName = part.type.replace('tool-', '');
-          const toolCallId = toolPart.toolCallId;
-
-          if (!toolCallId || handledToolCalls.current.has(toolCallId)) continue;
-
-          if (toolName === 'show_needs_chart' && toolPart.state === 'output-available') {
-            handledToolCalls.current.add(toolCallId);
-            setVisualizationData(toolPart.input as ShowNeedsChartArgs);
-            setShowVisualization(true);
-          }
-          if (toolName === 'hide_chart' && toolPart.state === 'output-available') {
-            handledToolCalls.current.add(toolCallId);
+        if (part.type === 'tool-hide_chart') {
+          const toolPart = part as { toolCallId?: string; state?: string };
+          if (toolPart.state === 'output-available' && toolPart.toolCallId && !handledToolCalls.current.has(toolPart.toolCallId)) {
+            handledToolCalls.current.add(toolPart.toolCallId);
             setShowVisualization(false);
           }
         }
       }
     }
   }, [messages]);
+
+  // Open chart from Artifact click
+  const handleOpenChart = useCallback((data: ShowNeedsChartArgs) => {
+    setVisualizationData(data);
+    setShowVisualization(true);
+  }, []);
 
   const handleSubmit = useCallback((message: PromptInputMessage) => {
     const hasText = Boolean(message.text);
@@ -442,62 +450,133 @@ export function NeedsAssessmentView({
           <div className="relative flex size-full flex-col divide-y overflow-hidden">
             <Conversation>
               <ConversationContent>
-                {messages.map((message) => (
-                  <Message
-                    key={message.id}
-                    from={message.role === 'user' ? 'user' : 'assistant'}
-                  >
-                    <div>
-                      {message.parts.map((part, index) => {
-                        if (part.type === 'text') {
-                          return (
-                            <MessageContent
-                              key={index}
-                              className={cn(
-                                "group-[.is-user]:rounded-[24px] group-[.is-user]:bg-secondary group-[.is-user]:text-foreground",
-                                "group-[.is-assistant]:bg-transparent group-[.is-assistant]:p-0 group-[.is-assistant]:text-foreground"
-                              )}
-                            >
-                              <MessageResponse>{(part as TextUIPart).text}</MessageResponse>
-                            </MessageContent>
-                          );
-                        }
-                        if (part.type.startsWith('tool-')) {
-                          const toolPart = part as { type: string; toolCallId: string; toolName?: string; state?: string };
-                          return (
-                            <div key={toolPart.toolCallId} className="mt-2">
-                              <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-md text-xs">
-                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                                {toolPart.toolName === 'show_needs_chart' && 'Generating needs visualization...'}
-                                {toolPart.state === 'result' && ' ✓'}
-                              </div>
-                            </div>
-                          );
-                        }
-                        return null;
-                      })}
+                {messages.map((message) => {
+                  const textContent = message.parts
+                    .filter((p): p is TextUIPart => p.type === 'text')
+                    .map(p => p.text)
+                    .join('\n');
+                  const isUser = message.role === 'user';
+
+                  return (
+                    <div key={message.id} className={cn("flex gap-3", isUser && "flex-row-reverse")}>
+                      <Avatar className="h-8 w-8 shrink-0">
+                        {isUser ? (
+                          <>
+                            <AvatarImage src={session?.user?.image ?? undefined} />
+                            <AvatarFallback className="bg-primary text-primary-foreground">
+                              <User className="h-4 w-4" />
+                            </AvatarFallback>
+                          </>
+                        ) : (
+                          <AvatarFallback className="bg-muted">
+                            <Bot className="h-4 w-4" />
+                          </AvatarFallback>
+                        )}
+                      </Avatar>
+                      <Message from={isUser ? 'user' : 'assistant'}>
+                        <div>
+                        {message.parts.map((part, index) => {
+                          if (part.type === 'text') {
+                            return (
+                              <MessageContent
+                                key={index}
+                                className={cn(
+                                  "group-[.is-user]:rounded-[24px] group-[.is-user]:bg-secondary group-[.is-user]:text-foreground",
+                                  "group-[.is-assistant]:bg-transparent group-[.is-assistant]:p-0 group-[.is-assistant]:text-foreground"
+                                )}
+                              >
+                                <MessageResponse>{(part as TextUIPart).text}</MessageResponse>
+                              </MessageContent>
+                            );
+                          }
+                          if (part.type.startsWith('tool-')) {
+                            const toolPart = part as { type: string; toolCallId: string; state?: string; input?: unknown };
+                            const toolName = part.type.replace('tool-', '');
+                            const isComplete = toolPart.state === 'output-available';
+
+                            // Render clickable Artifact card for completed chart
+                            if (toolName === 'show_needs_chart' && isComplete) {
+                              const chartData = toolPart.input as ShowNeedsChartArgs;
+                              return (
+                                <div key={toolPart.toolCallId} className="mt-3 max-w-sm">
+                                  <Artifact
+                                    className="cursor-pointer hover:border-primary/50 hover:shadow-md transition-all"
+                                    onClick={() => handleOpenChart(chartData)}
+                                  >
+                                    <ArtifactHeader className="py-2 px-3">
+                                      <div className="flex items-center gap-2">
+                                        <BarChart2 className="h-4 w-4 text-primary" />
+                                        <ArtifactTitle>Needs Assessment</ArtifactTitle>
+                                      </div>
+                                      <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+                                    </ArtifactHeader>
+                                    <ArtifactContent className="py-2 px-3">
+                                      <ArtifactDescription>
+                                        {chartData.needs.length} needs analyzed • Click to view
+                                      </ArtifactDescription>
+                                    </ArtifactContent>
+                                  </Artifact>
+                                </div>
+                              );
+                            }
+
+                            // Loading state for in-progress tools
+                            if (toolName === 'show_needs_chart' && !isComplete) {
+                              return (
+                                <div key={toolPart.toolCallId} className="mt-2">
+                                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-muted rounded-md text-xs text-muted-foreground">
+                                    <Loader size={12} />
+                                    <Shimmer>Generating visualization...</Shimmer>
+                                  </div>
+                                </div>
+                              );
+                            }
+
+                            // Hide chart - no visual element
+                            if (toolName === 'hide_chart') {
+                              return null;
+                            }
+                          }
+                          return null;
+                        })}
+                      </div>
+                      {message.role === 'assistant' && textContent && (
+                        <MessageActions className="opacity-0 group-hover:opacity-100 transition-opacity">
+                          <MessageAction
+                            tooltip="Copy"
+                            onClick={() => {
+                              navigator.clipboard.writeText(textContent);
+                              toast.success('Copied to clipboard');
+                            }}
+                          >
+                            <CopyIcon className="h-3.5 w-3.5" />
+                          </MessageAction>
+                        </MessageActions>
+                      )}
+                      </Message>
                     </div>
-                  </Message>
-                ))}
+                  );
+                })}
 
                 {/* Loading state */}
                 {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
-                  <Message from="assistant">
-                    <div className="flex items-center gap-2">
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                      </div>
-                    </div>
-                  </Message>
+                  <div className="flex gap-3">
+                    <Avatar className="h-8 w-8 shrink-0">
+                      <AvatarFallback className="bg-muted">
+                        <Loader size={16} />
+                      </AvatarFallback>
+                    </Avatar>
+                    <Message from="assistant">
+                      <Shimmer className="text-sm text-muted-foreground">Thinking...</Shimmer>
+                    </Message>
+                  </div>
                 )}
 
                 {/* Error state */}
                 {error && (
-                  <div className="text-red-500 p-4 text-sm">
-                    Error: {error.message}
-                  </div>
+                  <Alert variant="destructive" className="mx-4">
+                    <AlertDescription>{error.message}</AlertDescription>
+                  </Alert>
                 )}
               </ConversationContent>
               <ConversationScrollButton />
