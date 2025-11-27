@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const modelMessages = convertToModelMessages(messages);
 
     const result = streamText({
-      model: openai('gpt-5.1-chat'),
+      model: openai('gpt-5.1-chat-latest'),
       system: SYSTEM_PROMPT,
       messages: modelMessages,
       tools: {
