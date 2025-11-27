@@ -9,7 +9,7 @@ export default {
     "./packages/ai-chatbot/components/**/*.{js,ts,jsx,tsx}",
     "./packages/ai-chatbot/app/**/*.{js,ts,jsx,tsx}"
   ],
-  darkMode: ['class', "class"],
+  darkMode: 'class',
   theme: {
   	spacing: {
   		'0': '0',

@@ -110,18 +110,9 @@
   --secondary-offset: 220 20% 12%;
 }
 
-/* Base resets from original */
-.ai-chat * {
-  min-width: 0;
-  border-color: hsl(var(--border));
-  outline-color: hsl(var(--ring) / 0.5);
-}
-
-.ai-chat ::after,
-.ai-chat ::before,
-.ai-chat ::backdrop,
-.ai-chat ::file-selector-button {
-  border-color: hsl(var(--border));
+/* Scoped focus fix - prevents ring offset glitch globally in chat */
+.ai-chat :focus-visible {
+  --tw-ring-offset-width: 0px;
 }
 
 /* Text rendering optimization */
@@ -155,11 +146,11 @@
 
 /* Focus states - matching demo's subtle style */
 .ai-chat .focus-visible\:ring-ring:focus-visible {
-  --tw-ring-color: hsl(var(--ring));
+  --tw-ring-color: hsl(var(--ring)) !important;
 }
 
 .ai-chat .focus-visible\:ring-1:focus-visible {
-  --tw-ring-width: 1px;
+  --tw-ring-width: 1px !important;
 }
 
 /* Shadow styles */
