@@ -41,6 +41,7 @@ export async function POST(req: Request) {
 
     const result = streamText({
       model: openai('gpt-5.1-chat-latest'),
+      temperature: 1.7,
       system: SYSTEM_PROMPT,
       messages: modelMessages,
       tools: {
