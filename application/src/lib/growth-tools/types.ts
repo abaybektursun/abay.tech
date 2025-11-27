@@ -97,3 +97,31 @@ export interface ShowNeedsChartArgs {
 export interface HideVisualizationArgs {
   // Empty object - no args needed
 }
+
+/**
+ * A single slider field within a multi-slider request
+ */
+export interface SliderField {
+  /** Name/title of this field */
+  name: string;
+  /** Minimum value (default: 0) */
+  min?: number;
+  /** Maximum value (default: 100) */
+  max?: number;
+  /** Step increment (default: 1) */
+  step?: number;
+  /** Default/initial value */
+  defaultValue?: number;
+  /** Labels for min/max ends (e.g., ["Not at all", "Completely"]) */
+  labels?: string[];
+}
+
+/**
+ * Tool call arguments for requesting slider inputs from the user
+ */
+export interface RequestSliderArgs {
+  /** Question or prompt to show the user */
+  question: string;
+  /** Array of slider fields to display */
+  fields: SliderField[];
+}

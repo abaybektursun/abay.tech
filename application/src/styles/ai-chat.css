@@ -9,89 +9,105 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* Light mode - HSL values for Tailwind compatibility */
-  --background: 0 0% 100%;
-  --foreground: 0 0% 9%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 9%;
+  /* Light mode - Warm Luxury (Alabaster & Charcoal) */
+  --background: 40 20% 99%;      /* Warm Alabaster */
+  --foreground: 220 15% 15%;     /* Deep Charcoal */
+  
+  --card: 0 0% 100%;             /* Pure White */
+  --card-foreground: 220 15% 15%;
+  
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 9%;
-  --primary: 230 70% 46%; /* Blue primary like demo */
+  --popover-foreground: 220 15% 15%;
+  
+  --primary: 220 15% 20%;        /* Midnight Charcoal - Elegant & Corporate */
   --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 96.1%;
-  --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 96.1%;
-  --muted-foreground: 0 0% 45.1%;
-  --accent: 0 0% 96.1%;
-  --accent-foreground: 0 0% 9%;
+  
+  --secondary: 40 10% 96%;       /* Warm Light Grey */
+  --secondary-foreground: 220 15% 15%;
+  
+  --muted: 40 10% 96%;
+  --muted-foreground: 220 10% 55%;
+  
+  --accent: 40 10% 94%;
+  --accent-foreground: 220 15% 15%;
+  
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 89.8%;  /* Subtle light gray */
-  --input: 0 0% 89.8%;   /* Matching border */
-  --ring: 0 0% 63.9%;    /* Neutral gray ring */
+  
+  --border: 220 10% 92%;         /* Subtle cool grey */
+  --input: 220 10% 92%;
+  --ring: 220 15% 20%;
 
-  /* Chart colors */
-  --chart-1: 25 95% 53%;
-  --chart-2: 197 37% 48%;
-  --chart-3: 213 27% 36%;
-  --chart-4: 86 59% 64%;
-  --chart-5: 43 59% 61%;
+  /* Chart colors - Sophisticated Earth & Jewel Tones */
+  --chart-1: 220 15% 20%; /* Charcoal */
+  --chart-2: 28 67% 55%;  /* Muted Terracotta */
+  --chart-3: 160 30% 45%; /* Deep Sage */
+  --chart-4: 35 40% 60%;  /* Antique Gold */
+  --chart-5: 220 20% 60%; /* Slate Blue */
 
   /* Sidebar (if needed) */
-  --sidebar-background: 0 0% 98%;
-  --sidebar-foreground: 0 0% 9%;
-  --sidebar-primary: 0 0% 9%;
-  --sidebar-primary-foreground: 0 0% 98%;
-  --sidebar-accent: 0 0% 96.1%;
-  --sidebar-accent-foreground: 0 0% 9%;
-  --sidebar-border: 0 0% 89.8%;
-  --sidebar-ring: 0 0% 63.9%;
+  --sidebar-background: 40 20% 98%;
+  --sidebar-foreground: 220 15% 15%;
+  --sidebar-primary: 220 15% 20%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 40 10% 94%;
+  --sidebar-accent-foreground: 220 15% 15%;
+  --sidebar-border: 220 10% 92%;
+  --sidebar-ring: 220 15% 20%;
 
   /* Secondary offset */
-  --secondary-offset: 0 0% 97%;
+  --secondary-offset: 40 10% 97%;
 }
 
 .ai-chat.dark {
-  /* Dark mode - HSL values for Tailwind compatibility */
-  --background: 0 0% 9%;
-  --foreground: 0 0% 95%;
-  --card: 0 0% 13%;
-  --card-foreground: 0 0% 95%;
-  --popover: 0 0% 13%;
-  --popover-foreground: 0 0% 95%;
-  --primary: 230 70% 46%; /* Blue primary like demo */
-  --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 16%;
-  --secondary-foreground: 0 0% 95%;
-  --muted: 0 0% 16%;
-  --muted-foreground: 0 0% 63.9%;
-  --accent: 0 0% 16%;
-  --accent-foreground: 0 0% 95%;
+  /* Dark mode - Midnight Luxury */
+  --background: 220 20% 10%;     /* Deep Midnight */
+  --foreground: 40 10% 96%;      /* Soft Off-White */
+  
+  --card: 220 20% 13%;
+  --card-foreground: 40 10% 96%;
+  
+  --popover: 220 20% 13%;
+  --popover-foreground: 40 10% 96%;
+  
+  --primary: 40 10% 96%;         /* Off-White Action - High Contrast */
+  --primary-foreground: 220 20% 10%;
+  
+  --secondary: 220 20% 16%;
+  --secondary-foreground: 40 10% 96%;
+  
+  --muted: 220 20% 16%;
+  --muted-foreground: 220 10% 65%;
+  
+  --accent: 220 20% 16%;
+  --accent-foreground: 40 10% 96%;
+  
   --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 95%;
-  --border: 0 0% 14.9%;  /* Subtle dark borders */
-  --input: 0 0% 14.9%;   /* Matching input borders */
-  --ring: 0 0% 40%;      /* Neutral dark gray ring */
+  --destructive-foreground: 40 10% 96%;
+  
+  --border: 220 20% 18%;
+  --input: 220 20% 18%;
+  --ring: 220 20% 30%;
 
   /* Chart colors for dark mode */
-  --chart-1: 223 70% 50%;
+  --chart-1: 220 70% 60%;
   --chart-2: 160 60% 60%;
   --chart-3: 43 59% 61%;
   --chart-4: 280 65% 60%;
   --chart-5: 10 70% 56%;
 
   /* Sidebar (if needed) */
-  --sidebar-background: 0 0% 13%;
-  --sidebar-foreground: 0 0% 95%;
-  --sidebar-primary: 223 70% 50%;
-  --sidebar-primary-foreground: 0 0% 95%;
-  --sidebar-accent: 0 0% 16%;
-  --sidebar-accent-foreground: 0 0% 95%;
-  --sidebar-border: 0 0% 14.9%;
-  --sidebar-ring: 0 0% 40%;
+  --sidebar-background: 220 20% 13%;
+  --sidebar-foreground: 40 10% 96%;
+  --sidebar-primary: 40 10% 96%;
+  --sidebar-primary-foreground: 220 20% 10%;
+  --sidebar-accent: 220 20% 16%;
+  --sidebar-accent-foreground: 40 10% 96%;
+  --sidebar-border: 220 20% 18%;
+  --sidebar-ring: 220 20% 30%;
 
   /* Secondary offset */
-  --secondary-offset: 0 0% 12%;
+  --secondary-offset: 220 20% 12%;
 }
 
 /* Base resets from original */

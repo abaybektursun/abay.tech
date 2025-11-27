@@ -25,7 +25,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Container from '@/components/container';
 import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
-import type { ShowNeedsChartArgs } from '@/lib/growth-tools/types';
+import type { ShowNeedsChartArgs, RequestSliderArgs, SliderField } from '@/lib/growth-tools/types';
 import { getLocalChat, saveLocalChat, getLocalChats, clearLocalChats } from '@/lib/growth-tools/local-storage';
 import { getChat, getChats, migrateChats, saveChat } from '@/lib/actions';
 import '@/styles/ai-chat.css';
@@ -86,6 +86,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Slider } from '@/components/ui/slider';
+import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { nanoid } from 'nanoid';
 import { Bot, User, BarChart2, ExternalLink } from 'lucide-react';
@@ -138,6 +140,7 @@ export function NeedsAssessmentView({
   const abortControllerRef = useRef<AbortController | null>(null);
   const migrationDone = useRef(false);
   const handledToolCalls = useRef<Set<string>>(new Set());
+  const [sliderValues, setSliderValues] = useState<Record<string, Record<string, number>>>({});
 
   const isLoading = status === 'streaming' || status === 'submitted';
   const isAuthenticated = sessionStatus === 'authenticated' && session?.user;
@@ -241,12 +244,21 @@ export function NeedsAssessmentView({
       trigger: 'submit-message',
     };
 
-    const response = await fetch('/api/apps/growth-tools/needs-assessment', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: abortControllerRef.current.signal,
-    });
+    let response: Response;
+    try {
+      response = await fetch('/api/apps/growth-tools/needs-assessment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: abortControllerRef.current.signal,
+      });
+    } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') {
+        // Request was aborted, ignore
+        return;
+      }
+      throw err;
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -314,14 +326,30 @@ export function NeedsAssessmentView({
             const updated = [...prev];
             const lastIndex = updated.length - 1;
             if (updated[lastIndex]?.role === 'assistant') {
-              const existingParts = (updated[lastIndex].parts as any[]).filter(
+              const currentParts = updated[lastIndex].parts as any[];
+
+              // 1. Remove any existing part with the SAME toolCallId (update case)
+              const otherParts = currentParts.filter(
                 (p: any) => p.toolCallId !== chunk.toolCallId
               );
+
+              // 2. Check for duplicate CONTENT (different toolCallId but same input)
+              // This prevents the AI from "stuttering" and sending the same tool call multiple times
+              const isDuplicateContent = otherParts.some(
+                (p: any) =>
+                  p.type === `tool-${chunk.toolName}` &&
+                  JSON.stringify(p.input) === JSON.stringify(chunk.input)
+              );
+
+              if (isDuplicateContent) {
+                return updated; // Skip adding this duplicate
+              }
+
               updated[lastIndex] = {
                 id: assistantMessageId,
                 role: 'assistant',
                 parts: [
-                  ...existingParts,
+                  ...otherParts,
                   {
                     type: `tool-${chunk.toolName}`,
                     toolCallId: chunk.toolCallId,
@@ -417,6 +445,15 @@ export function NeedsAssessmentView({
     setVisualizationData(data);
     setShowVisualization(true);
   }, []);
+
+  // Handle slider submission - sends values back via sendMessage (official AI SDK pattern)
+  const handleSliderSubmit = useCallback((toolCallId: string, fields: SliderField[], values: Record<string, number>) => {
+    // Mark this tool call as handled to prevent re-submission
+    handledToolCalls.current.add(toolCallId);
+    // Format values as readable response
+    const response = fields.map(f => `${f.name}: ${values[f.name] ?? f.defaultValue ?? 50}`).join(', ');
+    sendMessage(response);
+  }, [sendMessage]);
 
   const handleSubmit = useCallback((message: PromptInputMessage) => {
     const hasText = Boolean(message.text);
@@ -535,6 +572,90 @@ export function NeedsAssessmentView({
                             // Hide chart - no visual element
                             if (toolName === 'hide_chart') {
                               return null;
+                            }
+
+                            // Render interactive sliders for request_slider tool
+                            if (toolName === 'request_slider' && isComplete) {
+                              const sliderData = toolPart.input as RequestSliderArgs;
+                              const isSubmitted = handledToolCalls.current.has(toolPart.toolCallId);
+                              const toolValues = sliderValues[toolPart.toolCallId] ?? {};
+
+                              return (
+                                <div key={toolPart.toolCallId} className="mt-3 w-full max-w-md">
+                                  <Artifact>
+                                    <ArtifactContent className="p-4 space-y-4">
+                                      <p className="text-sm font-medium">{sliderData.question}</p>
+                                      <div className="space-y-4">
+                                        {sliderData.fields.map((field) => {
+                                          const min = field.min ?? 0;
+                                          const max = field.max ?? 100;
+                                          const step = field.step ?? 1;
+                                          const currentValue = toolValues[field.name] ?? field.defaultValue ?? Math.round((min + max) / 2);
+
+                                          return (
+                                            <div key={field.name} className="space-y-2">
+                                              <div className="flex justify-between items-center">
+                                                <span className="text-sm text-muted-foreground">{field.name}</span>
+                                                <span className="text-sm font-medium">{currentValue}</span>
+                                              </div>
+                                              <Slider
+                                                className="cursor-pointer"
+                                                value={[currentValue]}
+                                                min={min}
+                                                max={max}
+                                                step={step}
+                                                disabled={isSubmitted || isLoading}
+                                                onValueChange={([value]) => {
+                                                  setSliderValues(prev => ({
+                                                    ...prev,
+                                                    [toolPart.toolCallId]: {
+                                                      ...prev[toolPart.toolCallId],
+                                                      [field.name]: value,
+                                                    },
+                                                  }));
+                                                }}
+                                              />
+                                              {field.labels && (
+                                                <div className="flex justify-between text-xs text-muted-foreground">
+                                                  <span>{field.labels[0]}</span>
+                                                  <span>{field.labels[1]}</span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                      {!isSubmitted && (
+                                        <Button
+                                          size="sm"
+                                          className="w-full"
+                                          disabled={isLoading}
+                                          onClick={() => handleSliderSubmit(toolPart.toolCallId, sliderData.fields, toolValues)}
+                                        >
+                                          Submit
+                                        </Button>
+                                      )}
+                                      {isSubmitted && (
+                                        <p className="text-xs text-muted-foreground text-center">
+                                          Submitted
+                                        </p>
+                                      )}
+                                    </ArtifactContent>
+                                  </Artifact>
+                                </div>
+                              );
+                            }
+
+                            // Loading state for in-progress slider
+                            if (toolName === 'request_slider' && !isComplete) {
+                              return (
+                                <div key={toolPart.toolCallId} className="mt-2">
+                                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-muted rounded-md text-xs text-muted-foreground">
+                                    <Loader size={12} />
+                                    <Shimmer>Preparing question...</Shimmer>
+                                  </div>
+                                </div>
+                              );
                             }
                           }
                           return null;

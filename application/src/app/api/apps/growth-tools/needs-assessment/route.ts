@@ -67,6 +67,22 @@ export async function POST(req: Request) {
           inputSchema: z.object({}),
           execute: async () => ({}),
         }),
+        request_slider: tool({
+          description:
+            'Request numeric ratings from the user via interactive sliders. Use this when you need the user to rate one or more things on a scale (e.g., how fulfilled they feel across different areas). Each field has its own slider with a name/title.',
+          inputSchema: z.object({
+            question: z.string().describe('The overall question or prompt (e.g., "Rate how fulfilled you feel in these areas:")'),
+            fields: z.array(z.object({
+              name: z.string().describe('Name/title for this slider (e.g., "Work", "Relationships", "Health")'),
+              min: z.number().optional().default(0).describe('Minimum value (default: 0)'),
+              max: z.number().optional().default(100).describe('Maximum value (default: 100)'),
+              step: z.number().optional().default(1).describe('Step increment (default: 1)'),
+              defaultValue: z.number().optional().describe('Initial slider value'),
+              labels: z.array(z.string()).length(2).optional().describe('Labels for min/max ends'),
+            })).describe('Array of slider fields to display'),
+          }),
+          execute: async (input) => input,
+        }),
       },
       // Correct, documented way to catch streaming errors
       onError: (error) => {
