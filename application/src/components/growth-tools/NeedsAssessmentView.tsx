@@ -75,6 +75,9 @@ import {
   ScreenShare as ScreenShareIcon,
   Copy as CopyIcon,
   Check as CheckIcon,
+  Mic as MicIcon,
+  Volume2 as Volume2Icon,
+  Square as SquareIcon,
 } from 'lucide-react';
 
 // UI components
@@ -122,6 +125,12 @@ const suggestions = [
 
 type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
 
+// Voice INPUT state (mic button) - separate from audio output
+type VoiceInputState = 'idle' | 'recording' | 'transcribing';
+
+// Audio OUTPUT state (TTS playback) - independent from voice input
+type AudioOutputState = 'idle' | 'generating' | 'playing';
+
 export function NeedsAssessmentView({
   id: propId,
   initialMessages,
@@ -141,6 +150,12 @@ export function NeedsAssessmentView({
   const migrationDone = useRef(false);
   const handledToolCalls = useRef<Set<string>>(new Set());
   const [sliderValues, setSliderValues] = useState<Record<string, Record<string, number>>>({});
+  const [voiceInputState, setVoiceInputState] = useState<VoiceInputState>('idle');
+  const [audioOutputState, setAudioOutputState] = useState<AudioOutputState>('idle');
+  const [playingMessageId, setPlayingMessageId] = useState<string | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const isLoading = status === 'streaming' || status === 'submitted';
   const isAuthenticated = sessionStatus === 'authenticated' && session?.user;
@@ -474,6 +489,144 @@ export function NeedsAssessmentView({
     sendMessage(suggestion);
   }, [sendMessage]);
 
+  // Stop any playing audio (used when starting recording)
+  const stopAudioPlayback = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setPlayingMessageId(null);
+    setAudioOutputState('idle');
+  }, []);
+
+  // Voice recording - start on mouse down
+  const startRecording = useCallback(async () => {
+    // Interrupt any playing audio when user starts recording
+    stopAudioPlayback();
+
+    setVoiceInputState('recording');
+
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mediaRecorder = new MediaRecorder(stream);
+    mediaRecorderRef.current = mediaRecorder;
+    audioChunksRef.current = [];
+
+    mediaRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunksRef.current.push(event.data);
+      }
+    };
+
+    mediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(track => track.stop());
+
+      if (audioChunksRef.current.length === 0) {
+        setVoiceInputState('idle');
+        return;
+      }
+
+      // Transition to transcribing state
+      setVoiceInputState('transcribing');
+
+      const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'recording.webm');
+
+      const response = await fetch('/api/apps/growth-tools/needs-assessment/transcribe', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const { text, error } = await response.json();
+
+      if (error) {
+        toast.error('Transcription failed');
+        setVoiceInputState('idle');
+        return;
+      }
+
+      if (text?.trim()) {
+        // Back to idle before sending - sendMessage will handle chat state
+        setVoiceInputState('idle');
+        sendMessage(text);
+      } else {
+        setVoiceInputState('idle');
+      }
+    };
+
+    mediaRecorder.start();
+  }, [sendMessage, stopAudioPlayback]);
+
+  // Voice recording - stop on mouse up
+  const stopRecording = useCallback(() => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+    }
+    // Don't set to idle here - let onstop handler manage state transition
+  }, []);
+
+  // TTS playback
+  const playMessage = useCallback(async (messageId: string, text: string) => {
+    if (playingMessageId === messageId) {
+      // Stop current playback
+      stopAudioPlayback();
+      return;
+    }
+
+    setPlayingMessageId(messageId);
+    setAudioOutputState('generating');
+
+    const response = await fetch('/api/apps/growth-tools/needs-assessment/speak', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    });
+
+    if (!response.ok) {
+      toast.error('Failed to generate audio');
+      setPlayingMessageId(null);
+      setAudioOutputState('idle');
+      return;
+    }
+
+    const audioBlob = await response.blob();
+    const audioUrl = URL.createObjectURL(audioBlob);
+
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+    }
+
+    setAudioOutputState('playing');
+
+    audioRef.current.src = audioUrl;
+    audioRef.current.onended = () => {
+      setPlayingMessageId(null);
+      setAudioOutputState('idle');
+      URL.revokeObjectURL(audioUrl);
+    };
+    audioRef.current.play();
+  }, [playingMessageId, stopAudioPlayback]);
+
+  // Auto-play TTS when AI response completes (always)
+  const prevStatusRef = useRef<ChatStatus>('ready');
+  useEffect(() => {
+    // Trigger when transitioning from streaming to ready
+    if (prevStatusRef.current === 'streaming' && status === 'ready') {
+      // Find the last assistant message
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage?.role === 'assistant') {
+        const textPart = lastMessage.parts.find((p): p is TextUIPart => p.type === 'text');
+        if (textPart?.text) {
+          // Small delay to ensure UI is updated
+          setTimeout(() => {
+            playMessage(lastMessage.id, textPart.text);
+          }, 100);
+        }
+      }
+    }
+    prevStatusRef.current = status;
+  }, [status, messages, playMessage]);
+
   return (
     <div className="h-full">
       <Container className="flex h-full justify-center pt-4">
@@ -664,6 +817,16 @@ export function NeedsAssessmentView({
                       {message.role === 'assistant' && textContent && (
                         <MessageActions className="opacity-0 group-hover:opacity-100 transition-opacity">
                           <MessageAction
+                            tooltip={playingMessageId === message.id ? "Stop" : "Listen"}
+                            onClick={() => playMessage(message.id, textContent)}
+                          >
+                            {playingMessageId === message.id ? (
+                              <SquareIcon className="h-3.5 w-3.5" />
+                            ) : (
+                              <Volume2Icon className="h-3.5 w-3.5" />
+                            )}
+                          </MessageAction>
+                          <MessageAction
                             tooltip="Copy"
                             onClick={() => {
                               navigator.clipboard.writeText(textContent);
@@ -753,6 +916,58 @@ export function NeedsAssessmentView({
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
+                    {/* Mic button - only shows INPUT states */}
+                    <PromptInputButton
+                      className={cn(
+                        "!rounded-full border font-medium transition-all min-w-[140px]",
+                        voiceInputState === 'recording' && "bg-red-500 text-white border-red-500 animate-pulse",
+                        voiceInputState === 'transcribing' && "bg-amber-500 text-white border-amber-500"
+                      )}
+                      variant="outline"
+                      onMouseDown={voiceInputState === 'idle' ? startRecording : undefined}
+                      onMouseUp={voiceInputState === 'recording' ? stopRecording : undefined}
+                      onMouseLeave={voiceInputState === 'recording' ? stopRecording : undefined}
+                      onTouchStart={voiceInputState === 'idle' ? startRecording : undefined}
+                      onTouchEnd={voiceInputState === 'recording' ? stopRecording : undefined}
+                      disabled={voiceInputState === 'transcribing'}
+                    >
+                      {voiceInputState === 'transcribing' ? (
+                        <Loader size={16} />
+                      ) : (
+                        <MicIcon size={16} />
+                      )}
+                      <span>
+                        {voiceInputState === 'idle' && 'Hold to speak'}
+                        {voiceInputState === 'recording' && 'Recording...'}
+                        {voiceInputState === 'transcribing' && 'Transcribing...'}
+                      </span>
+                    </PromptInputButton>
+                    {/* Audio output indicator - shows TTS state */}
+                    {audioOutputState !== 'idle' && (
+                      <PromptInputButton
+                        className={cn(
+                          "!rounded-full border font-medium transition-all",
+                          audioOutputState === 'generating' && "bg-blue-500 text-white border-blue-500",
+                          audioOutputState === 'playing' && "bg-green-500 text-white border-green-500 animate-pulse"
+                        )}
+                        variant="outline"
+                        onClick={audioOutputState === 'playing' ? stopAudioPlayback : undefined}
+                      >
+                        {audioOutputState === 'generating' && (
+                          <>
+                            <Loader size={16} />
+                            <span>Generating...</span>
+                          </>
+                        )}
+                        {audioOutputState === 'playing' && (
+                          <>
+                            <Volume2Icon size={16} />
+                            <span>Playing</span>
+                            <SquareIcon size={12} />
+                          </>
+                        )}
+                      </PromptInputButton>
+                    )}
                   </PromptInputTools>
                 </PromptInputFooter>
               </PromptInput>
