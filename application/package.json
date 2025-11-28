@@ -11,7 +11,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:integration": "sst shell vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.72",
@@ -97,6 +100,7 @@
     "@types/node": "^22.10.1",
     "@types/react": "^19.2.3",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.1.3",
@@ -104,6 +108,7 @@
     "sst": "^3.17.23",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^4.0.14"
   }
 }

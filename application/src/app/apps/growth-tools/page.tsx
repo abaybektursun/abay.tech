@@ -8,7 +8,7 @@ import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import { LayoutGrid, MessagesSquare, ChevronDown, MessageCircle } from 'lucide-react';
-import { NeedsAssessmentView } from '@/components/growth-tools/NeedsAssessmentView';
+import { GrowthToolChat } from '@/components/growth-tools/GrowthToolChat';
 import { getLocalChats, type LocalChat } from '@/lib/growth-tools/local-storage';
 import { getChats } from '@/lib/actions';
 
@@ -73,6 +73,17 @@ function GrowthToolsContent() {
       className: 'md:col-span-1',
       glowColor: 'bg-emerald-500/80 dark:bg-emerald-400/80',
       layoutId: 'integrity-alignment-card'
+    },
+    {
+      name: 'Open World Mode',
+      description:
+        "Develop high-agency thinking: treat life as a game with hackable rules, turn obstacles into fuel, and discover that building from nothing is the greatest adventure.",
+      onClick: () => router.push('/apps/growth-tools?exercise=open-world-mode'),
+      cta: 'Enter Open World',
+      available: true,
+      className: 'md:col-span-1',
+      glowColor: 'bg-cyan-500/80 dark:bg-cyan-400/80',
+      layoutId: 'open-world-mode-card'
     },
   ];
 
@@ -152,15 +163,15 @@ function GrowthToolsContent() {
         {/* Main content */}
         <div className="flex-1">
           <AnimatePresence mode="wait">
-            {exercise === 'needs-assessment' ? (
+            {exercise ? (
               <motion.div
-                key={`needs-assessment-${chatId ?? 'new'}`}
+                key={`${exercise}-${chatId ?? 'new'}`}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
-                <NeedsAssessmentView id={chatId ?? undefined} />
+                <GrowthToolChat exercise={exercise} id={chatId ?? undefined} />
               </motion.div>
             ) : (
               <motion.div

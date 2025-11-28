@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
 import { SessionProvider } from 'next-auth/react';
 import { AuthButton } from '@/components/auth/auth-button';
+import { Toaster } from '@/components/ui/sonner';
 import '@/styles/ai-chat.css';
 
 interface AppsLayoutProps {
@@ -28,6 +29,7 @@ export default function AppsLayout({ children }: AppsLayoutProps) {
           <AnimatePresence mode="wait">
             {children}
           </AnimatePresence>
+          <Toaster />
         </div>
       </SessionProvider>
     );
@@ -43,6 +45,7 @@ export default function AppsLayout({ children }: AppsLayoutProps) {
         <AnimatePresence mode="wait">
           {children}
         </AnimatePresence>
+        <Toaster />
       </div>
     </SessionProvider>
   );

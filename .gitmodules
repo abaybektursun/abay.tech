@@ -1,0 +1,3 @@
+[submodule "application/public/rag/scrappy_mindset"]
+	path = application/public/rag/scrappy_mindset
+	url = git@github.com:abaybektursun/scrappy_mindset.git
