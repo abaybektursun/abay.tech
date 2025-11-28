@@ -3,6 +3,7 @@ import { streamText, tool, convertToModelMessages } from 'ai';
 import { z } from 'zod';
 import fs from 'fs';
 import path from 'path';
+import { checkTokenLimit, recordTokenUsage } from '@/lib/rate-limit';
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -19,6 +20,13 @@ const FRAMEWORK = fs.readFileSync(
 const SYSTEM_PROMPT = `${PROMPT}\n\n---\n\n# Reference: Human Needs Framework\n\n${FRAMEWORK}`;
 
 export async function POST(req: Request) {
+  const limit = await checkTokenLimit();
+  if (!limit.success) {
+    return Response.json(
+      { error: `Token limit exceeded (${limit.limit}). Please try again later.` },
+      { status: 429 }
+    );
+  }
 
   if (!process.env.OPENAI_API_KEY) {
     console.error(
@@ -94,6 +102,13 @@ export async function POST(req: Request) {
       onError: (error) => {
         console.error("[NeedsAssessmentAPI] A streaming error occurred:", error);
       },
+    });
+
+    // Record token usage after stream completes (non-blocking)
+    result.usage.then(usage => {
+      if (usage.totalTokens) {
+        recordTokenUsage(usage.totalTokens);
+      }
     });
 
     return result.toUIMessageStreamResponse();
