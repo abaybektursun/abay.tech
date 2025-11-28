@@ -74,6 +74,17 @@ function GrowthToolsContent() {
       glowColor: 'bg-emerald-500/80 dark:bg-emerald-400/80',
       layoutId: 'integrity-alignment-card'
     },
+    {
+      name: 'Open World Mode',
+      description:
+        "Develop high-agency thinking: treat life as a game with hackable rules, turn obstacles into fuel, and discover that building from nothing is the greatest adventure.",
+      onClick: () => router.push('/apps/growth-tools?exercise=open-world-mode'),
+      cta: 'Enter Open World',
+      available: true,
+      className: 'md:col-span-1',
+      glowColor: 'bg-cyan-500/80 dark:bg-cyan-400/80',
+      layoutId: 'open-world-mode-card'
+    },
   ];
 
   return (
