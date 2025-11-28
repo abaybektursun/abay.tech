@@ -276,6 +276,22 @@ export function NeedsAssessmentView({
     }
 
     if (!response.ok) {
+      if (response.status === 429) {
+        const data = await response.json();
+        const errorMessage = data.error || 'Usage limit reached. Please try again later.';
+        toast.error('Usage Limit Reached', {
+          description: errorMessage,
+          duration: 5000,
+        });
+        // Add assistant message explaining the rate limit
+        setMessages(prev => [...prev, {
+          id: nanoid(),
+          role: 'assistant',
+          parts: [{ type: 'text', text: `⚠️ ${errorMessage}` }],
+        }]);
+        setStatus('ready');
+        return;
+      }
       const errorText = await response.text();
       console.error('[Chat] API error:', errorText);
       setError(new Error(errorText));
@@ -537,6 +553,16 @@ export function NeedsAssessmentView({
         body: formData,
       });
 
+      if (response.status === 429) {
+        const data = await response.json();
+        toast.error('Usage Limit Reached', {
+          description: data.error || 'Please try again later.',
+          duration: 5000,
+        });
+        setVoiceInputState('idle');
+        return;
+      }
+
       const { text, error } = await response.json();
 
       if (error) {
@@ -568,7 +594,6 @@ export function NeedsAssessmentView({
   // TTS playback
   const playMessage = useCallback(async (messageId: string, text: string) => {
     if (playingMessageId === messageId) {
-      // Stop current playback
       stopAudioPlayback();
       return;
     }
@@ -581,6 +606,17 @@ export function NeedsAssessmentView({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text }),
     });
+
+    if (response.status === 429) {
+      const data = await response.json();
+      toast.error('Usage Limit Reached', {
+        description: data.error || 'Please try again later.',
+        duration: 5000,
+      });
+      setPlayingMessageId(null);
+      setAudioOutputState('idle');
+      return;
+    }
 
     if (!response.ok) {
       toast.error('Failed to generate audio');
@@ -597,7 +633,6 @@ export function NeedsAssessmentView({
     }
 
     setAudioOutputState('playing');
-
     audioRef.current.src = audioUrl;
     audioRef.current.onended = () => {
       setPlayingMessageId(null);
