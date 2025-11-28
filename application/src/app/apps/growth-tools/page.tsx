@@ -8,7 +8,7 @@ import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import { LayoutGrid, MessagesSquare, ChevronDown, MessageCircle } from 'lucide-react';
-import { NeedsAssessmentView } from '@/components/growth-tools/NeedsAssessmentView';
+import { GrowthToolChat } from '@/components/growth-tools/GrowthToolChat';
 import { getLocalChats, type LocalChat } from '@/lib/growth-tools/local-storage';
 import { getChats } from '@/lib/actions';
 
@@ -163,15 +163,15 @@ function GrowthToolsContent() {
         {/* Main content */}
         <div className="flex-1">
           <AnimatePresence mode="wait">
-            {exercise === 'needs-assessment' ? (
+            {exercise ? (
               <motion.div
-                key={`needs-assessment-${chatId ?? 'new'}`}
+                key={`${exercise}-${chatId ?? 'new'}`}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
-                <NeedsAssessmentView id={chatId ?? undefined} />
+                <GrowthToolChat exercise={exercise} id={chatId ?? undefined} />
               </motion.div>
             ) : (
               <motion.div

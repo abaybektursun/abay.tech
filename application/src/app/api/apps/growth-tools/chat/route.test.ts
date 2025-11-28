@@ -20,20 +20,37 @@ vi.mock('ai', () => ({
   streamText: (...args: unknown[]) => mockStreamText(...args),
   tool: vi.fn((config) => config),
   convertToModelMessages: vi.fn((messages) => messages),
+  stepCountIs: vi.fn(() => () => false),
 }));
 
 // Mock fs for system prompt loading
 vi.mock('fs', () => ({
   default: {
     readFileSync: vi.fn(() => 'mock prompt content'),
+    existsSync: vi.fn(() => true),
   },
+}));
+
+// Mock exercises module
+vi.mock('@/lib/growth-tools/exercises', () => ({
+  getExercise: vi.fn(() => ({
+    name: 'Needs Assessment',
+    prompt: ['needs-assessment/prompt.md'],
+    ragFolder: null,
+    tools: ['show_needs_chart', 'request_slider', 'hide_chart'],
+  })),
+}));
+
+// Mock RAG module
+vi.mock('@/lib/growth-tools/rag', () => ({
+  findRelevantChunks: vi.fn(() => Promise.resolve([])),
 }));
 
 // Set env
 process.env.OPENAI_API_KEY = 'test-key';
 process.env.DYNAMODB_TABLE = 'test-table';
 
-describe('needs-assessment API route', () => {
+describe('unified chat API route', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockCheckTokenLimit.mockResolvedValue({ success: true });
@@ -54,10 +71,10 @@ describe('needs-assessment API route', () => {
     it('should check token limit before processing', async () => {
       const { POST } = await import('./route');
 
-      const request = new Request('http://localhost/api/apps/growth-tools/needs-assessment', {
+      const request = new Request('http://localhost/api/apps/growth-tools/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [] }),
+        body: JSON.stringify({ exercise: 'needs-assessment', messages: [] }),
       });
 
       await POST(request);
@@ -74,10 +91,10 @@ describe('needs-assessment API route', () => {
 
       const { POST } = await import('./route');
 
-      const request = new Request('http://localhost/api/apps/growth-tools/needs-assessment', {
+      const request = new Request('http://localhost/api/apps/growth-tools/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [] }),
+        body: JSON.stringify({ exercise: 'needs-assessment', messages: [] }),
       });
 
       const response = await POST(request);
@@ -96,10 +113,10 @@ describe('needs-assessment API route', () => {
 
       const { POST } = await import('./route');
 
-      const request = new Request('http://localhost/api/apps/growth-tools/needs-assessment', {
+      const request = new Request('http://localhost/api/apps/growth-tools/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [] }),
+        body: JSON.stringify({ exercise: 'needs-assessment', messages: [] }),
       });
 
       const response = await POST(request);
@@ -118,10 +135,10 @@ describe('needs-assessment API route', () => {
 
       const { POST } = await import('./route');
 
-      const request = new Request('http://localhost/api/apps/growth-tools/needs-assessment', {
+      const request = new Request('http://localhost/api/apps/growth-tools/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [] }),
+        body: JSON.stringify({ exercise: 'needs-assessment', messages: [] }),
       });
 
       const response = await POST(request);
@@ -140,10 +157,10 @@ describe('needs-assessment API route', () => {
 
       const { POST } = await import('./route');
 
-      const request = new Request('http://localhost/api/apps/growth-tools/needs-assessment', {
+      const request = new Request('http://localhost/api/apps/growth-tools/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [] }),
+        body: JSON.stringify({ exercise: 'needs-assessment', messages: [] }),
       });
 
       await POST(request);
@@ -156,10 +173,10 @@ describe('needs-assessment API route', () => {
 
       const { POST } = await import('./route');
 
-      const request = new Request('http://localhost/api/apps/growth-tools/needs-assessment', {
+      const request = new Request('http://localhost/api/apps/growth-tools/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [{ role: 'user', content: 'hello' }] }),
+        body: JSON.stringify({ exercise: 'needs-assessment', messages: [{ role: 'user', content: 'hello' }] }),
       });
 
       const response = await POST(request);
@@ -177,10 +194,10 @@ describe('needs-assessment API route', () => {
 
       const { POST } = await import('./route');
 
-      const request = new Request('http://localhost/api/apps/growth-tools/needs-assessment', {
+      const request = new Request('http://localhost/api/apps/growth-tools/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [] }),
+        body: JSON.stringify({ exercise: 'needs-assessment', messages: [] }),
       });
 
       await POST(request);
@@ -202,10 +219,10 @@ describe('needs-assessment API route', () => {
 
       const { POST } = await import('./route');
 
-      const request = new Request('http://localhost/api/apps/growth-tools/needs-assessment', {
+      const request = new Request('http://localhost/api/apps/growth-tools/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [] }),
+        body: JSON.stringify({ exercise: 'needs-assessment', messages: [] }),
       });
 
       await POST(request);
@@ -260,10 +277,10 @@ describe('needs-assessment API route', () => {
 
       const { POST } = await import('./route');
 
-      const request = new Request('http://localhost/api/apps/growth-tools/needs-assessment', {
+      const request = new Request('http://localhost/api/apps/growth-tools/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [] }),
+        body: JSON.stringify({ exercise: 'needs-assessment', messages: [] }),
       });
 
       const start = performance.now();
