@@ -527,7 +527,6 @@ export function GrowthToolChat({
       body: JSON.stringify({
         text: messageText,
         voice: exerciseConfig?.voice,
-        speed: exerciseConfig?.voiceSpeed,
       }),
     });
 
@@ -564,7 +563,7 @@ export function GrowthToolChat({
       URL.revokeObjectURL(audioUrl);
     };
     audioRef.current.play();
-  }, [playingMessageId, stopAudioPlayback, exerciseConfig?.voice, exerciseConfig?.voiceSpeed]);
+  }, [playingMessageId, stopAudioPlayback, exerciseConfig?.voice]);
 
   // Auto-play TTS when AI response completes
   const prevStatusRef = useRef<ChatStatus>('ready');

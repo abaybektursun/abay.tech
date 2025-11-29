@@ -16,8 +16,7 @@ export interface ExerciseConfig {
   ragFolder: string | null; // Folder name in public/rag/ or null if no RAG
   tools: string[]; // Tool names this exercise uses
   suggestions: ExerciseSuggestion[];
-  voice: string; // OpenAI TTS voice: alloy, ash, ballad, coral, echo, fable, nova, onyx, sage, shimmer, verse
-  voiceSpeed: number; // Speech speed: 0.25 to 4.0, default 1.0
+  voice: string; // ElevenLabs voice ID
 }
 
 export const exercises: Record<string, ExerciseConfig> = {
@@ -38,8 +37,7 @@ export const exercises: Record<string, ExerciseConfig> = {
       { icon: 'Code2', text: 'Action plan', color: '#6c71ff' },
       { icon: 'Lightbulb', text: 'Get growth advice', color: '#76d0eb' },
     ],
-    voice: 'onyx', // Deep, authoritative - high energy Tony Robbins style
-    voiceSpeed: 1.25,
+    voice: 'pNInz6obpgDQGcFmaJgB', // Adam - deep male, high energy Tony Robbins style
   },
   'open-world-mode': {
     name: 'Open World Mode',
@@ -55,8 +53,7 @@ export const exercises: Record<string, ExerciseConfig> = {
       { icon: 'Map', text: "I don't know what's possible", color: '#22c55e' },
       { icon: 'Sparkles', text: 'Surprise me', color: '#76d0eb' },
     ],
-    voice: 'nova', // Friendly, upbeat - youthful and fun
-    voiceSpeed: 1.15,
+    voice: 'EXAVITQu4vr4xnSDxMaL', // Sarah - young female, youthful and fun
   },
   'integrity-alignment': {
     name: 'Integrity Alignment',
@@ -71,8 +68,7 @@ export const exercises: Record<string, ExerciseConfig> = {
       { icon: 'Eye', text: 'Help me see clearly', color: '#76d0eb' },
       { icon: 'Sparkles', text: 'Surprise me', color: '#6c71ff' },
     ],
-    voice: 'sage', // Calm, wise - empathetic and soothing
-    voiceSpeed: 1.0,
+    voice: '21m00Tcm4TlvDq8ikWAM', // Rachel - calm female, empathetic and soothing
   },
 };
 

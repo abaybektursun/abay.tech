@@ -17,6 +17,7 @@
     "test:integration": "sst shell vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
+    "@ai-sdk/elevenlabs": "^1.0.20",
     "@ai-sdk/openai": "^2.0.72",
     "@ai-sdk/react": "^2.0.101",
     "@aws-sdk/client-dynamodb": "^3.940.0",
