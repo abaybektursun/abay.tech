@@ -146,7 +146,7 @@ export async function POST(req: Request) {
   const hasTools = Object.keys(tools).length > 0;
 
   const result = streamText({
-    model: openai('gpt-4o'),
+    model: openai('gpt-5-chat-latest'),
     system: systemPrompt,
     messages: modelMessages,
     ...(hasTools && {
