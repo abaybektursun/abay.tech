@@ -56,7 +56,7 @@ export const exercises: Record<string, ExerciseConfig> = {
     name: 'Integrity Alignment',
     description:
       "Work through Martha Beck's Way of Integrity exercises to align your actions with your true nature.",
-    prompt: ['integrity-alignment/prompt.md'],
+    prompt: ['integrity-alignment/prompt.md', 'integrity-alignment/workbook.md'],
     ragFolder: null,
     tools: [],
     suggestions: [
