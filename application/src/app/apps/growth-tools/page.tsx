@@ -134,36 +134,48 @@ function GrowthToolsContent() {
                     </motion.div>
                   </Button>
                 </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <div className="mt-2 pl-6">
-                    {savedChats.length === 0 ? (
-                      <div className="text-xs text-muted-foreground py-2">
-                        No saved chats
-                      </div>
-                    ) : (
-                      <div className="relative">
-                        <ScrollArea className="h-[200px]">
-                          <div className="space-y-1 pr-2">
-                            {savedChats.map((chat) => (
-                              <Button
-                                key={chat.id}
-                                variant="ghost"
-                                size="sm"
-                                className="w-full justify-start text-xs font-normal truncate"
-                                onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
-                              >
-                                <MessageCircle className="mr-2 h-3 w-3 flex-shrink-0" />
-                                <span className="truncate">{chat.title}</span>
-                              </Button>
-                            ))}
-                          </div>
-                        </ScrollArea>
-                        {savedChats.length > 5 && (
-                          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-background to-transparent" />
-                        )}
-                      </div>
+                <CollapsibleContent forceMount>
+                  <AnimatePresence>
+                    {isChatsOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-2 pl-6">
+                          {savedChats.length === 0 ? (
+                            <div className="text-xs text-muted-foreground py-2">
+                              No saved chats
+                            </div>
+                          ) : (
+                            <div className="relative">
+                              <ScrollArea className="h-[200px]">
+                                <div className="space-y-1 pr-2">
+                                  {savedChats.map((chat) => (
+                                    <Button
+                                      key={chat.id}
+                                      variant="ghost"
+                                      size="sm"
+                                      className="w-full justify-start text-xs font-normal truncate"
+                                      onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
+                                    >
+                                      <MessageCircle className="mr-2 h-3 w-3 flex-shrink-0" />
+                                      <span className="truncate">{chat.title}</span>
+                                    </Button>
+                                  ))}
+                                </div>
+                              </ScrollArea>
+                              {savedChats.length > 5 && (
+                                <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-background to-transparent" />
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </motion.div>
                     )}
-                  </div>
+                  </AnimatePresence>
                 </CollapsibleContent>
               </Collapsible>
             </motion.div>
