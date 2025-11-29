@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const { text } = await req.json();
+  const { text, voice, speed } = await req.json();
 
   if (!text) {
     return Response.json({ error: 'No text provided' }, { status: 400 });
@@ -29,9 +29,9 @@ export async function POST(req: Request) {
   const { audio } = await generateSpeech({
     model: openai.speech('gpt-4o-mini-tts'),
     text,
-    voice: 'coral', // Fast, warm voice
+    voice: voice || 'coral', // Default to coral if not specified
     outputFormat: 'opus', // Smaller file size than mp3
-    speed: 1.15, // Slightly faster speech
+    speed: speed || 1.15, // Default speed if not specified
   });
 
   // Record usage based on text length

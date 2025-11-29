@@ -524,7 +524,11 @@ export function GrowthToolChat({
     const response = await fetch(SPEAK_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: messageText }),
+      body: JSON.stringify({
+        text: messageText,
+        voice: exerciseConfig?.voice,
+        speed: exerciseConfig?.voiceSpeed,
+      }),
     });
 
     if (response.status === 429) {
@@ -560,7 +564,7 @@ export function GrowthToolChat({
       URL.revokeObjectURL(audioUrl);
     };
     audioRef.current.play();
-  }, [playingMessageId, stopAudioPlayback]);
+  }, [playingMessageId, stopAudioPlayback, exerciseConfig?.voice, exerciseConfig?.voiceSpeed]);
 
   // Auto-play TTS when AI response completes
   const prevStatusRef = useRef<ChatStatus>('ready');
