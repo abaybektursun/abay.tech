@@ -2,9 +2,9 @@ import { db } from './db';
 import { GetCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 
 // Global limits (tokens)
-const DAILY_LIMIT = 50_000;
-const WEEKLY_LIMIT = 200_000;
-const MONTHLY_LIMIT = 500_000;
+const DAILY_LIMIT = 5_000_000;
+const WEEKLY_LIMIT = 20_000_000;
+const MONTHLY_LIMIT = 50_000_000;
 
 // Cache TTL in milliseconds
 const CACHE_TTL = 30_000; // 30 seconds
