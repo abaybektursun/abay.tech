@@ -25,6 +25,10 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "ELEVENLABS_API_KEY": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "GROQ_API_KEY": {
       "type": "sst.sst.Secret"
       "value": string

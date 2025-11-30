@@ -527,6 +527,7 @@ export function GrowthToolChat({
       body: JSON.stringify({
         text: messageText,
         voice: exerciseConfig?.voice,
+        voiceSettings: exerciseConfig?.voiceSettings,
       }),
     });
 

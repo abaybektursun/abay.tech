@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const { text, voice } = await req.json();
+  const { text, voice, voiceSettings } = await req.json();
 
   if (!text) {
     return Response.json({ error: 'No text provided' }, { status: 400 });
@@ -33,6 +33,15 @@ export async function POST(req: Request) {
     model: elevenlabs.speech('eleven_flash_v2_5'),
     text,
     voice: voice || DEFAULT_VOICE_ID,
+    providerOptions: voiceSettings ? {
+      elevenlabs: {
+        voiceSettings: {
+          stability: voiceSettings.stability,
+          similarityBoost: voiceSettings.similarity_boost,
+          style: voiceSettings.style,
+        },
+      },
+    } : undefined,
   });
 
   // Record usage based on text length
@@ -43,7 +52,7 @@ export async function POST(req: Request) {
 
   return new Response(binaryData, {
     headers: {
-      'Content-Type': audio.mediaType,
+      'Content-Type': audio.mimeType || 'audio/mpeg',
     },
   });
 }

@@ -9,6 +9,12 @@ export interface ExerciseSuggestion {
   color: string;
 }
 
+export interface VoiceSettings {
+  stability?: number; // 0-1, lower = more expressive
+  similarity_boost?: number; // 0-1, how closely to match original voice
+  style?: number; // 0-1, amplifies speaker's style (increases latency if >0)
+}
+
 export interface ExerciseConfig {
   name: string;
   description: string;
@@ -17,6 +23,7 @@ export interface ExerciseConfig {
   tools: string[]; // Tool names this exercise uses
   suggestions: ExerciseSuggestion[];
   voice: string; // ElevenLabs voice ID
+  voiceSettings?: VoiceSettings; // Optional ElevenLabs voice settings
 }
 
 export const exercises: Record<string, ExerciseConfig> = {
@@ -53,7 +60,12 @@ export const exercises: Record<string, ExerciseConfig> = {
       { icon: 'Map', text: "I don't know what's possible", color: '#22c55e' },
       { icon: 'Sparkles', text: 'Surprise me', color: '#76d0eb' },
     ],
-    voice: 'EXAVITQu4vr4xnSDxMaL', // Sarah - young female, youthful and fun
+    voice: 'CyHwTRKhXEYuSd7CbMwI', // Aria - youthful and fun
+    voiceSettings: {
+      stability: 0.3, // Low stability for more expressive, dynamic speech
+      similarity_boost: 0.8,
+      style: 0.7, // High style for enthusiasm and energy
+    }
   },
   'integrity-alignment': {
     name: 'Integrity Alignment',
