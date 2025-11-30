@@ -43,6 +43,7 @@ export default $config({
         AUTH_GITHUB_SECRET: authGithubSecret.value,
         AUTH_GOOGLE_ID: authGoogleId.value,
         AUTH_GOOGLE_SECRET: authGoogleSecret.value,
+        AUTH_TRUST_HOST: "true",
       }
     });
   },
