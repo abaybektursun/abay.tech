@@ -8,8 +8,9 @@ import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { LayoutGrid, MessagesSquare, ChevronDown, MessageCircle } from 'lucide-react';
+import { LayoutGrid, MessagesSquare, ChevronDown, MessageCircle, LayoutDashboard } from 'lucide-react';
 import { GrowthToolChat } from '@/components/growth-tools/GrowthToolChat';
+import { Dashboard } from '@/components/growth-tools/Dashboard';
 import { getLocalChats, type LocalChat } from '@/lib/growth-tools/local-storage';
 import { getChats } from '@/lib/actions';
 
@@ -23,9 +24,10 @@ function GrowthToolsContent() {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
 
-  // Get exercise and chatId from URL
+  // Get exercise, chatId, and view from URL
   const exercise = searchParams.get('exercise');
   const chatId = searchParams.get('chatId');
+  const view = searchParams.get('view');
 
   // State for sidebar
   const [isChatsOpen, setIsChatsOpen] = useState(true);
@@ -110,11 +112,27 @@ function GrowthToolsContent() {
               </Button>
             </motion.div>
 
+            {/* Dashboard button */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 0.05 }}
+            >
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-sm hover:bg-accent/50 transition-all duration-200"
+                onClick={() => router.push('/apps/growth-tools?view=dashboard')}
+              >
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                Dashboard
+              </Button>
+            </motion.div>
+
             {/* Collapsible Chats section */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
+              transition={{ duration: 0.3, delay: 0.15 }}
             >
               <Collapsible open={isChatsOpen} onOpenChange={setIsChatsOpen}>
                 <CollapsibleTrigger asChild>
@@ -185,7 +203,17 @@ function GrowthToolsContent() {
         {/* Main content */}
         <div className="flex-1">
           <AnimatePresence mode="wait">
-            {exercise ? (
+            {view === 'dashboard' ? (
+              <motion.div
+                key="dashboard"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <Dashboard />
+              </motion.div>
+            ) : exercise ? (
               <motion.div
                 key={`${exercise}-${chatId ?? 'new'}`}
                 initial={{ opacity: 0, x: 20 }}

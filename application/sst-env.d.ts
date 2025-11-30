@@ -41,6 +41,10 @@ declare module "sst" {
       "type": "sst.aws.Nextjs"
       "url": string
     }
+    "artifacts": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "chats": {
       "name": string
       "type": "sst.aws.Dynamo"

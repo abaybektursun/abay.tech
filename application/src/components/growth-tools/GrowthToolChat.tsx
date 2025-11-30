@@ -358,6 +358,29 @@ export function GrowthToolChat({
             const updated = [...prev];
             const lastIndex = updated.length - 1;
             if (updated[lastIndex]?.role === 'assistant') {
+              // Find the tool part to get tool name and input for artifact saving
+              const toolPart = (updated[lastIndex].parts as any[]).find(
+                (p: any) => p.toolCallId === chunk.toolCallId
+              );
+
+              // Save artifact for chart tools (only for authenticated users)
+              if (toolPart && isAuthenticated && session?.user?.id) {
+                const toolName = toolPart.type.replace('tool-', '');
+                if (toolName === 'show_needs_chart') {
+                  fetch('/api/apps/growth-tools/artifacts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      chatId,
+                      exerciseId: exercise,
+                      type: 'needs-chart',
+                      title: 'Needs Assessment',
+                      data: toolPart.input,
+                    }),
+                  }).catch(console.error);
+                }
+              }
+
               updated[lastIndex] = {
                 ...updated[lastIndex],
                 parts: (updated[lastIndex].parts as any[]).map((p: any) =>

@@ -29,8 +29,19 @@ export default $config({
       },
     });
 
+    const artifactsTable = new sst.aws.Dynamo("artifacts", {
+      fields: {
+        userId: "string",
+        id: "string",
+      },
+      primaryIndex: {
+        hashKey: "userId",
+        rangeKey: "id",
+      },
+    });
+
     new sst.aws.Nextjs("abay", {
-      link: [groqApiKey, openaiApiKey, elevenlabsApiKey, table],
+      link: [groqApiKey, openaiApiKey, elevenlabsApiKey, table, artifactsTable],
       // Set the domain only for the production stage
       domain: $app.stage === "production" ? "abay.tech" : undefined,
       environment: {
@@ -38,6 +49,7 @@ export default $config({
         OPENAI_API_KEY: openaiApiKey.value,
         ELEVENLABS_API_KEY: elevenlabsApiKey.value,
         DYNAMODB_TABLE: table.name,
+        ARTIFACTS_TABLE: artifactsTable.name,
         AUTH_SECRET: authSecret.value,
         AUTH_GITHUB_ID: authGithubId.value,
         AUTH_GITHUB_SECRET: authGithubSecret.value,
