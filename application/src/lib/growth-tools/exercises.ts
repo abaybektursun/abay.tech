@@ -24,6 +24,7 @@ export interface ExerciseConfig {
   suggestions: ExerciseSuggestion[];
   voice: string; // ElevenLabs voice ID
   voiceSettings?: VoiceSettings; // Optional ElevenLabs voice settings
+  introVideoId?: string; // YouTube video ID for intro context video
 }
 
 export const exercises: Record<string, ExerciseConfig> = {
@@ -44,7 +45,8 @@ export const exercises: Record<string, ExerciseConfig> = {
       { icon: 'Code2', text: 'Action plan', color: '#6c71ff' },
       { icon: 'Lightbulb', text: 'Get growth advice', color: '#76d0eb' },
     ],
-    voice: 'pNInz6obpgDQGcFmaJgB', // Adam - deep male, high energy Tony Robbins style
+    voice: 'WWr4C8ld745zI3BiA8n7', // Tony Robbins style voice
+    introVideoId: 'HVwUfSiZUZM', // Tony Robbins - 6 Human Needs
   },
   'open-world-mode': {
     name: 'Open World Mode',
@@ -81,6 +83,7 @@ export const exercises: Record<string, ExerciseConfig> = {
       { icon: 'Sparkles', text: 'Surprise me', color: '#6c71ff' },
     ],
     voice: '21m00Tcm4TlvDq8ikWAM', // Rachel - calm female, empathetic and soothing
+    introVideoId: 'By4e6MsiADA', // Martha Beck - The Way of Integrity
   },
 };
 

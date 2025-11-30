@@ -12,7 +12,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Container from '@/components/container';
 import { getLocalChat, saveLocalChat, getLocalChats, clearLocalChats } from '@/lib/growth-tools/local-storage';
-import { getChat, getChats, migrateChats, saveChat } from '@/lib/actions';
+import { getChat, getChats, migrateChats } from '@/lib/actions';
 import '@/styles/ai-chat.css';
 
 // AI Elements components
@@ -65,6 +65,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   Artifact,
   ArtifactHeader,
@@ -132,6 +140,9 @@ export function GrowthToolChat({
   const [visualizationData, setVisualizationData] = useState<ShowNeedsChartArgs | null>(null);
   const [sliderValues, setSliderValues] = useState<Record<string, Record<string, number>>>({});
 
+  // Intro video state (sessionStorage - resets on hard refresh)
+  const [showIntroVideo, setShowIntroVideo] = useState(false);
+
   // Get exercise config
   const exerciseConfig = getExercise(exercise);
   const suggestions: ExerciseSuggestion[] = exerciseConfig?.suggestions ?? [];
@@ -143,6 +154,24 @@ export function GrowthToolChat({
   const handleToolHandled = useCallback((toolCallId: string) => {
     handledToolCalls.current.add(toolCallId);
   }, []);
+
+  // Show intro video on first visit (uses sessionStorage - resets on hard refresh)
+  useEffect(() => {
+    if (!exerciseConfig?.introVideoId) return;
+
+    const key = `growth-tools-intro-seen-${exercise}`;
+    const seen = sessionStorage.getItem(key);
+
+    if (!seen) {
+      setShowIntroVideo(true);
+    }
+  }, [exercise, exerciseConfig?.introVideoId]);
+
+  const handleCloseIntroVideo = useCallback(() => {
+    const key = `growth-tools-intro-seen-${exercise}`;
+    sessionStorage.setItem(key, 'true');
+    setShowIntroVideo(false);
+  }, [exercise]);
 
   // Load existing chat on mount
   useEffect(() => {
@@ -363,10 +392,11 @@ export function GrowthToolChat({
                 (p: any) => p.toolCallId === chunk.toolCallId
               );
 
-              // Save artifact for chart tools (only for authenticated users)
-              if (toolPart && isAuthenticated && session?.user?.id) {
+              // Save artifact for chart tools (only for authenticated users, dedupe by toolCallId)
+              if (toolPart && isAuthenticated && !handledToolCalls.current.has(chunk.toolCallId)) {
                 const toolName = toolPart.type.replace('tool-', '');
                 if (toolName === 'show_needs_chart') {
+                  handledToolCalls.current.add(chunk.toolCallId);
                   fetch('/api/apps/growth-tools/artifacts', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -414,22 +444,10 @@ export function GrowthToolChat({
       }
     }
 
-    const finalMessages: UIMessage[] = [
-      ...newMessages,
-      {
-        id: assistantMessageId,
-        role: 'assistant',
-        parts: [{ type: 'text', text: currentText }],
-      },
-    ];
-
-    if (isAuthenticated && session?.user?.email) {
-      saveChat({
-        id: chatId,
-        messages: finalMessages,
-        userId: session.user.email,
-      });
-    }
+    // Server-side persistence now handles authenticated users via onFinish callback
+    // This fixes the bug where tool parts were lost (only text was saved)
+    // See: src/app/api/apps/growth-tools/chat/route.ts
+    console.log('[GrowthToolChat] Stream complete - server handles persistence for authenticated users');
 
     setStatus('ready');
   }, [messages, chatId, isAuthenticated, session?.user?.email, exercise]);
@@ -1003,6 +1021,35 @@ export function GrowthToolChat({
           </div>
         </motion.div>
       </Container>
+
+      {/* Intro video dialog */}
+      {exerciseConfig?.introVideoId && (
+        <Dialog open={showIntroVideo} onOpenChange={(open) => !open && handleCloseIntroVideo()}>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader className="text-center sm:text-center">
+              <DialogTitle>Before You Begin</DialogTitle>
+              <DialogDescription>
+                Watch this video to understand the framework behind this exercise
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="aspect-video rounded-lg overflow-hidden bg-black">
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${exerciseConfig.introVideoId}?autoplay=1&rel=0`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
+
+            <DialogFooter className="sm:justify-center">
+              <Button onClick={handleCloseIntroVideo} size="lg" variant="secondary">
+                Start Exercise
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

@@ -1,21 +1,28 @@
-import { auth } from '@/app/(auth)/auth'
+import { auth } from '@/auth'
 import { getArtifacts, togglePin, deleteArtifact, saveArtifact } from '@/lib/artifacts'
+
+// Use email as userId since NextAuth doesn't include id by default
+function getUserId(session: any): string | null {
+  return session?.user?.email || session?.user?.id || null
+}
 
 export async function GET() {
   const session = await auth()
+  const userId = getUserId(session)
 
-  if (!session?.user?.id) {
+  if (!userId) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const artifacts = await getArtifacts(session.user.id)
+  const artifacts = await getArtifacts(userId)
   return Response.json(artifacts)
 }
 
 export async function PUT(req: Request) {
   const session = await auth()
+  const userId = getUserId(session)
 
-  if (!session?.user?.id) {
+  if (!userId) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -25,14 +32,15 @@ export async function PUT(req: Request) {
     return Response.json({ error: 'Artifact ID required' }, { status: 400 })
   }
 
-  const newPinned = await togglePin(session.user.id, id)
+  const newPinned = await togglePin(userId, id)
   return Response.json({ pinned: newPinned })
 }
 
 export async function POST(req: Request) {
   const session = await auth()
+  const userId = getUserId(session)
 
-  if (!session?.user?.id) {
+  if (!userId) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -43,7 +51,7 @@ export async function POST(req: Request) {
   }
 
   const artifact = await saveArtifact({
-    userId: session.user.id,
+    userId,
     chatId,
     exerciseId,
     type,
@@ -56,8 +64,9 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   const session = await auth()
+  const userId = getUserId(session)
 
-  if (!session?.user?.id) {
+  if (!userId) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -67,6 +76,6 @@ export async function DELETE(req: Request) {
     return Response.json({ error: 'Artifact ID required' }, { status: 400 })
   }
 
-  await deleteArtifact(session.user.id, id)
+  await deleteArtifact(userId, id)
   return Response.json({ success: true })
 }

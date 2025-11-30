@@ -1,11 +1,13 @@
 import { openai } from '@ai-sdk/openai';
-import { streamText, tool, convertToModelMessages, stepCountIs } from 'ai';
+import { streamText, tool, convertToModelMessages, stepCountIs, createIdGenerator } from 'ai';
 import { z } from 'zod';
 import fs from 'fs';
 import path from 'path';
 import { checkTokenLimit, recordTokenUsage } from '@/lib/rate-limit';
 import { getExercise } from '@/lib/growth-tools/exercises';
 import { findRelevantChunks } from '@/lib/growth-tools/rag';
+import { auth } from '@/auth';
+import { saveChat } from '@/lib/actions';
 
 export const maxDuration = 30;
 
@@ -105,7 +107,13 @@ export async function POST(req: Request) {
     );
   }
 
-  const { exercise: exerciseId, messages } = await req.json();
+  // Get user session for persistence
+  const session = await auth();
+  const userId = session?.user?.email || session?.user?.id || null;
+  console.log('[Chat] Session userId:', userId ? 'authenticated' : 'anonymous');
+
+  const { exercise: exerciseId, id: chatId, messages } = await req.json();
+  console.log('[Chat] Request:', { exerciseId, chatId, messageCount: messages?.length });
 
   // Get exercise config
   const exerciseConfig = getExercise(exerciseId);
@@ -164,5 +172,41 @@ export async function POST(req: Request) {
     }
   });
 
-  return result.toUIMessageStreamResponse();
+  // Use onFinish callback for server-side persistence with complete UIMessage[]
+  return result.toUIMessageStreamResponse({
+    originalMessages: messages,
+    generateMessageId: createIdGenerator({ prefix: 'msg', size: 16 }),
+    onFinish: async ({ messages: finalMessages }) => {
+      // Log detailed message structure for debugging
+      console.log('[Chat] onFinish triggered');
+      console.log('[Chat] Final messages count:', finalMessages.length);
+
+      // Log each message's parts structure
+      finalMessages.forEach((msg, idx) => {
+        const partTypes = msg.parts.map(p => p.type);
+        console.log(`[Chat] Message ${idx} (${msg.role}):`, {
+          id: msg.id,
+          partsCount: msg.parts.length,
+          partTypes,
+        });
+      });
+
+      // Only save for authenticated users
+      if (userId && chatId) {
+        console.log('[Chat] Saving chat to DB:', { chatId, userId: 'redacted', messageCount: finalMessages.length });
+        try {
+          await saveChat({
+            id: chatId,
+            messages: finalMessages,
+            userId,
+          });
+          console.log('[Chat] Chat saved successfully');
+        } catch (error) {
+          console.error('[Chat] Failed to save chat:', error);
+        }
+      } else {
+        console.log('[Chat] Skipping save - anonymous user or no chatId');
+      }
+    },
+  });
 }

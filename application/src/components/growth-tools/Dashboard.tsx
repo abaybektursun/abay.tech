@@ -8,6 +8,8 @@ import { Pin, PinOff, Trash2, BarChart2, Quote, Lightbulb, FileText, Lock, Arrow
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Artifact } from '@/lib/artifacts';
+import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
+import type { ShowNeedsChartArgs } from '@/lib/growth-tools/types';
 
 // Icon mapping for artifact types
 const artifactIcons: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -69,7 +71,7 @@ function ArtifactCard({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      className="relative p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+      className="relative p-4 rounded-lg border bg-card"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2">
@@ -100,26 +102,12 @@ function ArtifactCard({
         </div>
       </div>
 
-      {/* Render artifact preview based on type */}
-      <div className="mt-3 text-xs text-muted-foreground">
-        {artifact.type === 'needs-chart' && data.needs && (
-          <div className="space-y-1">
-            {data.needs.slice(0, 3).map((need: any, i: number) => (
-              <div key={i} className="flex justify-between">
-                <span>{need.name}</span>
-                <span>{need.fulfilled}%</span>
-              </div>
-            ))}
-            {data.needs.length > 3 && (
-              <span className="text-muted-foreground">+{data.needs.length - 3} more</span>
-            )}
-          </div>
-        )}
+      <div className="mt-3 text-sm text-muted-foreground">
         {artifact.type === 'quote' && (
-          <p className="italic line-clamp-2">&ldquo;{data.text}&rdquo;</p>
+          <p className="italic">&ldquo;{data.text}&rdquo;</p>
         )}
         {artifact.type === 'insight' && (
-          <p className="line-clamp-2">{data.text}</p>
+          <p>{data.text}</p>
         )}
       </div>
 
@@ -352,14 +340,25 @@ export function Dashboard() {
             <Pin className="h-4 w-4" />
             <h2 className="text-lg font-semibold">Pinned</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-6">
             {pinnedArtifacts.map(artifact => (
-              <ArtifactCard
-                key={artifact.id}
-                artifact={artifact}
-                onTogglePin={handleTogglePin}
-                onDelete={handleDelete}
-              />
+              artifact.type === 'needs-chart' ? (
+                <NeedsChart
+                  key={artifact.id}
+                  data={JSON.parse(artifact.data) as ShowNeedsChartArgs}
+                  variant="compact"
+                  isPinned={artifact.pinned}
+                  onTogglePin={() => handleTogglePin(artifact.id)}
+                  onDelete={() => handleDelete(artifact.id)}
+                />
+              ) : (
+                <ArtifactCard
+                  key={artifact.id}
+                  artifact={artifact}
+                  onTogglePin={handleTogglePin}
+                  onDelete={handleDelete}
+                />
+              )
             ))}
           </div>
         </motion.div>
@@ -376,9 +375,7 @@ export function Dashboard() {
         {allArtifacts.length === 0 ? (
           <div className="space-y-6">
             {/* Skeleton placeholders */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <SkeletonArtifactCard />
-              <SkeletonArtifactCard />
+            <div className="grid grid-cols-1 gap-6">
               <SkeletonArtifactCard />
             </div>
 
@@ -398,18 +395,27 @@ export function Dashboard() {
             </div>
           </div>
         ) : (
-          <ScrollArea className="h-[400px]">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pr-4">
-              {allArtifacts.map(artifact => (
+          <div className="grid grid-cols-1 gap-6">
+            {allArtifacts.map(artifact => (
+              artifact.type === 'needs-chart' ? (
+                <NeedsChart
+                  key={artifact.id}
+                  data={JSON.parse(artifact.data) as ShowNeedsChartArgs}
+                  variant="compact"
+                  isPinned={artifact.pinned}
+                  onTogglePin={() => handleTogglePin(artifact.id)}
+                  onDelete={() => handleDelete(artifact.id)}
+                />
+              ) : (
                 <ArtifactCard
                   key={artifact.id}
                   artifact={artifact}
                   onTogglePin={handleTogglePin}
                   onDelete={handleDelete}
                 />
-              ))}
-            </div>
-          </ScrollArea>
+              )
+            ))}
+          </div>
         )}
       </motion.div>
     </div>

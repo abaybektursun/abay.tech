@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { type LucideIcon, XIcon } from "lucide-react";
+import { type LucideIcon, XIcon, Pin, PinOff, Trash2 } from "lucide-react";
 import type { ComponentProps, HTMLAttributes } from "react";
 
 export type ArtifactProps = HTMLAttributes<HTMLDivElement>;
@@ -145,3 +145,93 @@ export const ArtifactContent = ({
 }: ArtifactContentProps) => (
   <div className={cn("flex-1 overflow-auto p-4", className)} {...props} />
 );
+
+// Dashboard action primitives - reusable across all generative UI components
+
+export type ArtifactPinActionProps = Omit<ComponentProps<typeof Button>, 'children'> & {
+  isPinned?: boolean;
+  tooltip?: string;
+};
+
+export const ArtifactPinAction = ({
+  isPinned,
+  tooltip,
+  className,
+  size = "sm",
+  variant = "ghost",
+  ...props
+}: ArtifactPinActionProps) => {
+  const button = (
+    <Button
+      className={cn(
+        "size-8 p-0 text-muted-foreground hover:text-foreground",
+        className
+      )}
+      size={size}
+      type="button"
+      variant={variant}
+      {...props}
+    >
+      {isPinned ? <PinOff className="size-4" /> : <Pin className="size-4" />}
+      <span className="sr-only">{isPinned ? "Unpin" : "Pin"}</span>
+    </Button>
+  );
+
+  if (tooltip !== undefined) {
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>{button}</TooltipTrigger>
+          <TooltipContent>
+            <p>{tooltip || (isPinned ? "Unpin" : "Pin")}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+
+  return button;
+};
+
+export type ArtifactDeleteActionProps = Omit<ComponentProps<typeof Button>, 'children'> & {
+  tooltip?: string;
+};
+
+export const ArtifactDeleteAction = ({
+  tooltip,
+  className,
+  size = "sm",
+  variant = "ghost",
+  ...props
+}: ArtifactDeleteActionProps) => {
+  const button = (
+    <Button
+      className={cn(
+        "size-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10",
+        className
+      )}
+      size={size}
+      type="button"
+      variant={variant}
+      {...props}
+    >
+      <Trash2 className="size-4" />
+      <span className="sr-only">Delete</span>
+    </Button>
+  );
+
+  if (tooltip !== undefined) {
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>{button}</TooltipTrigger>
+          <TooltipContent>
+            <p>{tooltip || "Delete"}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+
+  return button;
+};

@@ -52,7 +52,7 @@ export async function POST(req: Request) {
 
   return new Response(binaryData, {
     headers: {
-      'Content-Type': audio.mimeType || 'audio/mpeg',
+      'Content-Type': `audio/${audio.format || 'mpeg'}`,
     },
   });
 }
