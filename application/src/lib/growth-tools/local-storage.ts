@@ -7,6 +7,7 @@ export interface LocalChat {
   title: string;
   createdAt: number;
   messages: UIMessage[];
+  pinned?: boolean;
 }
 
 export function getLocalChats(): LocalChat[] {
@@ -44,4 +45,13 @@ export function deleteLocalChat(id: string): void {
 
 export function clearLocalChats(): void {
   localStorage.removeItem(STORAGE_KEY);
+}
+
+export function toggleLocalChatPin(id: string): boolean {
+  const chats = getLocalChats();
+  const chat = chats.find(c => c.id === id);
+  if (!chat) return false;
+  chat.pinned = !chat.pinned;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(chats));
+  return chat.pinned;
 }
