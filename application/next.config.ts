@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['three'],
+  transpilePackages: [
+    'three',
+    'hast-util-to-text',
+    'rehype-katex',
+    'streamdown',
+  ],
   async redirects() {
     return [
       {
