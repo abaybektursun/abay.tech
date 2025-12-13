@@ -36,12 +36,6 @@ function loadSystemPrompt(promptFiles: string[]): string {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildTools(toolNames: string[]): Record<string, any> {
   const allTools = {
-    hide_chart: tool({
-      description:
-        'Hide the needs visualization and return to full chat view. Use this when the user wants to dismiss the chart or continue the conversation without the visual.',
-      inputSchema: z.object({}),
-      execute: async () => ({}),
-    }),
     request_slider: tool({
       description:
         'Request numeric ratings from the user via interactive sliders. Use this when you need the user to rate one or more things on a scale.',
