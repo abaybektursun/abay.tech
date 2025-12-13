@@ -78,6 +78,31 @@ function buildTools(toolNames: string[]): Record<string, any> {
       }),
       execute: async (input) => input,
     }),
+    show_life_wheel: tool({
+      description:
+        "Display a Life Wheel visualization showing the user's fulfillment across Tony Robbins' 6 Human Needs. Use this when you have gathered scores (0-10) for the six needs during the assessment.",
+      inputSchema: z.object({
+        areas: z
+          .array(
+            z.object({
+              category: z.enum([
+                'certainty',
+                'variety',
+                'significance',
+                'connection',
+                'growth',
+                'contribution',
+              ]),
+              label: z.string().describe('Human-readable label (e.g., "Certainty", "Growth")'),
+              score: z.number().min(0).max(10).describe('Fulfillment score for this need (0-10)'),
+            })
+          )
+          .describe('Array of the 6 human needs with fulfillment scores'),
+        insights: z.array(z.string()).describe('Key insights about their needs fulfillment (2-4 observations)'),
+        overallScore: z.number().min(0).max(10).optional().describe('Overall fulfillment score'),
+      }),
+      execute: async (input) => input,
+    }),
   };
 
   // Return only the tools this exercise needs

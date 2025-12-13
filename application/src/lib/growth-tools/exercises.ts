@@ -37,7 +37,7 @@ export const exercises: Record<string, ExerciseConfig> = {
       'needs-assessment/human_needs_framework.md',
     ],
     ragFolder: null,
-    tools: ['show_needs_chart', 'request_slider', 'hide_chart'],
+    tools: ['show_needs_chart', 'show_life_wheel', 'request_slider', 'hide_chart'],
     suggestions: [
       { icon: 'BarChart', text: 'Analyze my needs', color: '#76d0eb' },
       { icon: 'Box', text: 'Surprise me', color: '#76d0eb' },
