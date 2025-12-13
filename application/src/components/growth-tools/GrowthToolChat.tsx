@@ -101,8 +101,7 @@ import { Bot, User, BarChart2, ExternalLink } from 'lucide-react';
 import { getExercise, type ExerciseSuggestion } from '@/lib/growth-tools/exercises';
 
 // Visualizations
-import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
-import { LifeWheel } from '@/components/growth-tools/visualizations/LifeWheel';
+import { NeedsChart, LifeWheel } from '@/components/growth-tools/visualizations/NeedsChart';
 import type { ShowNeedsChartArgs, ShowLifeWheelArgs, RequestSliderArgs, SliderField } from '@/lib/growth-tools/types';
 
 export interface GrowthToolChatProps {
