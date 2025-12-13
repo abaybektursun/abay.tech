@@ -36,24 +36,6 @@ function loadSystemPrompt(promptFiles: string[]): string {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildTools(toolNames: string[]): Record<string, any> {
   const allTools = {
-    show_needs_chart: tool({
-      description:
-        "Display a visualization of the user's needs assessment. Use this when you have gathered enough information about their needs across different categories.",
-      inputSchema: z.object({
-        needs: z
-          .array(
-            z.object({
-              category: z.enum(['physical', 'emotional', 'mental', 'spiritual']),
-              name: z.string().describe('Specific need (e.g., "rest", "connection", "purpose")'),
-              fulfilled: z.number().min(0).max(100).describe('How fulfilled this need is (0-100)'),
-              importance: z.number().min(0).max(100).describe('How important this need is to the user (0-100)'),
-            })
-          )
-          .describe('Array of needs identified during the conversation'),
-        insights: z.array(z.string()).describe('Key insights or patterns you noticed (2-4 brief observations)'),
-      }),
-      execute: async (input) => input,
-    }),
     hide_chart: tool({
       description:
         'Hide the needs visualization and return to full chat view. Use this when the user wants to dismiss the chart or continue the conversation without the visual.',

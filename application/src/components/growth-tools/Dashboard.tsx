@@ -19,8 +19,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Artifact } from '@/lib/artifacts';
-import { NeedsChart, LifeWheel } from '@/components/growth-tools/visualizations/NeedsChart';
-import type { ShowNeedsChartArgs, ShowLifeWheelArgs } from '@/lib/growth-tools/types';
+import { LifeWheel } from '@/components/growth-tools/visualizations/NeedsChart';
+import type { ShowLifeWheelArgs } from '@/lib/growth-tools/types';
 import { cn } from '@/lib/utils';
 import { DynamicGrid } from './DynamicGrid';
 
@@ -37,7 +37,6 @@ interface LayoutItem {
 
 // Icon mapping for artifact types
 const artifactIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-  'needs-chart': BarChart2,
   'life-wheel': BarChart2,
   quote: Quote,
   insight: Lightbulb,
@@ -218,7 +217,7 @@ export function Dashboard() {
   const generateLayout = useMemo(() => {
     return artifacts.map((artifact, index) => {
       // Charts get larger default size
-      const isChart = artifact.type === 'needs-chart' || artifact.type === 'life-wheel';
+      const isChart = artifact.type === 'life-wheel';
       return {
         i: artifact.id,
         x: (index % 2) * 6,
@@ -397,15 +396,7 @@ export function Dashboard() {
         {artifacts.map((artifact) => (
           <div key={artifact.id}>
             <GridItem>
-              {artifact.type === 'needs-chart' ? (
-                <NeedsChart
-                  data={JSON.parse(artifact.data) as ShowNeedsChartArgs}
-                  variant="compact"
-                  isPinned={artifact.pinned}
-                  onTogglePin={() => handleTogglePin(artifact.id)}
-                  onDelete={() => handleDelete(artifact.id)}
-                />
-              ) : artifact.type === 'life-wheel' ? (
+              {artifact.type === 'life-wheel' ? (
                 <LifeWheel
                   data={JSON.parse(artifact.data) as ShowLifeWheelArgs}
                   variant="compact"
