@@ -749,7 +749,16 @@ export function GrowthToolChat({
       const handleSliderSubmit = (fields: SliderField[], values: Record<string, number>) => {
         handledToolCalls.current.add(toolCallId);
         handleToolHandled(toolCallId);
-        const response = fields.map(f => `${f.name}: ${values[f.name] ?? f.defaultValue ?? 50}`).join(', ');
+        const response = fields
+          .map((field) => {
+            const min = field.min ?? 0;
+            const max = field.max ?? 100;
+            const fallback = field.defaultValue ?? Math.round((min + max) / 2);
+            const rawValue = values[field.name] ?? fallback;
+            const clampedValue = Math.max(min, Math.min(rawValue, max));
+            return `${field.name}: ${clampedValue}`;
+          })
+          .join(', ');
         sendMessage(response);
       };
 
