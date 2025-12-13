@@ -28,11 +28,13 @@ export async function getChats(userId?: string | null) {
     ExpressionAttributeNames: {
       '#p': 'path',
     },
-    ProjectionExpression: 'id, title, #p',
+    ProjectionExpression: 'id, title, #p, createdAt',
   })
 
   const response = await db.send(command)
-  return response.Items ?? []
+  const items = response.Items ?? []
+  // Sort by createdAt descending (newest first)
+  return items.sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0))
 }
 
 export async function getChat(id: string, userId: string) {

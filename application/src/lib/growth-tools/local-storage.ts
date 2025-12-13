@@ -13,7 +13,9 @@ export function getLocalChats(): LocalChat[] {
   if (typeof window === 'undefined') return [];
   const stored = localStorage.getItem(STORAGE_KEY);
   if (!stored) return [];
-  return JSON.parse(stored);
+  const chats: LocalChat[] = JSON.parse(stored);
+  // Sort by createdAt descending (newest first)
+  return chats.sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0));
 }
 
 export function saveLocalChat(chat: LocalChat): void {
