@@ -671,16 +671,6 @@ export function GrowthToolChat({
       );
     }
 
-    // hide_chart tool
-    if (toolName === 'hide_chart') {
-      if (state === 'output-available' && !handledToolCalls.current.has(toolCallId)) {
-        handledToolCalls.current.add(toolCallId);
-        handleToolHandled(toolCallId);
-        setShowLifeWheel(false);
-      }
-      return null;
-    }
-
     // request_slider tool
     if (toolName === 'request_slider') {
       const isComplete = state === 'output-available';
