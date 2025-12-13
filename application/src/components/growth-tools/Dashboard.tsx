@@ -4,9 +4,6 @@ import { useState, useEffect, useMemo } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const ReactGridLayout = require('react-grid-layout');
-const { Responsive, WidthProvider } = ReactGridLayout;
 import {
   Pin,
   PinOff,
@@ -25,9 +22,7 @@ import type { Artifact } from '@/lib/artifacts';
 import { NeedsChart, LifeWheel } from '@/components/growth-tools/visualizations/NeedsChart';
 import type { ShowNeedsChartArgs, ShowLifeWheelArgs } from '@/lib/growth-tools/types';
 import { cn } from '@/lib/utils';
-
-// Import required CSS
-import 'react-grid-layout/css/styles.css';
+import { DynamicGrid } from './DynamicGrid';
 
 // Type for grid layout item
 interface LayoutItem {
@@ -39,8 +34,6 @@ interface LayoutItem {
   minW?: number;
   minH?: number;
 }
-
-const ResponsiveGridLayout = WidthProvider(Responsive);
 
 // Icon mapping for artifact types
 const artifactIcons: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -397,17 +390,9 @@ export function Dashboard() {
         </p>
       </motion.div>
 
-      <ResponsiveGridLayout
-        className="layout"
+      <DynamicGrid
         layouts={Object.keys(layouts).length > 0 ? layouts : { lg: generateLayout }}
-        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-        cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
-        rowHeight={40}
         onLayoutChange={handleLayoutChange}
-        draggableHandle=".grid-drag-handle"
-        isResizable
-        isDraggable
-        margin={[16, 16]}
       >
         {artifacts.map((artifact) => (
           <div key={artifact.id}>
@@ -438,7 +423,7 @@ export function Dashboard() {
             </GridItem>
           </div>
         ))}
-      </ResponsiveGridLayout>
+      </DynamicGrid>
     </div>
   );
 }
