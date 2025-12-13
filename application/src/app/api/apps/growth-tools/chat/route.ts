@@ -172,6 +172,11 @@ export async function POST(req: Request) {
     }
   });
 
+  // Consume stream server-side to ensure onFinish fires even if client disconnects.
+  // This prevents data loss when users close the browser mid-conversation.
+  // See: https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-message-persistence
+  result.consumeStream();
+
   // Use onFinish callback for server-side persistence with complete UIMessage[]
   return result.toUIMessageStreamResponse({
     originalMessages: messages,
