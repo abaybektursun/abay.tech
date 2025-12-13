@@ -8,15 +8,13 @@ import { Pin, PinOff, Trash2, BarChart2, Quote, Lightbulb, FileText, Lock, Arrow
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Artifact } from '@/lib/artifacts';
-import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
-import { LifeWheel } from '@/components/growth-tools/visualizations/LifeWheel';
+import { NeedsChart, LifeWheel } from '@/components/growth-tools/visualizations/NeedsChart';
 import type { ShowNeedsChartArgs, ShowLifeWheelArgs } from '@/lib/growth-tools/types';
-import { Circle } from 'lucide-react';
 
 // Icon mapping for artifact types
 const artifactIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   'needs-chart': BarChart2,
-  'life-wheel': Circle,
+  'life-wheel': BarChart2,
   'quote': Quote,
   'insight': Lightbulb,
   'action-plan': FileText,

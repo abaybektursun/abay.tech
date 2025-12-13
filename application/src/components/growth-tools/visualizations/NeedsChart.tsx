@@ -1,7 +1,7 @@
 'use client';
 
-import type { ShowNeedsChartArgs } from '@/lib/growth-tools/types';
-import { Download, Share2, X } from 'lucide-react';
+import type { ShowNeedsChartArgs, ShowLifeWheelArgs } from '@/lib/growth-tools/types';
+import { Download, Share2 } from 'lucide-react';
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -31,11 +31,18 @@ import {
 } from '@/components/ai-elements/artifact';
 import { cn } from '@/lib/utils';
 
+// Union type to accept both data formats
+type ChartData = ShowNeedsChartArgs | ShowLifeWheelArgs;
+
+// Type guard to detect format
+function isLifeWheelData(data: ChartData): data is ShowLifeWheelArgs {
+  return 'areas' in data;
+}
+
 interface NeedsChartProps {
-  data: ShowNeedsChartArgs;
+  data: ChartData;
   variant?: 'full' | 'compact';
   onClose?: () => void;
-  // Dashboard actions
   isPinned?: boolean;
   onTogglePin?: () => void;
   onDelete?: () => void;
@@ -50,57 +57,67 @@ export function NeedsChart({
   onDelete,
 }: NeedsChartProps) {
   const isCompact = variant === 'compact';
-  // Transform needs data for Recharts
-  const chartData = data.needs.map((need) => ({
-    need: need.name,
-    fulfilled: need.fulfilled,
-    importance: need.importance,
-    category: need.category,
-  }));
+  const isLifeWheel = isLifeWheelData(data);
 
-  // Chart configuration for Shadcn UI
-  const chartConfig = {
-    fulfilled: {
-      label: 'Fulfilled',
-      color: 'hsl(var(--primary))',
-    },
-    importance: {
-      label: 'Importance',
-      color: 'hsl(var(--secondary))',
-    },
-  } satisfies ChartConfig;
+  // Transform data for RadarChart based on format
+  const chartData = isLifeWheel
+    ? data.areas.map((area) => ({
+        name: area.label,
+        score: area.score * 10, // Convert 0-10 to 0-100 for chart
+        category: area.category,
+      }))
+    : data.needs.map((need) => ({
+        name: need.name,
+        fulfilled: need.fulfilled,
+        importance: need.importance,
+        category: need.category,
+      }));
 
-  // Get unique categories for color coding
-  const categories = Array.from(new Set(data.needs.map((n) => n.category)));
-  const categoryColors: Record<string, string> = {
-    physical: 'hsl(var(--chart-1))',
-    emotional: 'hsl(var(--chart-2))',
-    mental: 'hsl(var(--chart-3))',
-    spiritual: 'hsl(var(--chart-4))',
-  };
+  // Chart configuration based on format
+  const chartConfig: ChartConfig = isLifeWheel
+    ? {
+        score: {
+          label: 'Fulfillment',
+          color: 'hsl(var(--chart-1))',
+        },
+      }
+    : {
+        fulfilled: {
+          label: 'Fulfilled',
+          color: 'hsl(var(--chart-1))',
+        },
+        importance: {
+          label: 'Importance',
+          color: 'hsl(var(--chart-2))',
+        },
+      };
 
-  // Export functionality
+  // Title and description based on format
+  const title = isLifeWheel ? '6 Human Needs Assessment' : 'Your Needs Assessment';
+  const description = isLifeWheel
+    ? `Overall: ${data.overallScore ?? Math.round(data.areas.reduce((s, a) => s + a.score, 0) / data.areas.length)}/10`
+    : `${data.needs.length} needs analyzed`;
+
   const handleExport = () => {
-    // Export chart data as JSON
     const exportData = {
       date: new Date().toISOString(),
-      needs: data.needs,
+      ...(isLifeWheel ? { areas: data.areas } : { needs: data.needs }),
       insights: data.insights,
     };
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `needs-assessment-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `${isLifeWheel ? '6-human-needs' : 'needs-assessment'}-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleShare = () => {
-    // Share functionality (could be expanded)
     if (navigator.share) {
       navigator.share({
-        title: 'My Needs Assessment',
-        text: `I completed a needs assessment. Key insights: ${data.insights[0]}`,
+        title,
+        text: `${description}. ${data.insights[0] || ''}`,
       });
     }
   };
@@ -109,128 +126,86 @@ export function NeedsChart({
     <Artifact className="h-full shadow-2xl border-0 bg-background/95 backdrop-blur-sm">
       <ArtifactHeader>
         <div>
-          <ArtifactTitle>Your Needs Assessment</ArtifactTitle>
-          <ArtifactDescription>
-            {data.needs.length} needs across {categories.length} categories
-          </ArtifactDescription>
+          <ArtifactTitle>{title}</ArtifactTitle>
+          <ArtifactDescription>{description}</ArtifactDescription>
         </div>
         <ArtifactActions>
           {onTogglePin && (
             <ArtifactPinAction
               isPinned={isPinned}
               onClick={onTogglePin}
-              tooltip={isPinned ? "Unpin" : "Pin"}
+              tooltip={isPinned ? 'Unpin' : 'Pin'}
             />
           )}
-          <ArtifactAction
-            tooltip="Export data"
-            label="Export"
-            onClick={handleExport}
-          >
+          <ArtifactAction tooltip="Export data" label="Export" onClick={handleExport}>
             <Download className="h-4 w-4" />
           </ArtifactAction>
-          <ArtifactAction
-            tooltip="Share results"
-            label="Share"
-            onClick={handleShare}
-          >
+          <ArtifactAction tooltip="Share results" label="Share" onClick={handleShare}>
             <Share2 className="h-4 w-4" />
           </ArtifactAction>
-          {onDelete && (
-            <ArtifactDeleteAction onClick={onDelete} tooltip="Delete" />
-          )}
-          {onClose && (
-            <ArtifactClose onClick={onClose} />
-          )}
+          {onDelete && <ArtifactDeleteAction onClick={onDelete} tooltip="Delete" />}
+          {onClose && <ArtifactClose onClick={onClose} />}
         </ArtifactActions>
       </ArtifactHeader>
 
       <ArtifactContent className="flex flex-col">
-        {/* Chart - Responsive heights */}
         <ChartContainer
           config={chartConfig}
           className={cn(
-            "relative flex-shrink-0",
-            isCompact
-              ? "h-[180px] sm:h-[200px]"
-              : "h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]",
-            "px-2 sm:px-4",
-            "w-full"
+            'relative flex-shrink-0 w-full px-2 sm:px-4',
+            isCompact ? 'h-[180px] sm:h-[200px]' : 'h-[250px] sm:h-[300px] md:h-[350px]'
           )}
         >
           <RadarChart data={chartData}>
             <PolarGrid gridType="polygon" stroke="hsl(var(--border))" />
             <PolarAngleAxis
-              dataKey="need"
-              className="text-[10px] sm:text-xs"
-              tick={{
-                fill: 'hsl(var(--muted-foreground))',
-                fontSize: '10px',
-              }}
+              dataKey="name"
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
             />
             <PolarRadiusAxis
               angle={90}
               domain={[0, 100]}
-              className="text-[10px]"
-              tick={{
-                fill: 'hsl(var(--muted-foreground))',
-                fontSize: '10px',
-              }}
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
             />
-            <Radar
-              dataKey="fulfilled"
-              fill="var(--color-fulfilled)"
-              fillOpacity={0.5}
-              name="Fulfilled"
-              stroke="var(--color-fulfilled)"
-              strokeWidth={2}
-            />
-            <Radar
-              dataKey="importance"
-              fill="var(--color-importance)"
-              fillOpacity={0.3}
-              name="Importance"
-              stroke="var(--color-importance)"
-              strokeWidth={2}
-            />
-            <ChartTooltip
-              content={<ChartTooltipContent
-                indicator="dot"
-                formatter={(value, name, item) => {
-                  const data = item.payload;
-                  return (
-                    <div className="space-y-0.5">
-                      <p className="font-medium text-sm">{data.need}</p>
-                      <div className="text-xs">
-                        <span className="text-muted-foreground">
-                          {name}: {' '}
-                        </span>
-                        <span className="font-medium">{value}%</span>
-                      </div>
-                      <p className="capitalize text-muted-foreground text-xs">
-                        {data.category}
-                      </p>
-                    </div>
-                  );
-                }}
-              />}
-            />
-            <ChartLegend
-              verticalAlign="bottom"
-              content={<ChartLegendContent />}
-            />
+            {isLifeWheel ? (
+              <Radar
+                dataKey="score"
+                fill="var(--color-score)"
+                fillOpacity={0.5}
+                stroke="var(--color-score)"
+                strokeWidth={2}
+              />
+            ) : (
+              <>
+                <Radar
+                  dataKey="fulfilled"
+                  fill="var(--color-fulfilled)"
+                  fillOpacity={0.5}
+                  stroke="var(--color-fulfilled)"
+                  strokeWidth={2}
+                />
+                <Radar
+                  dataKey="importance"
+                  fill="var(--color-importance)"
+                  fillOpacity={0.3}
+                  stroke="var(--color-importance)"
+                  strokeWidth={2}
+                />
+              </>
+            )}
+            <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
+            <ChartLegend verticalAlign="bottom" content={<ChartLegendContent />} />
           </RadarChart>
         </ChartContainer>
 
-        {/* Insights - Responsive text sizes, limited in compact mode */}
-        {data.insights && data.insights.length > 0 && (
+        {data.insights?.length > 0 && (
           <div className="flex-1 overflow-y-auto mt-4 px-2 sm:px-4">
             <h3 className="font-medium text-sm sm:text-base mb-3">Key Insights</h3>
             <ul className="space-y-1.5 sm:space-y-2">
-              {(isCompact ? data.insights.slice(0, 2) : data.insights).map((insight, index) => (
-                <li key={index} className="text-xs sm:text-sm text-muted-foreground flex">
+              {(isCompact ? data.insights.slice(0, 2) : data.insights).map((insight, i) => (
+                <li key={i} className="text-xs sm:text-sm text-muted-foreground flex">
                   <span className="mr-2 text-primary">•</span>
-                  <span className={cn("leading-relaxed", isCompact && "line-clamp-2")}>{insight}</span>
+                  <span className={cn('leading-relaxed', isCompact && 'line-clamp-2')}>{insight}</span>
                 </li>
               ))}
               {isCompact && data.insights.length > 2 && (
@@ -245,3 +220,6 @@ export function NeedsChart({
     </Artifact>
   );
 }
+
+// Re-export as LifeWheel for backwards compatibility
+export { NeedsChart as LifeWheel };
