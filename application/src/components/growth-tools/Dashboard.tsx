@@ -9,11 +9,14 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Artifact } from '@/lib/artifacts';
 import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
-import type { ShowNeedsChartArgs } from '@/lib/growth-tools/types';
+import { LifeWheel } from '@/components/growth-tools/visualizations/LifeWheel';
+import type { ShowNeedsChartArgs, ShowLifeWheelArgs } from '@/lib/growth-tools/types';
+import { Circle } from 'lucide-react';
 
 // Icon mapping for artifact types
 const artifactIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   'needs-chart': BarChart2,
+  'life-wheel': Circle,
   'quote': Quote,
   'insight': Lightbulb,
   'action-plan': FileText,
@@ -23,14 +26,18 @@ const artifactIcons: Record<string, React.ComponentType<{ className?: string }>>
 const DEMO_ARTIFACTS = [
   {
     id: 'demo-1',
-    type: 'needs-chart',
-    title: 'Needs Assessment',
+    type: 'life-wheel',
+    title: '6 Human Needs Assessment',
     data: JSON.stringify({
-      needs: [
-        { name: 'Connection', category: 'emotional', fulfilled: 72, importance: 85 },
-        { name: 'Purpose', category: 'spiritual', fulfilled: 45, importance: 90 },
-        { name: 'Energy', category: 'physical', fulfilled: 60, importance: 75 },
-      ]
+      areas: [
+        { category: 'certainty', label: 'Certainty', score: 7 },
+        { category: 'variety', label: 'Variety', score: 5 },
+        { category: 'significance', label: 'Significance', score: 8 },
+        { category: 'connection', label: 'Connection', score: 6 },
+        { category: 'growth', label: 'Growth', score: 4 },
+        { category: 'contribution', label: 'Contribution', score: 5 },
+      ],
+      insights: ['Focus on Growth to unlock lasting fulfillment'],
     }),
     pinned: true,
     createdAt: Date.now() - 86400000,
@@ -155,6 +162,19 @@ function DemoArtifactCard({ artifact }: { artifact: typeof DEMO_ARTIFACTS[0] }) 
                 <span>{need.fulfilled}%</span>
               </div>
             ))}
+          </div>
+        )}
+        {artifact.type === 'life-wheel' && data.areas && (
+          <div className="space-y-1">
+            {data.areas.slice(0, 3).map((area: any, i: number) => (
+              <div key={i} className="flex justify-between">
+                <span>{area.label}</span>
+                <span>{area.score}/10</span>
+              </div>
+            ))}
+            {data.areas.length > 3 && (
+              <div className="text-muted-foreground/60">+{data.areas.length - 3} more</div>
+            )}
           </div>
         )}
         {artifact.type === 'quote' && (
@@ -341,25 +361,40 @@ export function Dashboard() {
             <h2 className="text-lg font-semibold">Pinned</h2>
           </div>
           <div className="grid grid-cols-1 gap-6">
-            {pinnedArtifacts.map(artifact => (
-              artifact.type === 'needs-chart' ? (
-                <NeedsChart
-                  key={artifact.id}
-                  data={JSON.parse(artifact.data) as ShowNeedsChartArgs}
-                  variant="compact"
-                  isPinned={artifact.pinned}
-                  onTogglePin={() => handleTogglePin(artifact.id)}
-                  onDelete={() => handleDelete(artifact.id)}
-                />
-              ) : (
+            {pinnedArtifacts.map(artifact => {
+              if (artifact.type === 'needs-chart') {
+                return (
+                  <NeedsChart
+                    key={artifact.id}
+                    data={JSON.parse(artifact.data) as ShowNeedsChartArgs}
+                    variant="compact"
+                    isPinned={artifact.pinned}
+                    onTogglePin={() => handleTogglePin(artifact.id)}
+                    onDelete={() => handleDelete(artifact.id)}
+                  />
+                );
+              }
+              if (artifact.type === 'life-wheel') {
+                return (
+                  <LifeWheel
+                    key={artifact.id}
+                    data={JSON.parse(artifact.data) as ShowLifeWheelArgs}
+                    variant="compact"
+                    isPinned={artifact.pinned}
+                    onTogglePin={() => handleTogglePin(artifact.id)}
+                    onDelete={() => handleDelete(artifact.id)}
+                  />
+                );
+              }
+              return (
                 <ArtifactCard
                   key={artifact.id}
                   artifact={artifact}
                   onTogglePin={handleTogglePin}
                   onDelete={handleDelete}
                 />
-              )
-            ))}
+              );
+            })}
           </div>
         </motion.div>
       )}
@@ -396,25 +431,40 @@ export function Dashboard() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6">
-            {allArtifacts.map(artifact => (
-              artifact.type === 'needs-chart' ? (
-                <NeedsChart
-                  key={artifact.id}
-                  data={JSON.parse(artifact.data) as ShowNeedsChartArgs}
-                  variant="compact"
-                  isPinned={artifact.pinned}
-                  onTogglePin={() => handleTogglePin(artifact.id)}
-                  onDelete={() => handleDelete(artifact.id)}
-                />
-              ) : (
+            {allArtifacts.map(artifact => {
+              if (artifact.type === 'needs-chart') {
+                return (
+                  <NeedsChart
+                    key={artifact.id}
+                    data={JSON.parse(artifact.data) as ShowNeedsChartArgs}
+                    variant="compact"
+                    isPinned={artifact.pinned}
+                    onTogglePin={() => handleTogglePin(artifact.id)}
+                    onDelete={() => handleDelete(artifact.id)}
+                  />
+                );
+              }
+              if (artifact.type === 'life-wheel') {
+                return (
+                  <LifeWheel
+                    key={artifact.id}
+                    data={JSON.parse(artifact.data) as ShowLifeWheelArgs}
+                    variant="compact"
+                    isPinned={artifact.pinned}
+                    onTogglePin={() => handleTogglePin(artifact.id)}
+                    onDelete={() => handleDelete(artifact.id)}
+                  />
+                );
+              }
+              return (
                 <ArtifactCard
                   key={artifact.id}
                   artifact={artifact}
                   onTogglePin={handleTogglePin}
                   onDelete={handleDelete}
                 />
-              )
-            ))}
+              );
+            })}
           </div>
         )}
       </motion.div>
