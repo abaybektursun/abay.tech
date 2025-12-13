@@ -3,6 +3,19 @@
 /**
  * Unified chat component for Growth Tools exercises.
  * Uses exercise ID to load config and call the unified API.
+ *
+ * NOTE: This component uses custom SSE parsing instead of the `useChat` hook from @ai-sdk/react.
+ * This is intentional due to a known limitation in AI SDK 5:
+ *
+ * Issue: useChat doesn't support UI Message Stream format (toUIMessageStreamResponse)
+ * - Tool events (tool-input-available, tool-output-available) are not processed
+ * - onFinish/onError callbacks don't fire with createUIMessageStream
+ * - Custom data parts are ignored
+ *
+ * Track for resolution: https://github.com/vercel/ai/issues/8549
+ * Related: https://github.com/vercel/ai/issues/8713
+ *
+ * Once #8549 is resolved, consider migrating to useChat for cleaner code.
  */
 
 import { type UIMessage, type TextUIPart } from 'ai';
