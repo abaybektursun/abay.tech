@@ -1,8 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutGrid, LayoutDashboard, MessagesSquare, ChevronDown, MessageCircle, MoreHorizontal, Pin, PinOff, type LucideIcon } from 'lucide-react';
+import { LayoutGrid, LayoutDashboard, MessagesSquare, ChevronDown, MessageCircle, MoreHorizontal, Pin, PinOff, Menu, type LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
@@ -11,6 +11,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 
 /**
  * Layout dimensions are defined in globals.css:
@@ -34,7 +41,6 @@ interface AppSidebarProps {
 
 /**
  * ChatListItem - A single chat entry
- * Simple, flat structure with predictable layout
  */
 function ChatListItem({
   chat,
@@ -49,7 +55,6 @@ function ChatListItem({
 }) {
   return (
     <div className="group flex items-center gap-1">
-      {/* Menu - shows on hover */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -68,7 +73,6 @@ function ChatListItem({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Chat button - takes remaining space */}
       <button
         onClick={onClick}
         className="flex-1 flex items-center gap-2 px-2 py-1 text-sm text-left rounded hover:bg-accent/50 transition-colors min-w-0"
@@ -86,7 +90,6 @@ function ChatListItem({
 
 /**
  * ChatList - Scrollable list of chats
- * Uses native overflow instead of ScrollArea for simplicity
  */
 function ChatList({
   chats,
@@ -113,7 +116,6 @@ function ChatList({
       className="overflow-y-auto space-y-1 pl-2"
       style={{ maxHeight: 'var(--chat-list-height)' }}
     >
-      {/* Pinned section */}
       {pinnedChats.length > 0 && (
         <div className="space-y-1">
           <p className="text-[10px] text-muted-foreground uppercase tracking-wide py-1">
@@ -131,7 +133,6 @@ function ChatList({
         </div>
       )}
 
-      {/* Regular chats section */}
       {regularChats.length > 0 && (
         <div className="space-y-1">
           {pinnedChats.length > 0 && (
@@ -161,36 +162,88 @@ function NavButton({
   icon: Icon,
   label,
   onClick,
-  delay = 0
 }: {
   icon: LucideIcon;
   label: string;
   onClick: () => void;
-  delay?: number;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.2, delay }}
+    <Button
+      variant="ghost"
+      className="w-full justify-start text-sm hover:bg-accent/50"
+      onClick={onClick}
     >
-      <Button
-        variant="ghost"
-        className="w-full justify-start text-sm hover:bg-accent/50"
-        onClick={onClick}
-      >
-        <Icon className="mr-2 h-4 w-4" />
-        {label}
-      </Button>
-    </motion.div>
+      <Icon className="mr-2 h-4 w-4" />
+      {label}
+    </Button>
   );
 }
 
 /**
- * AppSidebar - Clean, predictable sidebar component
+ * SidebarContent - The actual navigation content
+ * Reused by both desktop nav and mobile sheet
+ */
+function SidebarContent({
+  chats,
+  isChatsOpen,
+  onChatsOpenChange,
+  onTogglePin,
+  onNavigate,
+}: {
+  chats: ChatItem[];
+  isChatsOpen: boolean;
+  onChatsOpenChange: (open: boolean) => void;
+  onTogglePin: (chatId: string) => void;
+  onNavigate: (path: string) => void;
+}) {
+  return (
+    <div className="space-y-1">
+      <NavButton
+        icon={LayoutGrid}
+        label="Exercises"
+        onClick={() => onNavigate('/apps/growth-tools')}
+      />
+      <NavButton
+        icon={LayoutDashboard}
+        label="Dashboard"
+        onClick={() => onNavigate('/apps/growth-tools?view=dashboard')}
+      />
+
+      <Collapsible open={isChatsOpen} onOpenChange={onChatsOpenChange}>
+        <CollapsibleTrigger asChild>
+          <Button
+            variant="ghost"
+            className="w-full justify-between text-sm hover:bg-accent/50"
+          >
+            <span className="flex items-center">
+              <MessagesSquare className="mr-2 h-4 w-4" />
+              Chats
+            </span>
+            <ChevronDown
+              className={`h-4 w-4 transition-transform ${isChatsOpen ? 'rotate-180' : ''}`}
+            />
+          </Button>
+        </CollapsibleTrigger>
+
+        <CollapsibleContent>
+          <div className="mt-2">
+            <ChatList
+              chats={chats}
+              onTogglePin={onTogglePin}
+              onChatClick={(chatId) => onNavigate(`/apps/growth-tools?exercise=needs-assessment&chatId=${chatId}`)}
+            />
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
+    </div>
+  );
+}
+
+/**
+ * AppSidebar - Responsive sidebar component
  *
- * Layout is controlled by LAYOUT constants at the top of this file.
- * Structure is flat and easy to reason about.
+ * Desktop (md+): Fixed sidebar
+ * Mobile: Hamburger menu with slide-out sheet
  */
 export function AppSidebar({
   chats,
@@ -199,81 +252,63 @@ export function AppSidebar({
   onTogglePin
 }: AppSidebarProps) {
   const router = useRouter();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const handleChatClick = (chatId: string) => {
-    router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chatId}`);
+  const handleNavigate = (path: string) => {
+    setMobileOpen(false); // Close mobile sheet on navigation
+    router.push(path);
   };
 
   return (
-    <nav
-      className="hidden md:block shrink-0"
-      style={{ width: 'var(--app-sidebar-width)' }}
-    >
-      <div
-        className="sticky space-y-1"
-        style={{ top: 'var(--app-sticky-top)' }}
-      >
-        {/* Main navigation */}
-        <NavButton
-          icon={LayoutGrid}
-          label="Exercises"
-          onClick={() => router.push('/apps/growth-tools')}
-          delay={0}
-        />
-        <NavButton
-          icon={LayoutDashboard}
-          label="Dashboard"
-          onClick={() => router.push('/apps/growth-tools?view=dashboard')}
-          delay={0.05}
-        />
-
-        {/* Chats section */}
-        <motion.div
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.2, delay: 0.1 }}
-        >
-          <Collapsible open={isChatsOpen} onOpenChange={onChatsOpenChange}>
-            <CollapsibleTrigger asChild>
-              <Button
-                variant="ghost"
-                className="w-full justify-between text-sm hover:bg-accent/50"
-              >
-                <span className="flex items-center">
-                  <MessagesSquare className="mr-2 h-4 w-4" />
-                  Chats
-                </span>
-                <motion.span
-                  animate={{ rotate: isChatsOpen ? 180 : 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </motion.span>
-              </Button>
-            </CollapsibleTrigger>
-
-            <CollapsibleContent forceMount>
-              <AnimatePresence>
-                {isChatsOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="mt-2"
-                  >
-                    <ChatList
-                      chats={chats}
-                      onTogglePin={onTogglePin}
-                      onChatClick={handleChatClick}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </CollapsibleContent>
-          </Collapsible>
-        </motion.div>
+    <>
+      {/* Mobile: Hamburger + Sheet */}
+      <div className="md:hidden">
+        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="fixed top-4 left-4 z-40"
+              aria-label="Open navigation menu"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-64">
+            <SheetHeader>
+              <SheetTitle>Growth Tools</SheetTitle>
+            </SheetHeader>
+            <div className="mt-6">
+              <SidebarContent
+                chats={chats}
+                isChatsOpen={isChatsOpen}
+                onChatsOpenChange={onChatsOpenChange}
+                onTogglePin={onTogglePin}
+                onNavigate={handleNavigate}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
-    </nav>
+
+      {/* Desktop: Fixed sidebar */}
+      <nav
+        className="hidden md:block shrink-0"
+        style={{ width: 'var(--app-sidebar-width)' }}
+      >
+        <div
+          className="sticky space-y-1"
+          style={{ top: 'var(--app-sticky-top)' }}
+        >
+          <SidebarContent
+            chats={chats}
+            isChatsOpen={isChatsOpen}
+            onChatsOpenChange={onChatsOpenChange}
+            onTogglePin={onTogglePin}
+            onNavigate={(path) => router.push(path)}
+          />
+        </div>
+      </nav>
+    </>
   );
 }
