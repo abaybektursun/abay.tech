@@ -14,11 +14,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuAction,
-} from '@/components/ui/sidebar';
 import { LayoutGrid, MessagesSquare, ChevronDown, MessageCircle, LayoutDashboard, MoreHorizontal, Pin, PinOff } from 'lucide-react';
 import { GrowthToolChat } from '@/components/growth-tools/GrowthToolChat';
 import { Dashboard } from '@/components/growth-tools/Dashboard';
@@ -194,33 +189,35 @@ function GrowthToolsContent() {
                           ) : (
                             <div className="relative">
                               <ScrollArea className="h-[200px]">
-                                <SidebarMenu>
+                                <div className="space-y-1">
                                   {pinnedChats.length > 0 && (
                                     <>
                                       <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1 px-2">Pinned</div>
                                       {pinnedChats.map((chat) => (
-                                        <SidebarMenuItem key={chat.id}>
-                                          <button
-                                            onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
-                                            className="peer/menu-button flex w-full items-center gap-2 rounded-md p-2 text-left text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 [&>svg]:size-4 [&>svg]:shrink-0"
-                                          >
-                                            <Pin className="text-muted-foreground" />
-                                            <span className="truncate">{chat.title}</span>
-                                          </button>
+                                        <div key={chat.id} className="flex items-center gap-1 px-1">
                                           <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                              <SidebarMenuAction>
-                                                <MoreHorizontal />
-                                              </SidebarMenuAction>
+                                              <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0">
+                                                <MoreHorizontal className="h-4 w-4" />
+                                              </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent side="right" align="start">
                                               <DropdownMenuItem onClick={() => handleTogglePin(chat.id)}>
-                                                <PinOff className="mr-2" />
+                                                <PinOff className="mr-2 h-4 w-4" />
                                                 Unpin
                                               </DropdownMenuItem>
                                             </DropdownMenuContent>
                                           </DropdownMenu>
-                                        </SidebarMenuItem>
+                                          <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="flex-1 justify-start min-w-0"
+                                            onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
+                                          >
+                                            <Pin className="h-4 w-4 shrink-0 text-muted-foreground" />
+                                            <span className="truncate">{chat.title}</span>
+                                          </Button>
+                                        </div>
                                       ))}
                                     </>
                                   )}
@@ -228,30 +225,32 @@ function GrowthToolsContent() {
                                     <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1 px-2 mt-2">Recent</div>
                                   )}
                                   {regularChats.map((chat) => (
-                                    <SidebarMenuItem key={chat.id}>
-                                      <button
-                                        onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
-                                        className="peer/menu-button flex w-full items-center gap-2 rounded-md p-2 text-left text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 [&>svg]:size-4 [&>svg]:shrink-0"
-                                      >
-                                        <MessageCircle />
-                                        <span className="truncate">{chat.title}</span>
-                                      </button>
+                                    <div key={chat.id} className="flex items-center gap-1 px-1">
                                       <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                          <SidebarMenuAction>
-                                            <MoreHorizontal />
-                                          </SidebarMenuAction>
+                                          <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0">
+                                            <MoreHorizontal className="h-4 w-4" />
+                                          </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent side="right" align="start">
                                           <DropdownMenuItem onClick={() => handleTogglePin(chat.id)}>
-                                            <Pin className="mr-2" />
+                                            <Pin className="mr-2 h-4 w-4" />
                                             Pin
                                           </DropdownMenuItem>
                                         </DropdownMenuContent>
                                       </DropdownMenu>
-                                    </SidebarMenuItem>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="flex-1 justify-start min-w-0"
+                                        onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
+                                      >
+                                        <MessageCircle className="h-4 w-4 shrink-0" />
+                                        <span className="truncate">{chat.title}</span>
+                                      </Button>
+                                    </div>
                                   ))}
-                                </SidebarMenu>
+                                </div>
                               </ScrollArea>
                               {savedChats.length > 5 && (
                                 <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-background to-transparent" />
