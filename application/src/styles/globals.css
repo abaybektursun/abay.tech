@@ -58,7 +58,22 @@
     --radius: 0.75rem;
 
     /* Layout measurements */
-    --header-height: 5rem; /* 80px - header with py-6 + content */ --sidebar-background: 0 0% 98%; --sidebar-foreground: 240 5.3% 26.1%; --sidebar-primary: 240 5.9% 10%; --sidebar-primary-foreground: 0 0% 98%; --sidebar-accent: 240 4.8% 95.9%; --sidebar-accent-foreground: 240 5.9% 10%; --sidebar-border: 220 13% 91%; --sidebar-ring: 217.2 91.2% 59.8%;
+    --header-height: 5rem;
+    --app-sidebar-width: 13rem;
+    --app-content-gap: 2rem;
+    --app-max-width: 72rem;
+    --app-sticky-top: 6rem;
+    --chat-list-height: 12.5rem;
+
+    /* Sidebar theme */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {

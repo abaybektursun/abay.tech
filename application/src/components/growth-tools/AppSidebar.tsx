@@ -13,15 +13,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 /**
- * LAYOUT CONSTANTS - Single source of truth for all dimensions
- * Change these values to adjust the entire sidebar layout predictably
+ * Layout dimensions are defined in globals.css:
+ * - --app-sidebar-width
+ * - --app-sticky-top
+ * - --chat-list-height
  */
-const LAYOUT = {
-  /** Total sidebar width */
-  width: 'w-52', // 208px - gives more room for text
-  /** Chat list max height before scrolling */
-  chatListHeight: 'max-h-[200px]',
-} as const;
 
 interface ChatItem {
   id: string;
@@ -113,7 +109,10 @@ function ChatList({
   }
 
   return (
-    <div className={`${LAYOUT.chatListHeight} overflow-y-auto space-y-1 pl-2`}>
+    <div
+      className="overflow-y-auto space-y-1 pl-2"
+      style={{ maxHeight: 'var(--chat-list-height)' }}
+    >
       {/* Pinned section */}
       {pinnedChats.length > 0 && (
         <div className="space-y-1">
@@ -206,8 +205,14 @@ export function AppSidebar({
   };
 
   return (
-    <nav className={`hidden md:block ${LAYOUT.width} shrink-0`}>
-      <div className="sticky top-24 space-y-1">
+    <nav
+      className="hidden md:block shrink-0"
+      style={{ width: 'var(--app-sidebar-width)' }}
+    >
+      <div
+        className="sticky space-y-1"
+        style={{ top: 'var(--app-sticky-top)' }}
+      >
         {/* Main navigation */}
         <NavButton
           icon={LayoutGrid}
