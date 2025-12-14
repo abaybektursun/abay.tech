@@ -55,7 +55,7 @@ function ChatListItem({
 }) {
   return (
     <li className="group flex items-center gap-1">
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
