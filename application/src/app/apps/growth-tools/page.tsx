@@ -189,16 +189,16 @@ function GrowthToolsContent() {
                           ) : (
                             <div className="relative">
                               <ScrollArea className="h-[200px]">
-                                <div className="space-y-1 pr-4">
+                                <div className="space-y-1">
                                   {pinnedChats.length > 0 && (
                                     <>
                                       <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1">Pinned</div>
                                       {pinnedChats.map((chat) => (
-                                        <div key={chat.id} className="group flex items-center">
+                                        <div key={chat.id} className="relative group">
                                           <Button
                                             variant="ghost"
                                             size="sm"
-                                            className="flex-1 min-w-0 justify-start"
+                                            className="w-full justify-start pr-8"
                                             onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                           >
                                             <Pin className="text-muted-foreground" />
@@ -206,7 +206,11 @@ function GrowthToolsContent() {
                                           </Button>
                                           <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                              <Button variant="ghost" size="icon-sm">
+                                              <Button
+                                                variant="ghost"
+                                                size="icon-sm"
+                                                className="absolute right-1 top-1/2 -translate-y-1/2"
+                                              >
                                                 <MoreHorizontal />
                                               </Button>
                                             </DropdownMenuTrigger>
@@ -225,11 +229,11 @@ function GrowthToolsContent() {
                                     <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1 mt-2">Recent</div>
                                   )}
                                   {regularChats.map((chat) => (
-                                    <div key={chat.id} className="group flex items-center">
+                                    <div key={chat.id} className="relative group">
                                       <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="flex-1 min-w-0 justify-start"
+                                        className="w-full justify-start pr-8"
                                         onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                       >
                                         <MessageCircle />
@@ -237,7 +241,11 @@ function GrowthToolsContent() {
                                       </Button>
                                       <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                          <Button variant="ghost" size="icon-sm">
+                                          <Button
+                                            variant="ghost"
+                                            size="icon-sm"
+                                            className="absolute right-1 top-1/2 -translate-y-1/2"
+                                          >
                                             <MoreHorizontal />
                                           </Button>
                                         </DropdownMenuTrigger>
