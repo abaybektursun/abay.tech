@@ -54,46 +54,46 @@ describe('rate-limit', () => {
 
     it('should return failure when daily limit is exceeded', async () => {
       mockSend
-        .mockResolvedValueOnce({ Item: { tokens: 50_001 } }) // daily - over
-        .mockResolvedValueOnce({ Item: { tokens: 1000 } })   // weekly - under
-        .mockResolvedValueOnce({ Item: { tokens: 1000 } });  // monthly - under
+        .mockResolvedValueOnce({ Item: { tokens: 5_000_001 } }) // daily - over (limit is 5M)
+        .mockResolvedValueOnce({ Item: { tokens: 1000 } })      // weekly - under
+        .mockResolvedValueOnce({ Item: { tokens: 1000 } });     // monthly - under
 
       const result = await checkTokenLimit();
 
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.limit).toBe('daily');
-        expect(result.used).toBe(50_001);
+        expect(result.used).toBe(5_000_001);
       }
     });
 
     it('should return failure when weekly limit is exceeded', async () => {
       mockSend
-        .mockResolvedValueOnce({ Item: { tokens: 1000 } })    // daily - under
-        .mockResolvedValueOnce({ Item: { tokens: 200_001 } }) // weekly - over
-        .mockResolvedValueOnce({ Item: { tokens: 1000 } });   // monthly - under
+        .mockResolvedValueOnce({ Item: { tokens: 1000 } })       // daily - under
+        .mockResolvedValueOnce({ Item: { tokens: 20_000_001 } }) // weekly - over (limit is 20M)
+        .mockResolvedValueOnce({ Item: { tokens: 1000 } });      // monthly - under
 
       const result = await checkTokenLimit();
 
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.limit).toBe('weekly');
-        expect(result.used).toBe(200_001);
+        expect(result.used).toBe(20_000_001);
       }
     });
 
     it('should return failure when monthly limit is exceeded', async () => {
       mockSend
-        .mockResolvedValueOnce({ Item: { tokens: 1000 } })    // daily - under
-        .mockResolvedValueOnce({ Item: { tokens: 1000 } })    // weekly - under
-        .mockResolvedValueOnce({ Item: { tokens: 500_001 } }); // monthly - over
+        .mockResolvedValueOnce({ Item: { tokens: 1000 } })       // daily - under
+        .mockResolvedValueOnce({ Item: { tokens: 1000 } })       // weekly - under
+        .mockResolvedValueOnce({ Item: { tokens: 50_000_001 } }); // monthly - over (limit is 50M)
 
       const result = await checkTokenLimit();
 
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.limit).toBe('monthly');
-        expect(result.used).toBe(500_001);
+        expect(result.used).toBe(50_000_001);
       }
     });
 
@@ -115,9 +115,9 @@ describe('rate-limit', () => {
 
     it('should return success at exactly the limit minus one (boundary test)', async () => {
       mockSend
-        .mockResolvedValueOnce({ Item: { tokens: 49_999 } }) // daily - under
-        .mockResolvedValueOnce({ Item: { tokens: 199_999 } }) // weekly - under
-        .mockResolvedValueOnce({ Item: { tokens: 499_999 } }); // monthly - under
+        .mockResolvedValueOnce({ Item: { tokens: 4_999_999 } })  // daily - under (limit is 5M)
+        .mockResolvedValueOnce({ Item: { tokens: 19_999_999 } }) // weekly - under (limit is 20M)
+        .mockResolvedValueOnce({ Item: { tokens: 49_999_999 } }); // monthly - under (limit is 50M)
 
       const result = await checkTokenLimit();
 
@@ -126,7 +126,7 @@ describe('rate-limit', () => {
 
     it('should return failure at exactly the limit', async () => {
       mockSend
-        .mockResolvedValueOnce({ Item: { tokens: 50_000 } }) // daily - exactly at limit
+        .mockResolvedValueOnce({ Item: { tokens: 5_000_000 } }) // daily - exactly at limit (5M)
         .mockResolvedValueOnce({ Item: { tokens: 1000 } })
         .mockResolvedValueOnce({ Item: { tokens: 1000 } });
 
@@ -185,7 +185,7 @@ describe('rate-limit', () => {
       await checkTokenLimit();
 
       // Record usage
-      await recordTokenUsage(40_000);
+      await recordTokenUsage(4_000_000);
 
       // Check - should see updated cache without DB call
       const callsBefore = mockSend.mock.calls.length;
@@ -197,7 +197,7 @@ describe('rate-limit', () => {
       expect(result.success).toBe(true);
 
       // Record more to exceed limit
-      await recordTokenUsage(15_000); // Total: 55,000 > 50,000 daily limit
+      await recordTokenUsage(1_500_000); // Total: 5.5M > 5M daily limit
 
       const result2 = await checkTokenLimit();
       expect(result2.success).toBe(false);

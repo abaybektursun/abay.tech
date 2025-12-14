@@ -21,6 +21,7 @@ vi.mock('ai', () => ({
   tool: vi.fn((config) => config),
   convertToModelMessages: vi.fn((messages) => messages),
   stepCountIs: vi.fn(() => () => false),
+  createIdGenerator: vi.fn(() => () => 'mock-id'),
 }));
 
 // Mock fs for system prompt loading
@@ -46,6 +47,16 @@ vi.mock('@/lib/growth-tools/rag', () => ({
   findRelevantChunks: vi.fn(() => Promise.resolve([])),
 }));
 
+// Mock auth module (next-auth requires next/server which isn't available in tests)
+vi.mock('@/auth', () => ({
+  auth: vi.fn(() => Promise.resolve({ user: { email: 'test@example.com' } })),
+}));
+
+// Mock actions module (server actions require Next.js runtime)
+vi.mock('@/lib/actions', () => ({
+  saveChat: vi.fn(() => Promise.resolve()),
+}));
+
 // Set env
 process.env.OPENAI_API_KEY = 'test-key';
 process.env.DYNAMODB_TABLE = 'test-table';
@@ -59,6 +70,7 @@ describe('unified chat API route', () => {
     // Default mock for streamText
     mockStreamText.mockReturnValue({
       usage: Promise.resolve({ totalTokens: 1000 }),
+      consumeStream: vi.fn(),
       toUIMessageStreamResponse: () => new Response('stream', { status: 200 }),
     });
   });
@@ -189,6 +201,7 @@ describe('unified chat API route', () => {
       const usagePromise = Promise.resolve({ totalTokens: 1500 });
       mockStreamText.mockReturnValue({
         usage: usagePromise,
+        consumeStream: vi.fn(),
         toUIMessageStreamResponse: () => new Response('stream', { status: 200 }),
       });
 
@@ -214,6 +227,7 @@ describe('unified chat API route', () => {
       const usagePromise = Promise.resolve({ totalTokens: undefined });
       mockStreamText.mockReturnValue({
         usage: usagePromise,
+        consumeStream: vi.fn(),
         toUIMessageStreamResponse: () => new Response('stream', { status: 200 }),
       });
 
