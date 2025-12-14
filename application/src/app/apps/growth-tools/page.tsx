@@ -14,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { SidebarMenuAction } from '@/components/ui/sidebar';
 import { LayoutGrid, MessagesSquare, ChevronDown, MessageCircle, LayoutDashboard, MoreHorizontal, Pin, PinOff } from 'lucide-react';
 import { GrowthToolChat } from '@/components/growth-tools/GrowthToolChat';
 import { Dashboard } from '@/components/growth-tools/Dashboard';
@@ -194,11 +195,11 @@ function GrowthToolsContent() {
                                     <>
                                       <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1">Pinned</div>
                                       {pinnedChats.map((chat) => (
-                                        <div key={chat.id} className="relative group">
+                                        <div key={chat.id} className="group/menu-item relative">
                                           <Button
                                             variant="ghost"
                                             size="sm"
-                                            className="w-full justify-start pr-8"
+                                            className="peer/menu-button w-full justify-start"
                                             onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                           >
                                             <Pin className="text-muted-foreground" />
@@ -206,15 +207,11 @@ function GrowthToolsContent() {
                                           </Button>
                                           <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                              <Button
-                                                variant="ghost"
-                                                size="icon-sm"
-                                                className="absolute right-1 top-1/2 -translate-y-1/2"
-                                              >
+                                              <SidebarMenuAction>
                                                 <MoreHorizontal />
-                                              </Button>
+                                              </SidebarMenuAction>
                                             </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
+                                            <DropdownMenuContent side="right" align="start">
                                               <DropdownMenuItem onClick={() => handleTogglePin(chat.id)}>
                                                 <PinOff className="mr-2" />
                                                 Unpin
@@ -229,11 +226,11 @@ function GrowthToolsContent() {
                                     <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1 mt-2">Recent</div>
                                   )}
                                   {regularChats.map((chat) => (
-                                    <div key={chat.id} className="relative group">
+                                    <div key={chat.id} className="group/menu-item relative">
                                       <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="w-full justify-start pr-8"
+                                        className="peer/menu-button w-full justify-start"
                                         onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                       >
                                         <MessageCircle />
@@ -241,15 +238,11 @@ function GrowthToolsContent() {
                                       </Button>
                                       <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                          <Button
-                                            variant="ghost"
-                                            size="icon-sm"
-                                            className="absolute right-1 top-1/2 -translate-y-1/2"
-                                          >
+                                          <SidebarMenuAction>
                                             <MoreHorizontal />
-                                          </Button>
+                                          </SidebarMenuAction>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
+                                        <DropdownMenuContent side="right" align="start">
                                           <DropdownMenuItem onClick={() => handleTogglePin(chat.id)}>
                                             <Pin className="mr-2" />
                                             Pin
