@@ -92,6 +92,35 @@ export interface ShowNeedsChartArgs {
 }
 
 /**
+ * Life Wheel categories - Tony Robbins' 6 Human Needs framework
+ */
+export type LifeWheelCategory =
+  | 'certainty'
+  | 'variety'
+  | 'significance'
+  | 'connection'
+  | 'growth'
+  | 'contribution';
+
+/**
+ * A single life wheel area with its score
+ */
+export interface LifeWheelArea {
+  category: LifeWheelCategory;
+  label: string;
+  score: number; // 0-10 scale
+}
+
+/**
+ * Tool call arguments for showing the life wheel visualization
+ */
+export interface ShowLifeWheelArgs {
+  areas: LifeWheelArea[];
+  insights: string[];
+  overallScore?: number;
+}
+
+/**
  * Tool call arguments for hiding visualization
  */
 export interface HideVisualizationArgs {

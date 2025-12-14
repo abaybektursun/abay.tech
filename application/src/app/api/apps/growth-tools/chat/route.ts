@@ -36,30 +36,6 @@ function loadSystemPrompt(promptFiles: string[]): string {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildTools(toolNames: string[]): Record<string, any> {
   const allTools = {
-    show_needs_chart: tool({
-      description:
-        "Display a visualization of the user's needs assessment. Use this when you have gathered enough information about their needs across different categories.",
-      inputSchema: z.object({
-        needs: z
-          .array(
-            z.object({
-              category: z.enum(['physical', 'emotional', 'mental', 'spiritual']),
-              name: z.string().describe('Specific need (e.g., "rest", "connection", "purpose")'),
-              fulfilled: z.number().min(0).max(100).describe('How fulfilled this need is (0-100)'),
-              importance: z.number().min(0).max(100).describe('How important this need is to the user (0-100)'),
-            })
-          )
-          .describe('Array of needs identified during the conversation'),
-        insights: z.array(z.string()).describe('Key insights or patterns you noticed (2-4 brief observations)'),
-      }),
-      execute: async (input) => input,
-    }),
-    hide_chart: tool({
-      description:
-        'Hide the needs visualization and return to full chat view. Use this when the user wants to dismiss the chart or continue the conversation without the visual.',
-      inputSchema: z.object({}),
-      execute: async () => ({}),
-    }),
     request_slider: tool({
       description:
         'Request numeric ratings from the user via interactive sliders. Use this when you need the user to rate one or more things on a scale.',
@@ -75,6 +51,31 @@ function buildTools(toolNames: string[]): Record<string, any> {
             labels: z.array(z.string()).length(2).optional(),
           })
         ),
+      }),
+      execute: async (input) => input,
+    }),
+    show_life_wheel: tool({
+      description:
+        "Display a Life Wheel visualization showing the user's fulfillment across Tony Robbins' 6 Human Needs. Use this when you have gathered scores (0-10) for the six needs during the assessment.",
+      inputSchema: z.object({
+        areas: z
+          .array(
+            z.object({
+              category: z.enum([
+                'certainty',
+                'variety',
+                'significance',
+                'connection',
+                'growth',
+                'contribution',
+              ]),
+              label: z.string().describe('Human-readable label (e.g., "Certainty", "Growth")'),
+              score: z.number().min(0).max(10).describe('Fulfillment score for this need (0-10)'),
+            })
+          )
+          .describe('Array of the 6 human needs with fulfillment scores'),
+        insights: z.array(z.string()).describe('Key insights about their needs fulfillment (2-4 observations)'),
+        overallScore: z.number().min(0).max(10).optional().describe('Overall fulfillment score'),
       }),
       execute: async (input) => input,
     }),

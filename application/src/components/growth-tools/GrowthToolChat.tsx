@@ -101,8 +101,8 @@ import { Bot, User, BarChart2, ExternalLink } from 'lucide-react';
 import { getExercise, type ExerciseSuggestion } from '@/lib/growth-tools/exercises';
 
 // Visualizations
-import { NeedsChart } from '@/components/growth-tools/visualizations/NeedsChart';
-import type { ShowNeedsChartArgs, RequestSliderArgs, SliderField } from '@/lib/growth-tools/types';
+import { LifeWheel } from '@/components/growth-tools/visualizations/NeedsChart';
+import type { ShowLifeWheelArgs, RequestSliderArgs, SliderField } from '@/lib/growth-tools/types';
 
 export interface GrowthToolChatProps {
   exercise: string;
@@ -149,8 +149,8 @@ export function GrowthToolChat({
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Tool UI state
-  const [showVisualization, setShowVisualization] = useState(false);
-  const [visualizationData, setVisualizationData] = useState<ShowNeedsChartArgs | null>(null);
+  const [showLifeWheel, setShowLifeWheel] = useState(false);
+  const [lifeWheelData, setLifeWheelData] = useState<ShowLifeWheelArgs | null>(null);
   const [sliderValues, setSliderValues] = useState<Record<string, Record<string, number>>>({});
 
   // Intro video state (sessionStorage - resets on hard refresh)
@@ -405,10 +405,10 @@ export function GrowthToolChat({
                 (p: any) => p.toolCallId === chunk.toolCallId
               );
 
-              // Save artifact for chart tools (only for authenticated users, dedupe by toolCallId)
+              // Save artifact for life wheel (only for authenticated users, dedupe by toolCallId)
               if (toolPart && isAuthenticated && !handledToolCalls.current.has(chunk.toolCallId)) {
                 const toolName = toolPart.type.replace('tool-', '');
-                if (toolName === 'show_needs_chart') {
+                if (toolName === 'show_life_wheel') {
                   handledToolCalls.current.add(chunk.toolCallId);
                   fetch('/api/apps/growth-tools/artifacts', {
                     method: 'POST',
@@ -416,8 +416,8 @@ export function GrowthToolChat({
                     body: JSON.stringify({
                       chatId,
                       exerciseId: exercise,
-                      type: 'needs-chart',
-                      title: 'Needs Assessment',
+                      type: 'life-wheel',
+                      title: '6 Human Needs Assessment',
                       data: toolPart.input,
                     }),
                   }).catch(console.error);
@@ -642,10 +642,10 @@ export function GrowthToolChat({
     const toolName = part.type.replace('tool-', '');
     const { toolCallId, state, input } = part;
 
-    // show_needs_chart tool
-    if (toolName === 'show_needs_chart') {
+    // show_life_wheel tool
+    if (toolName === 'show_life_wheel') {
       const isComplete = state === 'output-available';
-      const chartData = input as ShowNeedsChartArgs;
+      const wheelData = input as ShowLifeWheelArgs;
 
       if (isComplete) {
         return (
@@ -653,20 +653,20 @@ export function GrowthToolChat({
             <Artifact
               className="cursor-pointer hover:border-primary/50 hover:shadow-md transition-all"
               onClick={() => {
-                setVisualizationData(chartData);
-                setShowVisualization(true);
+                setLifeWheelData(wheelData);
+                setShowLifeWheel(true);
               }}
             >
               <ArtifactHeader className="py-2 px-3">
                 <div className="flex items-center gap-2">
                   <BarChart2 className="h-4 w-4 text-primary" />
-                  <ArtifactTitle>Needs Assessment</ArtifactTitle>
+                  <ArtifactTitle>6 Human Needs</ArtifactTitle>
                 </div>
                 <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
               </ArtifactHeader>
               <ArtifactContent className="py-2 px-3">
                 <ArtifactDescription>
-                  {chartData.needs.length} needs analyzed • Click to view
+                  {wheelData.areas.length} needs assessed • Click to view
                 </ArtifactDescription>
               </ArtifactContent>
             </Artifact>
@@ -678,20 +678,10 @@ export function GrowthToolChat({
         <div className="mt-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-muted rounded-md text-xs text-muted-foreground">
             <Loader size={12} />
-            <Shimmer>Generating visualization...</Shimmer>
+            <Shimmer>Generating life wheel...</Shimmer>
           </div>
         </div>
       );
-    }
-
-    // hide_chart tool
-    if (toolName === 'hide_chart') {
-      if (state === 'output-available' && !handledToolCalls.current.has(toolCallId)) {
-        handledToolCalls.current.add(toolCallId);
-        handleToolHandled(toolCallId);
-        setShowVisualization(false);
-      }
-      return null;
     }
 
     // request_slider tool
@@ -704,7 +694,16 @@ export function GrowthToolChat({
       const handleSliderSubmit = (fields: SliderField[], values: Record<string, number>) => {
         handledToolCalls.current.add(toolCallId);
         handleToolHandled(toolCallId);
-        const response = fields.map(f => `${f.name}: ${values[f.name] ?? f.defaultValue ?? 50}`).join(', ');
+        const response = fields
+          .map((field) => {
+            const min = field.min ?? 0;
+            const max = field.max ?? 100;
+            const fallback = field.defaultValue ?? Math.round((min + max) / 2);
+            const rawValue = values[field.name] ?? fallback;
+            const clampedValue = Math.max(min, Math.min(rawValue, max));
+            return `${field.name}: ${clampedValue}`;
+          })
+          .join(', ');
         sendMessage(response);
       };
 
@@ -1014,19 +1013,19 @@ export function GrowthToolChat({
               )}
             </div>
 
-            {/* Visualization overlay */}
-            {showVisualization && visualizationData && (
+            {/* Visualization overlay - LifeWheel */}
+            {showLifeWheel && lifeWheelData && (
               <div
                 className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
-                onClick={() => setShowVisualization(false)}
+                onClick={() => setShowLifeWheel(false)}
               >
                 <div
                   className="w-full max-w-2xl animate-in fade-in zoom-in-95 duration-200"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <NeedsChart
-                    data={visualizationData}
-                    onClose={() => setShowVisualization(false)}
+                  <LifeWheel
+                    data={lifeWheelData}
+                    onClose={() => setShowLifeWheel(false)}
                   />
                 </div>
               </div>

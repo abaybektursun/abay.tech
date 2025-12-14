@@ -37,7 +37,7 @@ vi.mock('@/lib/growth-tools/exercises', () => ({
     name: 'Needs Assessment',
     prompt: ['needs-assessment/prompt.md'],
     ragFolder: null,
-    tools: ['show_needs_chart', 'request_slider', 'hide_chart'],
+    tools: ['show_life_wheel', 'request_slider'],
   })),
 }));
 
