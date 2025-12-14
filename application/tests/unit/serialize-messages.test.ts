@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { serializeMessages } from './serialize-messages'
+import { serializeMessages } from '@/lib/serialize-messages'
 import type { UIMessage } from 'ai'
 
 describe('serializeMessages', () => {
