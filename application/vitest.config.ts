@@ -5,7 +5,6 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   test: {
-    environment: 'node',
     globals: true,
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'tests/**/*.test.ts', 'tests/**/*.test.tsx'],
     exclude: [
@@ -14,9 +13,15 @@ export default defineConfig({
       'tests/growth-tools/**', // Uses custom test functions, not vitest
       'tests/unit/PersonalizedArticle.test.ts', // Uses custom test functions
     ],
+    // Use jsdom for component tests, node for others
+    environmentMatchGlobs: [
+      ['**/*.test.tsx', 'jsdom'],
+      ['**/*.test.ts', 'node'],
+    ],
+    setupFiles: ['./tests/setup.ts'],
     coverage: {
       provider: 'v8',
-      include: ['src/lib/rate-limit.ts'],
+      include: ['src/lib/rate-limit.ts', 'src/components/growth-tools/**'],
     },
   },
   resolve: {
