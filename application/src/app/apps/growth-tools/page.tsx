@@ -206,7 +206,7 @@ function GrowthToolsContent() {
                                           </Button>
                                           <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                              <Button variant="ghost" size="sm" className="h-6 w-6 p-0 flex-shrink-0 opacity-0 group-hover:opacity-100">
+                                              <Button variant="ghost" size="sm" className="h-6 w-6 p-0 flex-shrink-0">
                                                 <MoreHorizontal className="h-3 w-3" />
                                               </Button>
                                             </DropdownMenuTrigger>
@@ -237,7 +237,7 @@ function GrowthToolsContent() {
                                       </Button>
                                       <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0 flex-shrink-0 opacity-0 group-hover:opacity-100">
+                                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0 flex-shrink-0">
                                             <MoreHorizontal className="h-3 w-3" />
                                           </Button>
                                         </DropdownMenuTrigger>
