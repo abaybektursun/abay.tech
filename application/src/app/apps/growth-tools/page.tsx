@@ -198,21 +198,21 @@ function GrowthToolsContent() {
                                           <Button
                                             variant="ghost"
                                             size="sm"
-                                            className="flex-1 min-w-0 justify-start text-xs font-normal"
+                                            className="flex-1 min-w-0 justify-start"
                                             onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                           >
-                                            <Pin className="mr-2 h-3 w-3 flex-shrink-0 text-muted-foreground" />
+                                            <Pin className="text-muted-foreground" />
                                             <span className="truncate">{chat.title}</span>
                                           </Button>
                                           <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                              <Button variant="ghost" size="sm" className="h-6 w-6 p-0 flex-shrink-0">
-                                                <MoreHorizontal className="h-3 w-3" />
+                                              <Button variant="ghost" size="icon-sm">
+                                                <MoreHorizontal />
                                               </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                               <DropdownMenuItem onClick={() => handleTogglePin(chat.id)}>
-                                                <PinOff className="mr-2 h-4 w-4" />
+                                                <PinOff className="mr-2" />
                                                 Unpin
                                               </DropdownMenuItem>
                                             </DropdownMenuContent>
@@ -229,21 +229,21 @@ function GrowthToolsContent() {
                                       <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="flex-1 min-w-0 justify-start text-xs font-normal"
+                                        className="flex-1 min-w-0 justify-start"
                                         onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                       >
-                                        <MessageCircle className="mr-2 h-3 w-3 flex-shrink-0" />
+                                        <MessageCircle />
                                         <span className="truncate">{chat.title}</span>
                                       </Button>
                                       <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0 flex-shrink-0">
-                                            <MoreHorizontal className="h-3 w-3" />
+                                          <Button variant="ghost" size="icon-sm">
+                                            <MoreHorizontal />
                                           </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                           <DropdownMenuItem onClick={() => handleTogglePin(chat.id)}>
-                                            <Pin className="mr-2 h-4 w-4" />
+                                            <Pin className="mr-2" />
                                             Pin
                                           </DropdownMenuItem>
                                         </DropdownMenuContent>
