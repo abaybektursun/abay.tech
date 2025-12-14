@@ -181,7 +181,7 @@ function GrowthToolsContent() {
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.2, ease: 'easeInOut' }}
                       >
-                        <div className="mt-2 pl-6 pr-1">
+                        <div className="mt-2 pl-6">
                           {savedChats.length === 0 ? (
                             <div className="text-xs text-muted-foreground py-2">
                               No saved chats
@@ -194,11 +194,11 @@ function GrowthToolsContent() {
                                     <>
                                       <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1">Pinned</div>
                                       {pinnedChats.map((chat) => (
-                                        <div key={chat.id} className="group relative flex items-center">
+                                        <div key={chat.id} className="relative">
                                           <Button
                                             variant="ghost"
                                             size="sm"
-                                            className="flex-1 min-w-0 justify-start"
+                                            className="w-full justify-start pr-8"
                                             onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                           >
                                             <Pin className="text-muted-foreground" />
@@ -206,7 +206,7 @@ function GrowthToolsContent() {
                                           </Button>
                                           <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                              <Button variant="ghost" size="icon-sm" className="shrink-0">
+                                              <Button variant="ghost" size="icon-sm" className="absolute right-0 top-1/2 -translate-y-1/2">
                                                 <MoreHorizontal />
                                               </Button>
                                             </DropdownMenuTrigger>
@@ -225,11 +225,11 @@ function GrowthToolsContent() {
                                     <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1 mt-2">Recent</div>
                                   )}
                                   {regularChats.map((chat) => (
-                                    <div key={chat.id} className="group relative flex items-center">
+                                    <div key={chat.id} className="relative">
                                       <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="flex-1 min-w-0 justify-start"
+                                        className="w-full justify-start pr-8"
                                         onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                       >
                                         <MessageCircle />
@@ -237,7 +237,7 @@ function GrowthToolsContent() {
                                       </Button>
                                       <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                          <Button variant="ghost" size="icon-sm" className="shrink-0">
+                                          <Button variant="ghost" size="icon-sm" className="absolute right-0 top-1/2 -translate-y-1/2">
                                             <MoreHorizontal />
                                           </Button>
                                         </DropdownMenuTrigger>
