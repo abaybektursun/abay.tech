@@ -189,24 +189,24 @@ function GrowthToolsContent() {
                           ) : (
                             <div className="relative">
                               <ScrollArea className="h-[200px]">
-                                <div className="space-y-1 pr-8">
+                                <div className="space-y-1 pr-4">
                                   {pinnedChats.length > 0 && (
                                     <>
                                       <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1">Pinned</div>
                                       {pinnedChats.map((chat) => (
-                                        <div key={chat.id} className="relative">
+                                        <div key={chat.id} className="flex items-center gap-1">
                                           <Button
                                             variant="ghost"
                                             size="sm"
-                                            className="w-full justify-start pr-8"
+                                            className="flex-1 min-w-0 justify-start"
                                             onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                           >
-                                            <Pin className="text-muted-foreground" />
+                                            <Pin className="shrink-0 text-muted-foreground" />
                                             <span className="truncate">{chat.title}</span>
                                           </Button>
                                           <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                              <Button variant="ghost" size="icon-sm" className="absolute right-0 top-1/2 -translate-y-1/2">
+                                              <Button variant="ghost" size="icon-sm" className="shrink-0">
                                                 <MoreHorizontal />
                                               </Button>
                                             </DropdownMenuTrigger>
@@ -225,19 +225,19 @@ function GrowthToolsContent() {
                                     <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1 mt-2">Recent</div>
                                   )}
                                   {regularChats.map((chat) => (
-                                    <div key={chat.id} className="relative">
+                                    <div key={chat.id} className="flex items-center gap-1">
                                       <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="w-full justify-start pr-8"
+                                        className="flex-1 min-w-0 justify-start"
                                         onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                       >
-                                        <MessageCircle />
+                                        <MessageCircle className="shrink-0" />
                                         <span className="truncate">{chat.title}</span>
                                       </Button>
                                       <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                          <Button variant="ghost" size="icon-sm" className="absolute right-0 top-1/2 -translate-y-1/2">
+                                          <Button variant="ghost" size="icon-sm" className="shrink-0">
                                             <MoreHorizontal />
                                           </Button>
                                         </DropdownMenuTrigger>
