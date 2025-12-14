@@ -180,9 +180,8 @@ function GrowthToolsContent() {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        className="overflow-hidden"
                       >
-                        <div className="mt-2 pl-6">
+                        <div className="mt-2 pl-6 pr-1">
                           {savedChats.length === 0 ? (
                             <div className="text-xs text-muted-foreground py-2">
                               No saved chats
@@ -190,7 +189,7 @@ function GrowthToolsContent() {
                           ) : (
                             <div className="relative">
                               <ScrollArea className="h-[200px]">
-                                <div className="space-y-1 pr-2">
+                                <div className="space-y-1 pr-4">
                                   {pinnedChats.length > 0 && (
                                     <>
                                       <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1">Pinned</div>
@@ -199,7 +198,7 @@ function GrowthToolsContent() {
                                           <Button
                                             variant="ghost"
                                             size="sm"
-                                            className="flex-1 justify-start text-xs font-normal truncate"
+                                            className="flex-1 min-w-0 justify-start text-xs font-normal"
                                             onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                           >
                                             <Pin className="mr-2 h-3 w-3 flex-shrink-0 text-muted-foreground" />
@@ -207,7 +206,7 @@ function GrowthToolsContent() {
                                           </Button>
                                           <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                              <Button variant="ghost" size="sm" className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100">
+                                              <Button variant="ghost" size="sm" className="h-6 w-6 p-0 flex-shrink-0 opacity-0 group-hover:opacity-100">
                                                 <MoreHorizontal className="h-3 w-3" />
                                               </Button>
                                             </DropdownMenuTrigger>
@@ -230,7 +229,7 @@ function GrowthToolsContent() {
                                       <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="flex-1 justify-start text-xs font-normal truncate"
+                                        className="flex-1 min-w-0 justify-start text-xs font-normal"
                                         onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
                                       >
                                         <MessageCircle className="mr-2 h-3 w-3 flex-shrink-0" />
@@ -238,7 +237,7 @@ function GrowthToolsContent() {
                                       </Button>
                                       <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100">
+                                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0 flex-shrink-0 opacity-0 group-hover:opacity-100">
                                             <MoreHorizontal className="h-3 w-3" />
                                           </Button>
                                         </DropdownMenuTrigger>
