@@ -54,13 +54,14 @@ function ChatListItem({
   onClick: () => void;
 }) {
   return (
-    <div className="group flex items-center gap-1">
+    <li className="group flex items-center gap-1">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+            className="h-6 w-6 shrink-0 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+            aria-label={`Options for ${chat.title}`}
           >
             <MoreHorizontal className="h-3 w-3" />
           </Button>
@@ -75,16 +76,17 @@ function ChatListItem({
 
       <button
         onClick={onClick}
-        className="flex-1 flex items-center gap-2 px-2 py-1 text-sm text-left rounded hover:bg-accent/50 transition-colors min-w-0"
+        className="flex-1 flex items-center gap-2 px-2 py-1 text-sm text-left rounded hover:bg-accent/50 focus:bg-accent/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors min-w-0"
+        aria-label={`Open chat: ${chat.title}`}
       >
         {isPinned ? (
-          <Pin className="h-3 w-3 shrink-0 text-muted-foreground" />
+          <Pin className="h-3 w-3 shrink-0 text-muted-foreground" aria-hidden="true" />
         ) : (
-          <MessageCircle className="h-3 w-3 shrink-0 text-muted-foreground" />
+          <MessageCircle className="h-3 w-3 shrink-0 text-muted-foreground" aria-hidden="true" />
         )}
         <span className="truncate">{chat.title}</span>
       </button>
-    </div>
+    </li>
   );
 }
 
@@ -115,41 +117,47 @@ function ChatList({
     <div
       className="overflow-y-auto space-y-1 pl-2"
       style={{ maxHeight: 'var(--chat-list-height)' }}
+      role="region"
+      aria-label="Chat history"
     >
       {pinnedChats.length > 0 && (
-        <div className="space-y-1">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wide py-1">
+        <section aria-labelledby="pinned-chats-heading">
+          <h3 id="pinned-chats-heading" className="text-[10px] text-muted-foreground uppercase tracking-wide py-1">
             Pinned
-          </p>
-          {pinnedChats.map(chat => (
-            <ChatListItem
-              key={chat.id}
-              chat={chat}
-              isPinned={true}
-              onTogglePin={() => onTogglePin(chat.id)}
-              onClick={() => onChatClick(chat.id)}
-            />
-          ))}
-        </div>
+          </h3>
+          <ul className="space-y-1" aria-label="Pinned chats">
+            {pinnedChats.map(chat => (
+              <ChatListItem
+                key={chat.id}
+                chat={chat}
+                isPinned={true}
+                onTogglePin={() => onTogglePin(chat.id)}
+                onClick={() => onChatClick(chat.id)}
+              />
+            ))}
+          </ul>
+        </section>
       )}
 
       {regularChats.length > 0 && (
-        <div className="space-y-1">
+        <section aria-labelledby="recent-chats-heading">
           {pinnedChats.length > 0 && (
-            <p className="text-[10px] text-muted-foreground uppercase tracking-wide py-1 mt-2">
+            <h3 id="recent-chats-heading" className="text-[10px] text-muted-foreground uppercase tracking-wide py-1 mt-2">
               Recent
-            </p>
+            </h3>
           )}
-          {regularChats.map(chat => (
-            <ChatListItem
-              key={chat.id}
-              chat={chat}
-              isPinned={false}
-              onTogglePin={() => onTogglePin(chat.id)}
-              onClick={() => onChatClick(chat.id)}
-            />
-          ))}
-        </div>
+          <ul className="space-y-1" aria-label="Recent chats">
+            {regularChats.map(chat => (
+              <ChatListItem
+                key={chat.id}
+                chat={chat}
+                isPinned={false}
+                onTogglePin={() => onTogglePin(chat.id)}
+                onClick={() => onChatClick(chat.id)}
+              />
+            ))}
+          </ul>
+        </section>
       )}
     </div>
   );
@@ -295,6 +303,7 @@ export function AppSidebar({
       <nav
         className="hidden md:block shrink-0"
         style={{ width: 'var(--app-sidebar-width)' }}
+        aria-label="Main navigation"
       >
         <div
           className="sticky space-y-1"
