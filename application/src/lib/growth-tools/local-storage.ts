@@ -7,13 +7,16 @@ export interface LocalChat {
   title: string;
   createdAt: number;
   messages: UIMessage[];
+  pinned?: boolean;
 }
 
 export function getLocalChats(): LocalChat[] {
   if (typeof window === 'undefined') return [];
   const stored = localStorage.getItem(STORAGE_KEY);
   if (!stored) return [];
-  return JSON.parse(stored);
+  const chats: LocalChat[] = JSON.parse(stored);
+  // Sort by createdAt descending (newest first)
+  return chats.sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0));
 }
 
 export function saveLocalChat(chat: LocalChat): void {
@@ -42,4 +45,13 @@ export function deleteLocalChat(id: string): void {
 
 export function clearLocalChats(): void {
   localStorage.removeItem(STORAGE_KEY);
+}
+
+export function toggleLocalChatPin(id: string): boolean {
+  const chats = getLocalChats();
+  const chat = chats.find(c => c.id === id);
+  if (!chat) return false;
+  chat.pinned = !chat.pinned;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(chats));
+  return chat.pinned;
 }

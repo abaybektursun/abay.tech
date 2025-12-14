@@ -8,6 +8,7 @@ import {
   DeleteCommand,
   PutCommand,
   BatchWriteCommand,
+  UpdateCommand,
 } from '@aws-sdk/lib-dynamodb'
 import { db } from '@/lib/db'
 import { serializeMessages } from '@/lib/serialize-messages'
@@ -29,11 +30,13 @@ export async function getChats(userId?: string | null) {
     ExpressionAttributeNames: {
       '#p': 'path',
     },
-    ProjectionExpression: 'id, title, #p',
+    ProjectionExpression: 'id, title, #p, createdAt, pinned',
   })
 
   const response = await db.send(command)
-  return response.Items ?? []
+  const items = response.Items ?? []
+  // Sort by createdAt descending (newest first)
+  return items.sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0))
 }
 
 export async function getChat(id: string, userId: string) {
@@ -174,4 +177,24 @@ export async function migrateChats(chats: {
 
   revalidatePath('/apps/growth-tools')
   return { success: true }
+}
+
+export async function toggleChatPin(id: string, userId: string): Promise<boolean> {
+  const chat = await getChat(id, userId)
+  if (!chat) return false
+
+  const newPinned = !chat.pinned
+
+  const command = new UpdateCommand({
+    TableName,
+    Key: { userId, id },
+    UpdateExpression: 'SET pinned = :pinned',
+    ExpressionAttributeValues: {
+      ':pinned': newPinned,
+    },
+  })
+
+  await db.send(command)
+  revalidatePath('/apps/growth-tools')
+  return newPinned
 }

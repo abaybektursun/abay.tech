@@ -8,15 +8,22 @@ import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { LayoutGrid, MessagesSquare, ChevronDown, MessageCircle, LayoutDashboard } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { LayoutGrid, MessagesSquare, ChevronDown, MessageCircle, LayoutDashboard, MoreHorizontal, Pin, PinOff } from 'lucide-react';
 import { GrowthToolChat } from '@/components/growth-tools/GrowthToolChat';
 import { Dashboard } from '@/components/growth-tools/Dashboard';
-import { getLocalChats, type LocalChat } from '@/lib/growth-tools/local-storage';
-import { getChats } from '@/lib/actions';
+import { getLocalChats, toggleLocalChatPin, type LocalChat } from '@/lib/growth-tools/local-storage';
+import { getChats, toggleChatPin } from '@/lib/actions';
 
 interface ChatItem {
   id: string;
   title: string;
+  pinned?: boolean;
 }
 
 function GrowthToolsContent() {
@@ -43,16 +50,29 @@ function GrowthToolsContent() {
       if (isAuthenticated && session?.user?.email) {
         // Fetch from DB for authenticated users
         const dbChats = await getChats(session.user.email);
-        setSavedChats(dbChats.map((c) => ({ id: c.id as string, title: c.title as string })));
+        setSavedChats(dbChats.map((c) => ({ id: c.id as string, title: c.title as string, pinned: c.pinned as boolean })));
       } else {
         // Load from localStorage for anonymous users
         const localChats = getLocalChats();
-        setSavedChats(localChats.map((c) => ({ id: c.id, title: c.title })));
+        setSavedChats(localChats.map((c) => ({ id: c.id, title: c.title, pinned: c.pinned })));
       }
     };
 
     loadChats();
   }, [sessionStatus, isAuthenticated, session?.user?.email]);
+
+  const handleTogglePin = async (chatId: string) => {
+    if (isAuthenticated && session?.user?.email) {
+      const newPinned = await toggleChatPin(chatId, session.user.email);
+      setSavedChats(prev => prev.map(c => c.id === chatId ? { ...c, pinned: newPinned } : c));
+    } else {
+      const newPinned = toggleLocalChatPin(chatId);
+      setSavedChats(prev => prev.map(c => c.id === chatId ? { ...c, pinned: newPinned } : c));
+    }
+  };
+
+  const pinnedChats = savedChats.filter(c => c.pinned);
+  const regularChats = savedChats.filter(c => !c.pinned);
 
   const conversations = [
     {
@@ -160,7 +180,6 @@ function GrowthToolsContent() {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        className="overflow-hidden"
                       >
                         <div className="mt-2 pl-6">
                           {savedChats.length === 0 ? (
@@ -170,18 +189,66 @@ function GrowthToolsContent() {
                           ) : (
                             <div className="relative">
                               <ScrollArea className="h-[200px]">
-                                <div className="space-y-1 pr-2">
-                                  {savedChats.map((chat) => (
-                                    <Button
-                                      key={chat.id}
-                                      variant="ghost"
-                                      size="sm"
-                                      className="w-full justify-start text-xs font-normal truncate"
-                                      onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
-                                    >
-                                      <MessageCircle className="mr-2 h-3 w-3 flex-shrink-0" />
-                                      <span className="truncate">{chat.title}</span>
-                                    </Button>
+                                <div className="space-y-1">
+                                  {pinnedChats.length > 0 && (
+                                    <>
+                                      <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1 px-2">Pinned</div>
+                                      {pinnedChats.map((chat) => (
+                                        <div key={chat.id} className="flex items-center gap-1 px-1">
+                                          <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                              <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0">
+                                                <MoreHorizontal className="h-4 w-4" />
+                                              </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent side="right" align="start">
+                                              <DropdownMenuItem onClick={() => handleTogglePin(chat.id)}>
+                                                <PinOff className="mr-2 h-4 w-4" />
+                                                Unpin
+                                              </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                          </DropdownMenu>
+                                          <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="flex-1 justify-start min-w-0"
+                                            onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
+                                          >
+                                            <Pin className="h-4 w-4 shrink-0 text-muted-foreground" />
+                                            <span className="truncate">{chat.title}</span>
+                                          </Button>
+                                        </div>
+                                      ))}
+                                    </>
+                                  )}
+                                  {regularChats.length > 0 && pinnedChats.length > 0 && (
+                                    <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1 px-2 mt-2">Recent</div>
+                                  )}
+                                  {regularChats.map((chat) => (
+                                    <div key={chat.id} className="flex items-center gap-1 px-1">
+                                      <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                          <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0">
+                                            <MoreHorizontal className="h-4 w-4" />
+                                          </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent side="right" align="start">
+                                          <DropdownMenuItem onClick={() => handleTogglePin(chat.id)}>
+                                            <Pin className="mr-2 h-4 w-4" />
+                                            Pin
+                                          </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                      </DropdownMenu>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="flex-1 justify-start min-w-0"
+                                        onClick={() => router.push(`/apps/growth-tools?exercise=needs-assessment&chatId=${chat.id}`)}
+                                      >
+                                        <MessageCircle className="h-4 w-4 shrink-0" />
+                                        <span className="truncate">{chat.title}</span>
+                                      </Button>
+                                    </div>
                                   ))}
                                 </div>
                               </ScrollArea>
