@@ -91,6 +91,48 @@ function ChatListItem({
 }
 
 /**
+ * ChatSection - A group of chats with optional heading
+ */
+function ChatSection({
+  title,
+  chats,
+  isPinned,
+  onTogglePin,
+  onChatClick,
+  showHeading = true,
+}: {
+  title: string;
+  chats: ChatItem[];
+  isPinned: boolean;
+  onTogglePin: (id: string) => void;
+  onChatClick: (id: string) => void;
+  showHeading?: boolean;
+}) {
+  if (chats.length === 0) return null;
+
+  return (
+    <section aria-label={title}>
+      {showHeading && (
+        <h3 className="text-[10px] text-muted-foreground uppercase tracking-wide py-1">
+          {title}
+        </h3>
+      )}
+      <ul className="space-y-1">
+        {chats.map(chat => (
+          <ChatListItem
+            key={chat.id}
+            chat={chat}
+            isPinned={isPinned}
+            onTogglePin={() => onTogglePin(chat.id)}
+            onClick={() => onChatClick(chat.id)}
+          />
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/**
  * ChatList - Scrollable list of chats
  */
 function ChatList({
@@ -115,50 +157,26 @@ function ChatList({
 
   return (
     <div
-      className="overflow-y-auto space-y-1 pl-2"
+      className="overflow-y-auto space-y-2 pl-2"
       style={{ maxHeight: 'var(--chat-list-height)' }}
       role="region"
       aria-label="Chat history"
     >
-      {pinnedChats.length > 0 && (
-        <section aria-labelledby="pinned-chats-heading">
-          <h3 id="pinned-chats-heading" className="text-[10px] text-muted-foreground uppercase tracking-wide py-1">
-            Pinned
-          </h3>
-          <ul className="space-y-1" aria-label="Pinned chats">
-            {pinnedChats.map(chat => (
-              <ChatListItem
-                key={chat.id}
-                chat={chat}
-                isPinned={true}
-                onTogglePin={() => onTogglePin(chat.id)}
-                onClick={() => onChatClick(chat.id)}
-              />
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {regularChats.length > 0 && (
-        <section aria-labelledby="recent-chats-heading">
-          {pinnedChats.length > 0 && (
-            <h3 id="recent-chats-heading" className="text-[10px] text-muted-foreground uppercase tracking-wide py-1 mt-2">
-              Recent
-            </h3>
-          )}
-          <ul className="space-y-1" aria-label="Recent chats">
-            {regularChats.map(chat => (
-              <ChatListItem
-                key={chat.id}
-                chat={chat}
-                isPinned={false}
-                onTogglePin={() => onTogglePin(chat.id)}
-                onClick={() => onChatClick(chat.id)}
-              />
-            ))}
-          </ul>
-        </section>
-      )}
+      <ChatSection
+        title="Pinned"
+        chats={pinnedChats}
+        isPinned={true}
+        onTogglePin={onTogglePin}
+        onChatClick={onChatClick}
+      />
+      <ChatSection
+        title="Recent"
+        chats={regularChats}
+        isPinned={false}
+        onTogglePin={onTogglePin}
+        onChatClick={onChatClick}
+        showHeading={pinnedChats.length > 0}
+      />
     </div>
   );
 }
@@ -229,6 +247,7 @@ function SidebarContent({
             </span>
             <ChevronDown
               className={`h-4 w-4 transition-transform ${isChatsOpen ? 'rotate-180' : ''}`}
+              aria-hidden="true"
             />
           </Button>
         </CollapsibleTrigger>
