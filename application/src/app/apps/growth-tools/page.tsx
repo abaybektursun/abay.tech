@@ -189,7 +189,7 @@ function GrowthToolsContent() {
                           ) : (
                             <div className="relative">
                               <ScrollArea className="h-[200px]">
-                                <div className="space-y-1">
+                                <div className="space-y-1 pr-8">
                                   {pinnedChats.length > 0 && (
                                     <>
                                       <div className="text-[10px] text-muted-foreground uppercase tracking-wide py-1">Pinned</div>
