@@ -9,8 +9,8 @@ import { GrowthToolChat } from '@/components/growth-tools/GrowthToolChat';
 import { Dashboard } from '@/components/growth-tools/Dashboard';
 import { AppLayout } from '@/components/growth-tools/AppLayout';
 import { AppSidebar } from '@/components/growth-tools/AppSidebar';
-import { getLocalChats, toggleLocalChatPin } from '@/lib/growth-tools/local-storage';
-import { getChats, toggleChatPin } from '@/lib/actions';
+import { getLocalChats, toggleLocalChatPin, deleteLocalChat } from '@/lib/growth-tools/local-storage';
+import { getChats, toggleChatPin, deleteChat } from '@/lib/actions';
 
 interface ChatItem {
   id: string;
@@ -71,6 +71,20 @@ function GrowthToolsContent() {
     }
   };
 
+  const handleDeleteChat = async (chatId: string) => {
+    if (isAuthenticated && session?.user?.email) {
+      await deleteChat(chatId, session.user.email);
+    } else {
+      deleteLocalChat(chatId);
+    }
+    setSavedChats(prev => prev.filter(c => c.id !== chatId));
+
+    // If currently viewing the deleted chat, redirect to exercises
+    if (chatId === searchParams.get('chatId')) {
+      router.push('/apps/growth-tools');
+    }
+  };
+
   const conversations = [
     {
       name: 'Needs Assessment',
@@ -114,6 +128,7 @@ function GrowthToolsContent() {
       isChatsOpen={isChatsOpen}
       onChatsOpenChange={setIsChatsOpen}
       onTogglePin={handleTogglePin}
+      onDeleteChat={handleDeleteChat}
     />
   );
 

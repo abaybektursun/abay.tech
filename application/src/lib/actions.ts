@@ -198,3 +198,14 @@ export async function toggleChatPin(id: string, userId: string): Promise<boolean
   revalidatePath('/apps/growth-tools')
   return newPinned
 }
+
+export async function deleteChat(id: string, userId: string): Promise<boolean> {
+  const command = new DeleteCommand({
+    TableName,
+    Key: { userId, id },
+  })
+
+  await db.send(command)
+  revalidatePath('/apps/growth-tools')
+  return true
+}

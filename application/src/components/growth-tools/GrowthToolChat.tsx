@@ -908,7 +908,7 @@ export function GrowthToolChat({
                 />
                 <PromptInputFooter className="p-2.5">
                   <PromptInputTools>
-                    <DropdownMenu>
+                    <DropdownMenu modal={false}>
                       <DropdownMenuTrigger asChild>
                         <PromptInputButton
                           className="!rounded-full border font-medium"

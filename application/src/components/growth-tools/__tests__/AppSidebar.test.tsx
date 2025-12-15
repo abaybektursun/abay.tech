@@ -20,6 +20,7 @@ describe('AppSidebar', () => {
     isChatsOpen: true,
     onChatsOpenChange: vi.fn(),
     onTogglePin: vi.fn(),
+    onDeleteChat: vi.fn(),
   };
 
   beforeEach(() => {
@@ -159,6 +160,80 @@ describe('AppSidebar', () => {
       await user.click(pinOption);
 
       expect(onTogglePin).toHaveBeenCalledWith('chat-1');
+    });
+  });
+
+  describe('delete functionality', () => {
+    it('shows delete option in menu', async () => {
+      const user = userEvent.setup();
+      const chats = [{ id: 'chat-1', title: 'Test Chat', pinned: false }];
+
+      render(<AppSidebar {...defaultProps} chats={chats} />);
+
+      const optionsButton = screen.getByRole('button', { name: /options for test chat/i });
+      await user.click(optionsButton);
+
+      expect(screen.getByRole('menuitem', { name: /delete/i })).toBeInTheDocument();
+    });
+
+    it('shows confirmation dialog when delete is clicked', async () => {
+      const user = userEvent.setup();
+      const chats = [{ id: 'chat-1', title: 'Test Chat', pinned: false }];
+
+      render(<AppSidebar {...defaultProps} chats={chats} />);
+
+      const optionsButton = screen.getByRole('button', { name: /options for test chat/i });
+      await user.click(optionsButton);
+
+      const deleteOption = screen.getByRole('menuitem', { name: /delete/i });
+      await user.click(deleteOption);
+
+      expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+      expect(screen.getByText(/delete chat\?/i)).toBeInTheDocument();
+    });
+
+    it('calls onDeleteChat when delete is confirmed', async () => {
+      const onDeleteChat = vi.fn();
+      const user = userEvent.setup();
+      const chats = [{ id: 'chat-1', title: 'Test Chat', pinned: false }];
+
+      render(<AppSidebar {...defaultProps} chats={chats} onDeleteChat={onDeleteChat} />);
+
+      // Open options menu
+      const optionsButton = screen.getByRole('button', { name: /options for test chat/i });
+      await user.click(optionsButton);
+
+      // Click delete
+      const deleteOption = screen.getByRole('menuitem', { name: /delete/i });
+      await user.click(deleteOption);
+
+      // Confirm deletion
+      const confirmButton = screen.getByRole('button', { name: /^delete$/i });
+      await user.click(confirmButton);
+
+      expect(onDeleteChat).toHaveBeenCalledWith('chat-1');
+    });
+
+    it('does not call onDeleteChat when cancel is clicked', async () => {
+      const onDeleteChat = vi.fn();
+      const user = userEvent.setup();
+      const chats = [{ id: 'chat-1', title: 'Test Chat', pinned: false }];
+
+      render(<AppSidebar {...defaultProps} chats={chats} onDeleteChat={onDeleteChat} />);
+
+      // Open options menu
+      const optionsButton = screen.getByRole('button', { name: /options for test chat/i });
+      await user.click(optionsButton);
+
+      // Click delete
+      const deleteOption = screen.getByRole('menuitem', { name: /delete/i });
+      await user.click(deleteOption);
+
+      // Cancel deletion
+      const cancelButton = screen.getByRole('button', { name: /cancel/i });
+      await user.click(cancelButton);
+
+      expect(onDeleteChat).not.toHaveBeenCalled();
     });
   });
 
