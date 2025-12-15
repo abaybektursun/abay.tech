@@ -23,6 +23,17 @@
     scrollbar-gutter: stable;
   }
 
+  /* Fix Radix UI scroll-lock conflict with scrollbar-gutter
+   * When Radix locks scroll (via react-remove-scroll), it adds padding to compensate
+   * for the scrollbar. Since we use scrollbar-gutter: stable, the space is already
+   * reserved, so we disable Radix's compensation to prevent double-shifting.
+   * See: https://github.com/radix-ui/primitives/issues/3251
+   */
+  body[data-scroll-locked] {
+    --removed-body-scroll-bar-size: 0px !important;
+    margin-right: 0 !important;
+  }
+
   :root {
     /* Premium Color System - Inspired by Calm, Headspace, and modern wellness apps */
     --background: 0 0% 100%;
