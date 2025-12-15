@@ -18,6 +18,11 @@
 }
 
 @layer base {
+  /* Prevent layout shift when modals/dropdowns open (scrollbar compensation) */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   :root {
     /* Premium Color System - Inspired by Calm, Headspace, and modern wellness apps */
     --background: 0 0% 100%;
