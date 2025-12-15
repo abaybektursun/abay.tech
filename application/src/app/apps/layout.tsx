@@ -20,9 +20,10 @@ export default function AppsLayout({ children }: AppsLayoutProps) {
 
   if (isInApp) {
     // For actual apps, provide a full-height container minus header
+    // Use negative margin to cancel out the py-8 from root layout
     return (
       <SessionProvider>
-        <div className="h-viewport ai-chat">
+        <div className="-my-8 h-[calc(100vh-var(--header-height))] ai-chat">
           <div className="absolute top-4 right-4 z-50">
             <AuthButton />
           </div>
