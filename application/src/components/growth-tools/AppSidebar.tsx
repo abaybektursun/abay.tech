@@ -2,15 +2,26 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LayoutGrid, LayoutDashboard, MessagesSquare, ChevronDown, MessageCircle, MoreHorizontal, Pin, PinOff, Menu, type LucideIcon } from 'lucide-react';
+import { LayoutGrid, LayoutDashboard, MessagesSquare, ChevronDown, MessageCircle, MoreHorizontal, Pin, PinOff, Menu, Trash2, type LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import {
   Sheet,
   SheetContent,
@@ -37,6 +48,7 @@ interface AppSidebarProps {
   isChatsOpen: boolean;
   onChatsOpenChange: (open: boolean) => void;
   onTogglePin: (chatId: string) => void;
+  onDeleteChat: (chatId: string) => void;
 }
 
 /**
@@ -46,13 +58,17 @@ function ChatListItem({
   chat,
   isPinned,
   onTogglePin,
+  onDelete,
   onClick
 }: {
   chat: ChatItem;
   isPinned: boolean;
   onTogglePin: () => void;
+  onDelete: () => void;
   onClick: () => void;
 }) {
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   return (
     <li className="group flex items-center gap-1">
       <DropdownMenu>
@@ -71,8 +87,36 @@ function ChatListItem({
             {isPinned ? <PinOff className="mr-2 h-4 w-4" /> : <Pin className="mr-2 h-4 w-4" />}
             {isPinned ? 'Unpin' : 'Pin'}
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => setShowDeleteConfirm(true)}
+            className="text-destructive focus:text-destructive"
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            Delete
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete chat?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete &quot;{chat.title}&quot;. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={onDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <button
         onClick={onClick}
@@ -98,6 +142,7 @@ function ChatSection({
   chats,
   isPinned,
   onTogglePin,
+  onDelete,
   onChatClick,
   showHeading = true,
 }: {
@@ -105,6 +150,7 @@ function ChatSection({
   chats: ChatItem[];
   isPinned: boolean;
   onTogglePin: (id: string) => void;
+  onDelete: (id: string) => void;
   onChatClick: (id: string) => void;
   showHeading?: boolean;
 }) {
@@ -124,6 +170,7 @@ function ChatSection({
             chat={chat}
             isPinned={isPinned}
             onTogglePin={() => onTogglePin(chat.id)}
+            onDelete={() => onDelete(chat.id)}
             onClick={() => onChatClick(chat.id)}
           />
         ))}
@@ -138,10 +185,12 @@ function ChatSection({
 function ChatList({
   chats,
   onTogglePin,
+  onDelete,
   onChatClick
 }: {
   chats: ChatItem[];
   onTogglePin: (id: string) => void;
+  onDelete: (id: string) => void;
   onChatClick: (id: string) => void;
 }) {
   const pinnedChats = chats.filter(c => c.pinned);
@@ -167,6 +216,7 @@ function ChatList({
         chats={pinnedChats}
         isPinned={true}
         onTogglePin={onTogglePin}
+        onDelete={onDelete}
         onChatClick={onChatClick}
       />
       <ChatSection
@@ -174,6 +224,7 @@ function ChatList({
         chats={regularChats}
         isPinned={false}
         onTogglePin={onTogglePin}
+        onDelete={onDelete}
         onChatClick={onChatClick}
         showHeading={pinnedChats.length > 0}
       />
@@ -214,12 +265,14 @@ function SidebarContent({
   isChatsOpen,
   onChatsOpenChange,
   onTogglePin,
+  onDelete,
   onNavigate,
 }: {
   chats: ChatItem[];
   isChatsOpen: boolean;
   onChatsOpenChange: (open: boolean) => void;
   onTogglePin: (chatId: string) => void;
+  onDelete: (chatId: string) => void;
   onNavigate: (path: string) => void;
 }) {
   return (
@@ -257,6 +310,7 @@ function SidebarContent({
             <ChatList
               chats={chats}
               onTogglePin={onTogglePin}
+              onDelete={onDelete}
               onChatClick={(chatId) => onNavigate(`/apps/growth-tools?exercise=needs-assessment&chatId=${chatId}`)}
             />
           </div>
@@ -276,7 +330,8 @@ export function AppSidebar({
   chats,
   isChatsOpen,
   onChatsOpenChange,
-  onTogglePin
+  onTogglePin,
+  onDeleteChat,
 }: AppSidebarProps) {
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -311,6 +366,7 @@ export function AppSidebar({
                 isChatsOpen={isChatsOpen}
                 onChatsOpenChange={onChatsOpenChange}
                 onTogglePin={onTogglePin}
+                onDelete={onDeleteChat}
                 onNavigate={handleNavigate}
               />
             </div>
@@ -333,6 +389,7 @@ export function AppSidebar({
             isChatsOpen={isChatsOpen}
             onChatsOpenChange={onChatsOpenChange}
             onTogglePin={onTogglePin}
+            onDelete={onDeleteChat}
             onNavigate={(path) => router.push(path)}
           />
         </div>
