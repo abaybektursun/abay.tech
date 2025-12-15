@@ -22,17 +22,23 @@
   html {
     scrollbar-gutter: stable;
   }
+}
 
-  /* Fix Radix UI scroll-lock conflict with scrollbar-gutter
-   * When Radix locks scroll (via react-remove-scroll), it adds padding to compensate
-   * for the scrollbar. Since we use scrollbar-gutter: stable, the space is already
-   * reserved, so we disable Radix's compensation to prevent double-shifting.
-   * See: https://github.com/radix-ui/primitives/issues/3251
-   */
-  body[data-scroll-locked] {
-    --removed-body-scroll-bar-size: 0px !important;
-    margin-right: 0 !important;
-  }
+/* Fix Radix UI scroll-lock conflict with scrollbar-gutter
+ * When Radix locks scroll (via react-remove-scroll), it adds padding/margin to compensate
+ * for the scrollbar. Since we use scrollbar-gutter: stable, the space is already
+ * reserved, so we disable Radix's compensation to prevent double-shifting.
+ *
+ * IMPORTANT: This must be outside @layer base for higher specificity over inline styles.
+ * See: https://github.com/radix-ui/primitives/issues/3251
+ */
+html body[data-scroll-locked] {
+  --removed-body-scroll-bar-size: 0px !important;
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+}
+
+@layer base {
 
   :root {
     /* Premium Color System - Inspired by Calm, Headspace, and modern wellness apps */
