@@ -8,6 +8,7 @@ export interface LocalChat {
   createdAt: number;
   messages: UIMessage[];
   pinned?: boolean;
+  exerciseId?: string;
 }
 
 export function getLocalChats(): LocalChat[] {

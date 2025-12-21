@@ -41,6 +41,7 @@ interface ChatItem {
   id: string;
   title: string;
   pinned?: boolean;
+  exerciseId?: string;
 }
 
 interface AppSidebarProps {
@@ -151,7 +152,7 @@ function ChatSection({
   isPinned: boolean;
   onTogglePin: (id: string) => void;
   onDelete: (id: string) => void;
-  onChatClick: (id: string) => void;
+  onChatClick: (id: string, exerciseId?: string) => void;
   showHeading?: boolean;
 }) {
   if (chats.length === 0) return null;
@@ -171,7 +172,7 @@ function ChatSection({
             isPinned={isPinned}
             onTogglePin={() => onTogglePin(chat.id)}
             onDelete={() => onDelete(chat.id)}
-            onClick={() => onChatClick(chat.id)}
+            onClick={() => onChatClick(chat.id, chat.exerciseId)}
           />
         ))}
       </ul>
@@ -191,7 +192,7 @@ function ChatList({
   chats: ChatItem[];
   onTogglePin: (id: string) => void;
   onDelete: (id: string) => void;
-  onChatClick: (id: string) => void;
+  onChatClick: (id: string, exerciseId?: string) => void;
 }) {
   const pinnedChats = chats.filter(c => c.pinned);
   const regularChats = chats.filter(c => !c.pinned);
@@ -311,7 +312,7 @@ function SidebarContent({
               chats={chats}
               onTogglePin={onTogglePin}
               onDelete={onDelete}
-              onChatClick={(chatId) => onNavigate(`/apps/growth-tools?exercise=needs-assessment&chatId=${chatId}`)}
+              onChatClick={(chatId, exerciseId) => onNavigate(`/apps/growth-tools?exercise=${exerciseId || 'needs-assessment'}&chatId=${chatId}`)}
             />
           </div>
         </CollapsibleContent>

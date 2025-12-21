@@ -110,7 +110,7 @@ describe('AppSidebar', () => {
       expect(screen.getByText('Chat 1')).toBeInTheDocument();
     });
 
-    it('navigates to chat when clicking chat item', async () => {
+    it('navigates to chat when clicking chat item (defaults to needs-assessment)', async () => {
       const user = userEvent.setup();
       const chats = [{ id: 'chat-123', title: 'Test Chat', pinned: false }];
 
@@ -120,6 +120,19 @@ describe('AppSidebar', () => {
 
       expect(mockPush).toHaveBeenCalledWith(
         '/apps/growth-tools?exercise=needs-assessment&chatId=chat-123'
+      );
+    });
+
+    it('navigates to chat with stored exerciseId', async () => {
+      const user = userEvent.setup();
+      const chats = [{ id: 'chat-456', title: 'Open World Chat', pinned: false, exerciseId: 'open-world-mode' }];
+
+      render(<AppSidebar {...defaultProps} chats={chats} />);
+
+      await user.click(screen.getByRole('button', { name: /open chat: open world chat/i }));
+
+      expect(mockPush).toHaveBeenCalledWith(
+        '/apps/growth-tools?exercise=open-world-mode&chatId=chat-456'
       );
     });
   });

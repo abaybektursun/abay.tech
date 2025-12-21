@@ -156,6 +156,9 @@ export function GrowthToolChat({
   // Intro video state (sessionStorage - resets on hard refresh)
   const [showIntroVideo, setShowIntroVideo] = useState(false);
 
+  // Loading state for initial message fetch
+  const [isLoadingMessages, setIsLoadingMessages] = useState(!initialMessages?.length);
+
   // Get exercise config
   const exerciseConfig = getExercise(exercise);
   const suggestions: ExerciseSuggestion[] = exerciseConfig?.suggestions ?? [];
@@ -189,19 +192,26 @@ export function GrowthToolChat({
   // Load existing chat on mount
   useEffect(() => {
     if (sessionStatus === 'loading') return;
-    if (initialMessages && initialMessages.length > 0) return;
+    if (initialMessages && initialMessages.length > 0) {
+      setIsLoadingMessages(false);
+      return;
+    }
 
     const loadChat = async () => {
-      if (isAuthenticated && session?.user?.email) {
-        const dbChat = await getChat(chatId, session.user.email);
-        if (dbChat?.messages) {
-          setMessages(JSON.parse(dbChat.messages as string));
+      try {
+        if (isAuthenticated && session?.user?.email) {
+          const dbChat = await getChat(chatId, session.user.email);
+          if (dbChat?.messages) {
+            setMessages(JSON.parse(dbChat.messages as string));
+          }
+        } else {
+          const localChat = getLocalChat(chatId);
+          if (localChat && localChat.messages.length > 0) {
+            setMessages(localChat.messages);
+          }
         }
-      } else {
-        const localChat = getLocalChat(chatId);
-        if (localChat && localChat.messages.length > 0) {
-          setMessages(localChat.messages);
-        }
+      } finally {
+        setIsLoadingMessages(false);
       }
     };
 
@@ -246,11 +256,18 @@ export function GrowthToolChat({
       title,
       createdAt: Date.now(),
       messages,
+      exerciseId: exercise,
     });
-  }, [messages, chatId, isAuthenticated]);
+  }, [messages, chatId, isAuthenticated, exercise]);
 
   const sendMessage = useCallback(async (userText: string) => {
     if (!userText.trim()) return;
+
+    // Block sending while messages are still loading to prevent race condition
+    if (isLoadingMessages) {
+      console.warn('[GrowthToolChat] Blocked send while messages are loading');
+      return;
+    }
 
     const userMessage: UIMessage = {
       id: nanoid(),
@@ -463,7 +480,7 @@ export function GrowthToolChat({
     console.log('[GrowthToolChat] Stream complete - server handles persistence for authenticated users');
 
     setStatus('ready');
-  }, [messages, chatId, isAuthenticated, session?.user?.email, exercise]);
+  }, [messages, chatId, isAuthenticated, session?.user?.email, exercise, isLoadingMessages]);
 
   const handleSubmit = useCallback((message: PromptInputMessage) => {
     const hasText = Boolean(message.text);
@@ -798,6 +815,14 @@ export function GrowthToolChat({
           <div className="relative flex size-full flex-col divide-y overflow-hidden">
             <Conversation>
               <ConversationContent>
+                {/* Loading state while fetching messages */}
+                {isLoadingMessages && (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader size={24} />
+                    <span className="ml-2 text-sm text-muted-foreground">Loading conversation...</span>
+                  </div>
+                )}
+
                 {messages.map((message) => {
                   const textContent = message.parts
                     .filter((p): p is TextUIPart => p.type === 'text')
@@ -993,7 +1018,7 @@ export function GrowthToolChat({
                 </PromptInputFooter>
               </PromptInput>
 
-              {messages.length === 0 && suggestions.length > 0 && (
+              {!isLoadingMessages && messages.length === 0 && suggestions.length > 0 && (
                 <Suggestions className="px-4">
                   {suggestions.map(({ icon, text, color }) => {
                     const Icon = getIcon(icon);

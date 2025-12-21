@@ -16,6 +16,7 @@ interface ChatItem {
   id: string;
   title: string;
   pinned?: boolean;
+  exerciseId?: string;
 }
 
 function GrowthToolsContent() {
@@ -42,14 +43,16 @@ function GrowthToolsContent() {
         setSavedChats(dbChats.map((c) => ({
           id: c.id as string,
           title: c.title as string,
-          pinned: c.pinned as boolean
+          pinned: c.pinned as boolean,
+          exerciseId: c.exerciseId as string | undefined,
         })));
       } else {
         const localChats = getLocalChats();
         setSavedChats(localChats.map((c) => ({
           id: c.id,
           title: c.title,
-          pinned: c.pinned
+          pinned: c.pinned,
+          exerciseId: c.exerciseId,
         })));
       }
     };
