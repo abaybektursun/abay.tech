@@ -30,7 +30,7 @@ export async function getChats(userId?: string | null) {
     ExpressionAttributeNames: {
       '#p': 'path',
     },
-    ProjectionExpression: 'id, title, #p, createdAt, pinned',
+    ProjectionExpression: 'id, title, #p, createdAt, pinned, exerciseId',
   })
 
   const response = await db.send(command)
@@ -110,6 +110,7 @@ export async function saveChat(chat: {
   id: string
   messages: UIMessage[]
   userId: string
+  exerciseId: string
 }) {
   // Extract title from first user message
   const firstUserMessage = chat.messages.find(m => m.role === 'user')
@@ -122,8 +123,9 @@ export async function saveChat(chat: {
     userId: chat.userId,
     id: chat.id,
     title,
+    exerciseId: chat.exerciseId,
     createdAt: Date.now(),
-    path: `/apps/growth-tools/needs-assessment/${chat.id}`,
+    path: `/apps/growth-tools/${chat.exerciseId}/${chat.id}`,
     messages: serializeMessages(chat.messages),
   }
 

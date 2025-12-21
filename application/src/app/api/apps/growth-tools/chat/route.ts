@@ -205,6 +205,7 @@ export async function POST(req: Request) {
             id: chatId,
             messages: finalMessages,
             userId,
+            exerciseId,
           });
           console.log('[Chat] Chat saved successfully');
         } catch (error) {
