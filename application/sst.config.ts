@@ -39,8 +39,17 @@ export default $config({
       },
     });
 
+    const sharesTable = new sst.aws.Dynamo("shares", {
+      fields: {
+        chatId: "string",
+      },
+      primaryIndex: {
+        hashKey: "chatId",
+      },
+    });
+
     new sst.aws.Nextjs("abay", {
-      link: [openaiApiKey, elevenlabsApiKey, table, artifactsTable],
+      link: [openaiApiKey, elevenlabsApiKey, table, artifactsTable, sharesTable],
       // Set the domain only for the production stage
       domain: $app.stage === "production" ? "abay.tech" : undefined,
       environment: {
@@ -48,6 +57,7 @@ export default $config({
         ELEVENLABS_API_KEY: elevenlabsApiKey.value,
         DYNAMODB_TABLE: table.name,
         ARTIFACTS_TABLE: artifactsTable.name,
+        SHARES_TABLE: sharesTable.name,
         AUTH_SECRET: authSecret.value,
         AUTH_GITHUB_ID: authGithubId.value,
         AUTH_GITHUB_SECRET: authGithubSecret.value,
