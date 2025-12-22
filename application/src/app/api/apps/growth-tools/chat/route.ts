@@ -8,6 +8,7 @@ import { getExercise } from '@/lib/growth-tools/exercises';
 import { findRelevantChunks } from '@/lib/growth-tools/rag';
 import { auth } from '@/auth';
 import { saveChat } from '@/lib/actions';
+import { saveArtifact } from '@/lib/artifacts';
 
 export const maxDuration = 30;
 
@@ -30,11 +31,17 @@ function loadSystemPrompt(promptFiles: string[]): string {
     .join('\n\n---\n\n');
 }
 
+interface BuildToolsContext {
+  userId: string | null;
+  chatId: string;
+  exerciseId: string;
+}
+
 /**
  * Build tools object based on exercise config
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildTools(toolNames: string[]): Record<string, any> {
+function buildTools(toolNames: string[], ctx: BuildToolsContext): Record<string, any> {
   const allTools = {
     request_slider: tool({
       description:
@@ -78,6 +85,32 @@ function buildTools(toolNames: string[]): Record<string, any> {
         overallScore: z.number().min(0).max(10).optional().describe('Overall fulfillment score'),
       }),
       execute: async (input) => input,
+    }),
+    save_quote: tool({
+      description:
+        'Save a meaningful quote or insight. Use when: (1) the user explicitly asks to save/remember/bookmark something, (2) the user shares a breakthrough realization worth preserving. Always use this tool when the user says things like "save that", "remember this", "that\'s worth saving", or "bookmark that quote".',
+      inputSchema: z.object({
+        quote: z.string().describe('The quote or insight text'),
+        source: z.string().optional().describe('Who said it (e.g., "User", a book title, or a person\'s name)'),
+        context: z.string().optional().describe('Brief note on why this quote matters or when it came up'),
+      }),
+      execute: async (input) => {
+        if (!ctx.userId) {
+          return { saved: false, reason: 'Sign in to save quotes' };
+        }
+        const title = input.source
+          ? `"${input.quote.slice(0, 50)}${input.quote.length > 50 ? '...' : ''}" — ${input.source}`
+          : `"${input.quote.slice(0, 60)}${input.quote.length > 60 ? '...' : ''}"`;
+        const artifact = await saveArtifact({
+          userId: ctx.userId,
+          chatId: ctx.chatId,
+          exerciseId: ctx.exerciseId,
+          type: 'quote',
+          title,
+          data: JSON.stringify(input),
+        });
+        return { saved: true, id: artifact.id };
+      },
     }),
   };
 
@@ -151,7 +184,7 @@ export async function POST(req: Request) {
   }
 
   // Build tools for this exercise
-  const tools = buildTools(exerciseConfig.tools);
+  const tools = buildTools(exerciseConfig.tools, { userId, chatId, exerciseId });
   const hasTools = Object.keys(tools).length > 0;
 
   const result = streamText({

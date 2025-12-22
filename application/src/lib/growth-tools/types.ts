@@ -154,3 +154,15 @@ export interface RequestSliderArgs {
   /** Array of slider fields to display */
   fields: SliderField[];
 }
+
+/**
+ * Tool call arguments for saving a quote
+ */
+export interface SaveQuoteArgs {
+  /** The quote text */
+  quote: string;
+  /** Who said it (user, book, person) */
+  source?: string;
+  /** Why this quote matters */
+  context?: string;
+}

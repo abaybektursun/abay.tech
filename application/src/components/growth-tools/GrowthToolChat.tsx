@@ -95,14 +95,14 @@ import {
 } from '@/components/ai-elements/artifact';
 import { toast } from 'sonner';
 import { nanoid } from 'nanoid';
-import { Bot, User, BarChart2, ExternalLink } from 'lucide-react';
+import { Bot, User, BarChart2, ExternalLink, Quote, Check } from 'lucide-react';
 
 // Exercise config
 import { getExercise, type ExerciseSuggestion } from '@/lib/growth-tools/exercises';
 
 // Visualizations
 import { LifeWheel } from '@/components/growth-tools/visualizations/NeedsChart';
-import type { ShowLifeWheelArgs, RequestSliderArgs, SliderField } from '@/lib/growth-tools/types';
+import type { ShowLifeWheelArgs, RequestSliderArgs, SliderField, SaveQuoteArgs } from '@/lib/growth-tools/types';
 
 export interface GrowthToolChatProps {
   exercise: string;
@@ -795,6 +795,37 @@ export function GrowthToolChat({
             <Loader size={12} />
             <Shimmer>Preparing question...</Shimmer>
           </div>
+        </div>
+      );
+    }
+
+    // save_quote tool
+    if (toolName === 'save_quote') {
+      const isComplete = state === 'output-available';
+      const quoteData = input as SaveQuoteArgs;
+
+      return (
+        <div className="mt-3 max-w-sm">
+          <Artifact>
+            <ArtifactHeader className="py-2 px-3">
+              <div className="flex items-center gap-2">
+                <Quote className="h-4 w-4 text-primary" />
+                <ArtifactTitle>Saved Quote</ArtifactTitle>
+              </div>
+              {isComplete && <Check className="h-4 w-4 text-green-500" />}
+            </ArtifactHeader>
+            <ArtifactContent className="py-2 px-3">
+              <blockquote className="italic text-sm border-l-2 border-primary/30 pl-3">
+                "{quoteData.quote}"
+              </blockquote>
+              {quoteData.source && (
+                <p className="text-xs text-muted-foreground mt-2">— {quoteData.source}</p>
+              )}
+              {quoteData.context && (
+                <p className="text-xs text-muted-foreground mt-1 opacity-70">{quoteData.context}</p>
+              )}
+            </ArtifactContent>
+          </Artifact>
         </div>
       );
     }
