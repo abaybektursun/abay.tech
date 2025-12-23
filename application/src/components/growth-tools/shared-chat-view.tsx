@@ -31,8 +31,14 @@ export function SharedChatView({ chat }: SharedChatViewProps) {
 
   return (
     <div className="relative flex flex-col h-screen w-full">
-      {/* Top fade overlay */}
-      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background via-background/80 to-transparent z-10 pointer-events-none" />
+      {/* Top header with soft fade */}
+      <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none">
+        <div className="bg-background/95 backdrop-blur-sm py-4 px-6 text-center pointer-events-auto">
+          <h1 className="font-medium text-foreground/90 truncate">{chat.title}</h1>
+          <p className="text-sm text-muted-foreground/70">{exercise?.name ?? 'Growth Tools'}</p>
+        </div>
+        <div className="h-12 bg-gradient-to-b from-background/80 to-transparent" />
+      </div>
 
       {/* Messages */}
       <Conversation className="flex-1 max-w-3xl mx-auto w-full">
