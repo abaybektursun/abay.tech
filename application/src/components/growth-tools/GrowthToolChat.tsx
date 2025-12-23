@@ -882,25 +882,42 @@ export function GrowthToolChat({
             {/* Header with share button */}
             {isAuthenticated && messages.length > 0 && (
               <div className="flex items-center justify-end px-3 py-2 border-b bg-muted/30">
-                <Button
-                  variant={chatIsShared ? 'secondary' : 'ghost'}
-                  size="sm"
-                  onClick={handleShareToggle}
-                  disabled={isShareLoading}
-                  className="gap-2"
-                >
-                  {chatIsShared ? (
-                    <>
+                {chatIsShared ? (
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/share/${chatId}`);
+                        toast.success('Link copied');
+                      }}
+                      className="gap-2 text-muted-foreground hover:text-foreground"
+                    >
                       <Link2 className="h-4 w-4" />
-                      <span className="hidden sm:inline">Shared</span>
-                    </>
-                  ) : (
-                    <>
-                      <Share2 className="h-4 w-4" />
-                      <span className="hidden sm:inline">Share</span>
-                    </>
-                  )}
-                </Button>
+                      <span className="hidden sm:inline">Copy link</span>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleShareToggle}
+                      disabled={isShareLoading}
+                      className="text-muted-foreground hover:text-destructive"
+                    >
+                      <span className="text-xs">Unshare</span>
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleShareToggle}
+                    disabled={isShareLoading}
+                    className="gap-2"
+                  >
+                    <Share2 className="h-4 w-4" />
+                    <span className="hidden sm:inline">Share</span>
+                  </Button>
+                )}
               </div>
             )}
 
