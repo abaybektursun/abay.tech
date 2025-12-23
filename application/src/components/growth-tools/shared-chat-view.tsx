@@ -19,7 +19,7 @@ import {
 
 // UI components
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Bot, User, Share2 } from 'lucide-react';
+import { Bot, User } from 'lucide-react';
 
 interface SharedChatViewProps {
   chat: SharedChat;
@@ -30,21 +30,13 @@ export function SharedChatView({ chat }: SharedChatViewProps) {
   const exercise = getExercise(chat.exerciseId);
 
   return (
-    <div className="flex flex-col h-full max-w-3xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b bg-muted/30">
-        <Share2 className="h-5 w-5 text-muted-foreground" />
-        <div className="flex-1 min-w-0">
-          <h1 className="font-medium truncate">{chat.title}</h1>
-          <p className="text-sm text-muted-foreground">
-            {exercise?.name ?? 'Growth Tools'} • Shared conversation
-          </p>
-        </div>
-      </div>
+    <div className="relative flex flex-col h-screen w-full">
+      {/* Top fade overlay */}
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background via-background/80 to-transparent z-10 pointer-events-none" />
 
       {/* Messages */}
-      <Conversation className="flex-1">
-        <ConversationContent>
+      <Conversation className="flex-1 max-w-3xl mx-auto w-full">
+        <ConversationContent className="pt-28 pb-32">
           {messages.map((message) => {
             const isUser = message.role === 'user';
 
@@ -91,14 +83,17 @@ export function SharedChatView({ chat }: SharedChatViewProps) {
         </ConversationContent>
       </Conversation>
 
-      {/* Footer */}
-      <div className="p-4 border-t bg-muted/30 text-center">
-        <p className="text-sm text-muted-foreground">
-          This is a shared conversation. Start your own at{' '}
-          <a href="/apps/growth-tools" className="text-primary hover:underline">
-            Growth Tools
-          </a>
-        </p>
+      {/* Bottom fade overlay with CTA */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
+        <div className="h-16 bg-gradient-to-t from-background via-background/80 to-transparent" />
+        <div className="bg-background/95 backdrop-blur-sm py-4 text-center pointer-events-auto">
+          <p className="text-sm text-muted-foreground/80">
+            {exercise?.name ?? 'Growth Tools'} • {' '}
+            <a href="/apps/growth-tools" className="text-primary/90 hover:text-primary hover:underline transition-colors">
+              Start your own conversation →
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
