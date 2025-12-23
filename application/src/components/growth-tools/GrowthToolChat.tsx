@@ -26,6 +26,7 @@ import { cn } from '@/lib/utils';
 import Container from '@/components/container';
 import { getLocalChat, saveLocalChat, getLocalChats, clearLocalChats } from '@/lib/growth-tools/local-storage';
 import { getChat, getChats, migrateChats } from '@/lib/actions';
+import { shareChat, unshareChat, isShared } from '@/lib/shares';
 import '@/styles/ai-chat.css';
 
 // AI Elements components
@@ -95,7 +96,7 @@ import {
 } from '@/components/ai-elements/artifact';
 import { toast } from 'sonner';
 import { nanoid } from 'nanoid';
-import { Bot, User, BarChart2, ExternalLink } from 'lucide-react';
+import { Bot, User, BarChart2, ExternalLink, Share2, Link2, LinkIcon } from 'lucide-react';
 
 // Exercise config
 import { getExercise, type ExerciseSuggestion } from '@/lib/growth-tools/exercises';
@@ -158,6 +159,10 @@ export function GrowthToolChat({
 
   // Loading state for initial message fetch
   const [isLoadingMessages, setIsLoadingMessages] = useState(!initialMessages?.length);
+
+  // Share state
+  const [chatIsShared, setChatIsShared] = useState(false);
+  const [isShareLoading, setIsShareLoading] = useState(false);
 
   // Get exercise config
   const exerciseConfig = getExercise(exercise);
@@ -259,6 +264,36 @@ export function GrowthToolChat({
       exerciseId: exercise,
     });
   }, [messages, chatId, isAuthenticated, exercise]);
+
+  // Check if chat is shared on load (only for authenticated users with existing chat)
+  useEffect(() => {
+    if (!isAuthenticated || !propId) return;
+
+    isShared(propId).then(setChatIsShared);
+  }, [isAuthenticated, propId]);
+
+  // Handle share/unshare
+  const handleShareToggle = useCallback(async () => {
+    if (!isAuthenticated) return;
+
+    setIsShareLoading(true);
+    try {
+      if (chatIsShared) {
+        await unshareChat(chatId);
+        setChatIsShared(false);
+        toast.success('Chat is now private');
+      } else {
+        const shareUrl = await shareChat(chatId);
+        setChatIsShared(true);
+        await navigator.clipboard.writeText(window.location.origin + shareUrl);
+        toast.success('Link copied to clipboard');
+      }
+    } catch (err) {
+      toast.error('Failed to update sharing');
+    } finally {
+      setIsShareLoading(false);
+    }
+  }, [isAuthenticated, chatIsShared, chatId]);
 
   const sendMessage = useCallback(async (userText: string) => {
     if (!userText.trim()) return;
@@ -813,6 +848,31 @@ export function GrowthToolChat({
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
           <div className="relative flex size-full flex-col divide-y overflow-hidden">
+            {/* Header with share button */}
+            {isAuthenticated && messages.length > 0 && (
+              <div className="flex items-center justify-end px-3 py-2 border-b bg-muted/30">
+                <Button
+                  variant={chatIsShared ? 'secondary' : 'ghost'}
+                  size="sm"
+                  onClick={handleShareToggle}
+                  disabled={isShareLoading}
+                  className="gap-2"
+                >
+                  {chatIsShared ? (
+                    <>
+                      <Link2 className="h-4 w-4" />
+                      <span className="hidden sm:inline">Shared</span>
+                    </>
+                  ) : (
+                    <>
+                      <Share2 className="h-4 w-4" />
+                      <span className="hidden sm:inline">Share</span>
+                    </>
+                  )}
+                </Button>
+              </div>
+            )}
+
             <Conversation>
               <ConversationContent>
                 {/* Loading state while fetching messages */}
