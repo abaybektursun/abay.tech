@@ -37,7 +37,7 @@ export const exercises: Record<string, ExerciseConfig> = {
       'needs-assessment/human_needs_framework.md',
     ],
     ragFolder: null,
-    tools: ['show_life_wheel', 'request_slider'],
+    tools: ['show_life_wheel', 'request_slider', 'save_quote'],
     suggestions: [
       { icon: 'BarChart', text: 'Analyze my needs', color: '#76d0eb' },
       { icon: 'Box', text: 'Surprise me', color: '#76d0eb' },
@@ -54,7 +54,7 @@ export const exercises: Record<string, ExerciseConfig> = {
       'Develop high-agency thinking: treat life as a game with hackable rules.',
     prompt: ['open-world-mode/prompt.md'],
     ragFolder: 'scrappy_mindset',
-    tools: [],
+    tools: ['save_quote'],
     suggestions: [
       { icon: 'Compass', text: 'I feel stuck', color: '#76d0eb' },
       { icon: 'Rocket', text: 'I want to start something', color: '#ea8444' },
@@ -75,7 +75,7 @@ export const exercises: Record<string, ExerciseConfig> = {
       "Work through Martha Beck's Way of Integrity exercises to align your actions with your true nature.",
     prompt: ['integrity-alignment/prompt.md', 'integrity-alignment/workbook.md'],
     ragFolder: null,
-    tools: [],
+    tools: ['save_quote'],
     suggestions: [
       { icon: 'Compass', text: 'Am I on the right path?', color: '#22c55e' },
       { icon: 'Heart', text: 'Something feels off', color: '#ea8444' },

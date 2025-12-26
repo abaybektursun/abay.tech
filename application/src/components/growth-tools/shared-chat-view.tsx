@@ -4,7 +4,7 @@ import type { UIMessage, TextUIPart } from 'ai';
 import { cn } from '@/lib/utils';
 import { getExercise } from '@/lib/growth-tools/exercises';
 import type { SharedChat } from '@/lib/shares';
-import type { ShowLifeWheelArgs, RequestSliderArgs } from '@/lib/growth-tools/types';
+import { renderToolPart } from '@/components/growth-tools/tool-renderers';
 
 // AI Elements
 import {
@@ -16,19 +16,10 @@ import {
   MessageContent,
   MessageResponse,
 } from '@/components/ai-elements/message';
-import {
-  Artifact,
-  ArtifactHeader,
-  ArtifactTitle,
-  ArtifactContent,
-} from '@/components/ai-elements/artifact';
 
 // UI components
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Bot, User, BarChart2, Share2 } from 'lucide-react';
-
-// Visualizations
-import { LifeWheel } from '@/components/growth-tools/visualizations/NeedsChart';
+import { Bot, User } from 'lucide-react';
 
 interface SharedChatViewProps {
   chat: SharedChat;
@@ -38,65 +29,20 @@ export function SharedChatView({ chat }: SharedChatViewProps) {
   const messages: UIMessage[] = JSON.parse(chat.messages);
   const exercise = getExercise(chat.exerciseId);
 
-  const renderToolPart = (part: any) => {
-    const toolName = part.type.replace('tool-', '');
-    const { state, input, output } = part;
-
-    // Life wheel - show static visualization
-    if (toolName === 'show_life_wheel' && state === 'output-available') {
-      const wheelData = input as ShowLifeWheelArgs;
-      return (
-        <div className="mt-3 max-w-md">
-          <LifeWheel data={wheelData} variant="compact" />
-        </div>
-      );
-    }
-
-    // Slider - show submitted values
-    if (toolName === 'request_slider' && state === 'output-available') {
-      const sliderData = input as RequestSliderArgs;
-      return (
-        <div className="mt-3 w-full max-w-md">
-          <Artifact>
-            <ArtifactContent className="p-4 space-y-3">
-              <p className="text-sm font-medium">{sliderData.question}</p>
-              <div className="space-y-2">
-                {sliderData.fields.map((field) => {
-                  const value = field.defaultValue ?? 50;
-                  return (
-                    <div key={field.name} className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">{field.name}</span>
-                      <span className="font-medium">{value}</span>
-                    </div>
-                  );
-                })}
-              </div>
-              <p className="text-xs text-muted-foreground text-center">Submitted</p>
-            </ArtifactContent>
-          </Artifact>
-        </div>
-      );
-    }
-
-    return null;
-  };
-
   return (
-    <div className="flex flex-col h-full max-w-3xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b bg-muted/30">
-        <Share2 className="h-5 w-5 text-muted-foreground" />
-        <div className="flex-1 min-w-0">
-          <h1 className="font-medium truncate">{chat.title}</h1>
-          <p className="text-sm text-muted-foreground">
-            {exercise?.name ?? 'Growth Tools'} • Shared conversation
-          </p>
+    <div className="relative flex flex-col h-screen w-full">
+      {/* Top header with soft fade */}
+      <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none">
+        <div className="bg-background/95 backdrop-blur-sm py-4 px-6 text-center pointer-events-auto">
+          <h1 className="font-medium text-foreground/90 truncate">{chat.title}</h1>
+          <p className="text-sm text-muted-foreground/70">{exercise?.name ?? 'Growth Tools'}</p>
         </div>
+        <div className="h-12 bg-gradient-to-b from-background/80 to-transparent" />
       </div>
 
       {/* Messages */}
-      <Conversation className="flex-1">
-        <ConversationContent>
+      <Conversation className="flex-1 max-w-3xl mx-auto w-full">
+        <ConversationContent className="pt-28 pb-32">
           {messages.map((message) => {
             const isUser = message.role === 'user';
 
@@ -131,7 +77,7 @@ export function SharedChatView({ chat }: SharedChatViewProps) {
                         );
                       }
                       if (part.type.startsWith('tool-')) {
-                        return <div key={index}>{renderToolPart(part)}</div>;
+                        return <div key={index}>{renderToolPart(part, { readOnly: true })}</div>;
                       }
                       return null;
                     })}
@@ -143,14 +89,17 @@ export function SharedChatView({ chat }: SharedChatViewProps) {
         </ConversationContent>
       </Conversation>
 
-      {/* Footer */}
-      <div className="p-4 border-t bg-muted/30 text-center">
-        <p className="text-sm text-muted-foreground">
-          This is a shared conversation. Start your own at{' '}
-          <a href="/apps/growth-tools" className="text-primary hover:underline">
-            Growth Tools
-          </a>
-        </p>
+      {/* Bottom fade overlay with CTA */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
+        <div className="h-16 bg-gradient-to-t from-background via-background/80 to-transparent" />
+        <div className="bg-background/95 backdrop-blur-sm py-4 text-center pointer-events-auto">
+          <p className="text-sm text-muted-foreground/80">
+            {exercise?.name ?? 'Growth Tools'} • {' '}
+            <a href="/apps/growth-tools" className="text-primary/90 hover:text-primary hover:underline transition-colors">
+              Start your own conversation →
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -102,7 +102,70 @@ function GridItem({
   );
 }
 
-// Artifact card for text-based artifacts
+// Quote card with elegant blockquote styling
+function QuoteCard({
+  artifact,
+  onTogglePin,
+  onDelete,
+}: {
+  artifact: Artifact;
+  onTogglePin: (id: string) => void;
+  onDelete: (id: string) => void;
+}) {
+  const data = JSON.parse(artifact.data);
+  // Support both old format (text) and new format (quote)
+  const quoteText = data.quote || data.text || '';
+  const source = data.source;
+  const context = data.context;
+
+  return (
+    <Card className="h-full flex flex-col overflow-hidden">
+      <div className="flex items-center justify-between px-4 pt-3 pb-2">
+        <Quote className="h-4 w-4 text-primary/60" />
+        <div className="flex gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={() => onTogglePin(artifact.id)}
+          >
+            {artifact.pinned ? <PinOff className="h-3 w-3" /> : <Pin className="h-3 w-3" />}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 text-destructive hover:text-destructive"
+            onClick={() => onDelete(artifact.id)}
+          >
+            <Trash2 className="h-3 w-3" />
+          </Button>
+        </div>
+      </div>
+      <CardContent className="flex-1 pt-0 flex flex-col">
+        <blockquote className="relative flex-1 pl-4 border-l-2 border-primary/30">
+          <p className="text-sm italic text-foreground leading-relaxed">
+            "{quoteText}"
+          </p>
+        </blockquote>
+        {source && (
+          <p className="text-sm font-medium text-muted-foreground mt-3 text-right">
+            — {source}
+          </p>
+        )}
+        {context && (
+          <p className="text-xs text-muted-foreground/70 mt-1 italic">
+            {context}
+          </p>
+        )}
+        <p className="text-xs text-muted-foreground mt-3">
+          {new Date(artifact.createdAt).toLocaleDateString()}
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+// Artifact card for text-based artifacts (non-quote)
 function ArtifactCard({
   artifact,
   onTogglePin,
@@ -142,9 +205,6 @@ function ArtifactCard({
         </div>
       </CardHeader>
       <CardContent className="flex-1">
-        {artifact.type === 'quote' && (
-          <p className="text-sm italic text-muted-foreground">&ldquo;{data.text}&rdquo;</p>
-        )}
         {artifact.type === 'insight' && <p className="text-sm text-muted-foreground">{data.text}</p>}
         <p className="text-xs text-muted-foreground mt-2">
           {new Date(artifact.createdAt).toLocaleDateString()}
@@ -158,6 +218,7 @@ function ArtifactCard({
 function DemoArtifactCard({ artifact }: { artifact: (typeof DEMO_ARTIFACTS)[0] }) {
   const Icon = artifactIcons[artifact.type] || FileText;
   const data = JSON.parse(artifact.data);
+  const quoteText = data.quote || data.text || '';
 
   return (
     <Card className="h-full opacity-60 blur-[0.5px]">
@@ -179,7 +240,7 @@ function DemoArtifactCard({ artifact }: { artifact: (typeof DEMO_ARTIFACTS)[0] }
             ))}
           </div>
         )}
-        {artifact.type === 'quote' && <p className="italic">&ldquo;{data.text}&rdquo;</p>}
+        {artifact.type === 'quote' && <p className="italic">"{quoteText}"</p>}
         {artifact.type === 'insight' && <p>{data.text}</p>}
       </CardContent>
     </Card>
@@ -403,6 +464,12 @@ export function Dashboard() {
                   isPinned={artifact.pinned}
                   onTogglePin={() => handleTogglePin(artifact.id)}
                   onDelete={() => handleDelete(artifact.id)}
+                />
+              ) : artifact.type === 'quote' ? (
+                <QuoteCard
+                  artifact={artifact}
+                  onTogglePin={handleTogglePin}
+                  onDelete={handleDelete}
                 />
               ) : (
                 <ArtifactCard

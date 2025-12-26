@@ -96,14 +96,14 @@ import {
 } from '@/components/ai-elements/artifact';
 import { toast } from 'sonner';
 import { nanoid } from 'nanoid';
-import { Bot, User, BarChart2, ExternalLink, Share2, Link2, LinkIcon } from 'lucide-react';
+import { Bot, User, BarChart2, ExternalLink, Quote, Check, Share2, Link2 } from 'lucide-react';
 
 // Exercise config
 import { getExercise, type ExerciseSuggestion } from '@/lib/growth-tools/exercises';
 
 // Visualizations
 import { LifeWheel } from '@/components/growth-tools/visualizations/NeedsChart';
-import type { ShowLifeWheelArgs, RequestSliderArgs, SliderField } from '@/lib/growth-tools/types';
+import type { ShowLifeWheelArgs, RequestSliderArgs, SliderField, SaveQuoteArgs } from '@/lib/growth-tools/types';
 
 export interface GrowthToolChatProps {
   exercise: string;
@@ -834,6 +834,37 @@ export function GrowthToolChat({
       );
     }
 
+    // save_quote tool
+    if (toolName === 'save_quote') {
+      const isComplete = state === 'output-available';
+      const quoteData = input as SaveQuoteArgs;
+
+      return (
+        <div className="mt-3 max-w-sm">
+          <Artifact>
+            <ArtifactHeader className="py-2 px-3">
+              <div className="flex items-center gap-2">
+                <Quote className="h-4 w-4 text-primary" />
+                <ArtifactTitle>Saved Quote</ArtifactTitle>
+              </div>
+              {isComplete && <Check className="h-4 w-4 text-green-500" />}
+            </ArtifactHeader>
+            <ArtifactContent className="py-2 px-3">
+              <blockquote className="italic text-sm border-l-2 border-primary/30 pl-3">
+                "{quoteData.quote}"
+              </blockquote>
+              {quoteData.source && (
+                <p className="text-xs text-muted-foreground mt-2">— {quoteData.source}</p>
+              )}
+              {quoteData.context && (
+                <p className="text-xs text-muted-foreground mt-1 opacity-70">{quoteData.context}</p>
+              )}
+            </ArtifactContent>
+          </Artifact>
+        </div>
+      );
+    }
+
     // Unknown tools - don't render
     return null;
   };
@@ -851,25 +882,42 @@ export function GrowthToolChat({
             {/* Header with share button */}
             {isAuthenticated && messages.length > 0 && (
               <div className="flex items-center justify-end px-3 py-2 border-b bg-muted/30">
-                <Button
-                  variant={chatIsShared ? 'secondary' : 'ghost'}
-                  size="sm"
-                  onClick={handleShareToggle}
-                  disabled={isShareLoading}
-                  className="gap-2"
-                >
-                  {chatIsShared ? (
-                    <>
+                {chatIsShared ? (
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/share/${chatId}`);
+                        toast.success('Link copied');
+                      }}
+                      className="gap-2 text-muted-foreground hover:text-foreground"
+                    >
                       <Link2 className="h-4 w-4" />
-                      <span className="hidden sm:inline">Shared</span>
-                    </>
-                  ) : (
-                    <>
-                      <Share2 className="h-4 w-4" />
-                      <span className="hidden sm:inline">Share</span>
-                    </>
-                  )}
-                </Button>
+                      <span className="hidden sm:inline">Copy link</span>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleShareToggle}
+                      disabled={isShareLoading}
+                      className="text-muted-foreground hover:text-destructive"
+                    >
+                      <span className="text-xs">Unshare</span>
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleShareToggle}
+                    disabled={isShareLoading}
+                    className="gap-2"
+                  >
+                    <Share2 className="h-4 w-4" />
+                    <span className="hidden sm:inline">Share</span>
+                  </Button>
+                )}
               </div>
             )}
 
