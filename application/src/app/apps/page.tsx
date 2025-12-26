@@ -36,7 +36,23 @@ export default function AppsPage() {
       tech: ['GPT-4o', 'AI SDK', 'Next.js 15', 'Recharts', 'Tailwind CSS'],
       gradient: 'from-rose-500 to-pink-500',
     },
-    // Future apps can be added here
+    {
+      id: 'fuelos',
+      title: 'fuelOS',
+      description: 'Zero friction nutrition tracking powered by AI',
+      longDescription: 'A wellness tracking app that prioritizes user experience over logging friction. Track nutrition through voice, photos, text, or barcodes—powered by Gemini AI.',
+      href: 'https://fuelos.site/',
+      external: true,
+      status: 'live',
+      features: [
+        'Voice, photo, text & barcode input',
+        'AI-powered meal recognition',
+        'Mindful eating without friction',
+        'Seamless daily tracking'
+      ],
+      tech: ['Gemini AI', 'React Native', 'Cloud Functions'],
+      gradient: 'from-emerald-500 to-teal-500',
+    },
   ];
 
   const statusBadge = (status: App['status']) => {
@@ -146,9 +162,10 @@ export default function AppsPage() {
                             <Link
                               href={app.href}
                               className="flex-1"
+                              {...(app.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                             >
                               <button className="w-full flex items-center justify-center px-4 py-2 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 rounded-md hover:bg-stone-800 dark:hover:bg-stone-200 transition-all hover:shadow-sm">
-                                <span>Launch App</span>
+                                <span>{app.external ? 'Visit App' : 'Launch App'}</span>
                               </button>
                             </Link>
                             {app.github && (
