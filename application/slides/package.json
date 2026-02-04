@@ -1,0 +1,13 @@
+{
+  "name": "slides",
+  "private": true,
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "slidev build",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^52.10.1",
+    "@slidev/theme-default": "latest"
+  }
+}

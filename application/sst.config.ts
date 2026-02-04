@@ -66,5 +66,14 @@ export default $config({
         AUTH_TRUST_HOST: "true",
       }
     });
+
+    new sst.aws.StaticSite("Slides", {
+      path: "slides",
+      build: {
+        command: "pnpm install && pnpm build",
+        output: "dist",
+      },
+      domain: $app.stage === "production" ? "slides.abay.tech" : undefined,
+    });
   },
 }); 
