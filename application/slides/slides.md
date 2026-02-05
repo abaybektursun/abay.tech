@@ -98,3 +98,82 @@ hideInToc: true
 </main>
 
 </div>
+
+---
+
+<div class="h-full w-full p-8 flex flex-col font-sans">
+
+<header class="mb-6">
+  <span class="text-sm tracking-wide text-neutral-400">Truths & Givens</span>
+  <span class="text-sm text-neutral-500 ml-2">/ AI & Engineering</span>
+</header>
+
+<main class="flex-1 flex flex-col justify-center text-neutral-400 text-sm">
+
+<v-click>
+<div class="mb-8">
+  <div class="font-semibold text-lg text-white mb-3">LLM context must be small</div>
+  <ul class="ml-4 list-disc space-y-2">
+    <li>Transformer compute scales quadratically with context length</li>
+    <li>Flash attention gave us 2-4x gains, but that was low-hanging fruit — we're now approaching hardware limits</li>
+    <li>Early implementations were hacky; we're only now doing proper hardware alignment</li>
+    <li>Training data bottleneck: hard to generate tasks where AI meaningfully tracks long-range attention</li>
+    <li>Most benchmarks are needle-in-haystack — if the haystack is all needles, transformers lose intelligence</li>
+  </ul>
+</div>
+</v-click>
+
+<v-click>
+<div class="mb-8">
+  <div class="font-semibold text-lg text-white mb-3">LLMs have not achieved agency</div>
+  <ul class="ml-4 list-disc space-y-2">
+    <li>Still a dataset limitation — LLMs are massive pattern-matching machines that generalize across abstraction levels</li>
+    <li>More data improves abstractions, but it's still small-context, limited pattern matching</li>
+    <li>All signals — talks, results, startups, stock market — indicate AI is not autonomous yet</li>
+    <li>No true common sense; Salesforce publicly disappointed with AI agent output</li>
+    <li>Research shows AI reduces productivity in well-established fields and production codebases</li>
+  </ul>
+</div>
+</v-click>
+
+</main>
+
+</div>
+
+---
+
+<div class="h-full w-full p-8 flex flex-col font-sans">
+
+<header class="mb-6">
+  <span class="text-sm tracking-wide text-neutral-400">Implications & Design Choices</span>
+</header>
+
+<main class="flex-1 flex flex-col justify-center text-neutral-400 text-sm">
+
+<v-click>
+<div class="mb-8">
+  <div class="font-semibold text-lg text-white mb-3">Minimize agent context</div>
+  <ul class="ml-4 list-disc space-y-2">
+    <li>Give agents only the most essential, highest-leverage data for the task</li>
+    <li>Creating high-leverage data requires good intentional design</li>
+    <li>High-leverage code = solid, small, compact, well-indexed, intentionally designed codebases (first-order)</li>
+    <li>Second-order generated code is heavily conditioned by first-order code</li>
+  </ul>
+</div>
+</v-click>
+
+<v-click>
+<div class="mb-8">
+  <div class="font-semibold text-lg text-white mb-3">Build around the bridge developer</div>
+  <ul class="ml-4 list-disc space-y-2">
+    <li>Agents get some autonomy, but actual work is guided by the bridge developer</li>
+    <li>Need good tools for the bridge developer to solve problems</li>
+    <li>Given the truths above, we must build around human guidance</li>
+    <li>Allows flexibility for different developers' styles and strengths</li>
+  </ul>
+</div>
+</v-click>
+
+</main>
+
+</div>
