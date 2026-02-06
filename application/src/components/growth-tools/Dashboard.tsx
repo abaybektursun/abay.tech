@@ -119,47 +119,78 @@ function QuoteCard({
   const context = data.context;
 
   return (
-    <Card className="h-full flex flex-col overflow-hidden">
-      <div className="flex items-center justify-between px-4 pt-3 pb-2">
-        <Quote className="h-4 w-4 text-primary/60" />
-        <div className="flex gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7"
-            onClick={() => onTogglePin(artifact.id)}
-          >
-            {artifact.pinned ? <PinOff className="h-3 w-3" /> : <Pin className="h-3 w-3" />}
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7 text-destructive hover:text-destructive"
-            onClick={() => onDelete(artifact.id)}
-          >
-            <Trash2 className="h-3 w-3" />
-          </Button>
-        </div>
+    <Card className="h-full group/card relative overflow-hidden transition-all duration-300 hover:shadow-lg border-border/40 bg-gradient-to-br from-card to-muted/10 hover:border-border/80">
+      {/* Background Decorative Element */}
+      <div className="absolute -right-6 -top-6 opacity-[0.04] -rotate-12 pointer-events-none select-none transition-transform duration-500 group-hover/card:scale-110">
+        <Quote className="h-48 w-48 text-primary" />
       </div>
-      <CardContent className="flex-1 pt-0 flex flex-col">
-        <blockquote className="relative flex-1 pl-4 border-l-2 border-primary/30">
-          <p className="text-sm italic text-foreground leading-relaxed">
-            "{quoteText}"
-          </p>
-        </blockquote>
-        {source && (
-          <p className="text-sm font-medium text-muted-foreground mt-3 text-right">
-            — {source}
-          </p>
+
+      {/* Actions - visible on hover or if pinned */}
+      <div
+        className={cn(
+          'absolute top-3 right-3 flex gap-2 transition-all duration-300 z-20',
+          artifact.pinned ? 'opacity-100' : 'opacity-0 group-hover/card:opacity-100 translate-y-[-10px] group-hover/card:translate-y-0'
         )}
-        {context && (
-          <p className="text-xs text-muted-foreground/70 mt-1 italic">
-            {context}
-          </p>
-        )}
-        <p className="text-xs text-muted-foreground mt-3">
-          {new Date(artifact.createdAt).toLocaleDateString()}
-        </p>
+      >
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 rounded-full bg-background/40 backdrop-blur-md hover:bg-background/80 transition-all border border-transparent hover:border-border/50 shadow-sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            onTogglePin(artifact.id);
+          }}
+        >
+          {artifact.pinned ? <PinOff className="h-3.5 w-3.5" /> : <Pin className="h-3.5 w-3.5" />}
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 rounded-full text-destructive/70 hover:text-destructive bg-background/40 backdrop-blur-md hover:bg-background/80 transition-all border border-transparent hover:border-border/50 shadow-sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(artifact.id);
+          }}
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </Button>
+      </div>
+
+      <CardContent className="h-full flex flex-col p-7 relative z-10">
+        <div className="flex-1 flex flex-col justify-center min-h-[140px]">
+          <blockquote className="space-y-5">
+            <p className="text-lg md:text-xl font-normal leading-relaxed tracking-tight text-foreground/90 italic">
+              "{quoteText}"
+            </p>
+            {source && (
+              <footer className="flex items-center gap-3">
+                <div className="h-px w-8 bg-primary/30" />
+                <span className="text-sm font-semibold text-foreground/80 tracking-wide">
+                  {source}
+                </span>
+              </footer>
+            )}
+          </blockquote>
+        </div>
+
+        <div className="mt-6 flex items-end justify-between gap-4 pt-4 border-t border-border/30">
+          {context ? (
+            <div className="flex items-start gap-2 max-w-[70%]">
+              <Lightbulb className="h-3 w-3 text-amber-500/70 mt-0.5 shrink-0" />
+              <p className="text-xs text-muted-foreground/70 line-clamp-2 font-medium">
+                {context}
+              </p>
+            </div>
+          ) : (
+            <div />
+          )}
+          <time className="text-[10px] text-muted-foreground/40 font-mono shrink-0 uppercase tracking-widest ml-auto">
+            {new Date(artifact.createdAt).toLocaleDateString(undefined, {
+              month: 'short',
+              day: 'numeric',
+            })}
+          </time>
+        </div>
       </CardContent>
     </Card>
   );
