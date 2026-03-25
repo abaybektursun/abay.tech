@@ -35,6 +35,7 @@ async function getPosts(): Promise<Post[]> {
         const fileContent = await readFile(postPath, 'utf8')
         const { data } = matter(fileContent)
         
+        if (data.draft) return null
         return {
           slug: dirent.name,
           title: data.title,
@@ -44,8 +45,8 @@ async function getPosts(): Promise<Post[]> {
         }
       })
   )
-  
-  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+
+  return (posts.filter(Boolean) as Post[]).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
 function PostCard({ post }: { post: Post }) {
