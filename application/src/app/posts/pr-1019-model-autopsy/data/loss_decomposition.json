@@ -1,0 +1,70 @@
+{
+  "overall_bpb": 1.134272,
+  "total_bytes": 151080363.0,
+  "mean_entropy_nats": 1.8981,
+  "buckets": [
+    {
+      "dimension": "frequency",
+      "name": "tail",
+      "bpb": 1.0986,
+      "pct_bytes": 57.1,
+      "pct_loss": 55.3
+    },
+    {
+      "dimension": "frequency",
+      "name": "top-100",
+      "bpb": 1.1817,
+      "pct_bytes": 42.9,
+      "pct_loss": 44.7
+    },
+    {
+      "dimension": "position",
+      "name": "first 100 tokens",
+      "bpb": 1.3323,
+      "pct_bytes": 4.9,
+      "pct_loss": 5.7
+    },
+    {
+      "dimension": "position",
+      "name": "later tokens",
+      "bpb": 1.1241,
+      "pct_bytes": 95.1,
+      "pct_loss": 94.3
+    },
+    {
+      "dimension": "type",
+      "name": "number",
+      "bpb": 2.0928,
+      "pct_bytes": 3.2,
+      "pct_loss": 5.9
+    },
+    {
+      "dimension": "type",
+      "name": "other",
+      "bpb": 1.2013,
+      "pct_bytes": 1.0,
+      "pct_loss": 1.1
+    },
+    {
+      "dimension": "type",
+      "name": "punctuation",
+      "bpb": 2.377,
+      "pct_bytes": 0.9,
+      "pct_loss": 1.8
+    },
+    {
+      "dimension": "type",
+      "name": "whitespace",
+      "bpb": 3.012,
+      "pct_bytes": 0.5,
+      "pct_loss": 1.3
+    },
+    {
+      "dimension": "type",
+      "name": "word",
+      "bpb": 1.0798,
+      "pct_bytes": 94.4,
+      "pct_loss": 89.9
+    }
+  ]
+}

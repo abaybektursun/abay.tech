@@ -1,0 +1,1549 @@
+{
+  "total_tokens": 65536,
+  "num_sequences": 32,
+  "seq_len": 2048,
+  "repeated_bigrams_found": 395262,
+  "heads": [
+    {
+      "layer": 0,
+      "head": 0,
+      "prev_token_score": 0.0105,
+      "induction_score": 0.0012,
+      "bos_score": 0.0217,
+      "entropy": 6.1167,
+      "self_attn_score": 0.0194,
+      "offset_scores": [
+        0.0105,
+        0.0088,
+        0.0081,
+        0.0076,
+        0.0074
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 0,
+      "head": 1,
+      "prev_token_score": 0.0442,
+      "induction_score": 0.0024,
+      "bos_score": 0.0006,
+      "entropy": 2.0367,
+      "self_attn_score": 0.583,
+      "offset_scores": [
+        0.0442,
+        0.0128,
+        0.0097,
+        0.0087,
+        0.0075
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 0,
+      "head": 2,
+      "prev_token_score": 0.011,
+      "induction_score": 0.0035,
+      "bos_score": 0.003,
+      "entropy": 4.1129,
+      "self_attn_score": 0.2201,
+      "offset_scores": [
+        0.011,
+        0.0067,
+        0.0075,
+        0.0078,
+        0.0074
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 0,
+      "head": 3,
+      "prev_token_score": 0.0418,
+      "induction_score": 0.0022,
+      "bos_score": 0.0012,
+      "entropy": 1.0929,
+      "self_attn_score": 0.7324,
+      "offset_scores": [
+        0.0418,
+        0.0192,
+        0.0156,
+        0.0122,
+        0.0099
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 0,
+      "head": 4,
+      "prev_token_score": 0.0838,
+      "induction_score": 0.0031,
+      "bos_score": 0.001,
+      "entropy": 2.6666,
+      "self_attn_score": 0.4875,
+      "offset_scores": [
+        0.0838,
+        0.0178,
+        0.0099,
+        0.0072,
+        0.0069
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 0,
+      "head": 5,
+      "prev_token_score": 0.0033,
+      "induction_score": 0.0206,
+      "bos_score": 0.0014,
+      "entropy": 4.0485,
+      "self_attn_score": 0.3574,
+      "offset_scores": [
+        0.0033,
+        0.0013,
+        0.0015,
+        0.0017,
+        0.0018
+      ],
+      "classification": "induction"
+    },
+    {
+      "layer": 0,
+      "head": 6,
+      "prev_token_score": 0.1362,
+      "induction_score": 0.0008,
+      "bos_score": 0.0007,
+      "entropy": 1.0177,
+      "self_attn_score": 0.6741,
+      "offset_scores": [
+        0.1362,
+        0.0498,
+        0.0252,
+        0.0175,
+        0.0129
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 0,
+      "head": 7,
+      "prev_token_score": 0.1523,
+      "induction_score": 0.0006,
+      "bos_score": 0.0007,
+      "entropy": 0.806,
+      "self_attn_score": 0.7349,
+      "offset_scores": [
+        0.1523,
+        0.0357,
+        0.0094,
+        0.005,
+        0.0046
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 1,
+      "head": 0,
+      "prev_token_score": 0.0444,
+      "induction_score": 0.0017,
+      "bos_score": 0.0115,
+      "entropy": 4.3818,
+      "self_attn_score": 0.1241,
+      "offset_scores": [
+        0.0444,
+        0.0325,
+        0.0302,
+        0.0292,
+        0.028
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 1,
+      "head": 1,
+      "prev_token_score": 0.0377,
+      "induction_score": 0.0026,
+      "bos_score": 0.0006,
+      "entropy": 0.6925,
+      "self_attn_score": 0.8397,
+      "offset_scores": [
+        0.0377,
+        0.0093,
+        0.0058,
+        0.0047,
+        0.0042
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 1,
+      "head": 2,
+      "prev_token_score": 0.0359,
+      "induction_score": 0.0004,
+      "bos_score": 0.0006,
+      "entropy": 0.2384,
+      "self_attn_score": 0.9124,
+      "offset_scores": [
+        0.0359,
+        0.0101,
+        0.0058,
+        0.0053,
+        0.0044
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 1,
+      "head": 3,
+      "prev_token_score": 0.0634,
+      "induction_score": 0.0003,
+      "bos_score": 0.0007,
+      "entropy": 0.2637,
+      "self_attn_score": 0.8766,
+      "offset_scores": [
+        0.0634,
+        0.0277,
+        0.0092,
+        0.0043,
+        0.0025
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 1,
+      "head": 4,
+      "prev_token_score": 0.1427,
+      "induction_score": 0.0006,
+      "bos_score": 0.0009,
+      "entropy": 1.0198,
+      "self_attn_score": 0.6638,
+      "offset_scores": [
+        0.1427,
+        0.0569,
+        0.0357,
+        0.0266,
+        0.0194
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 1,
+      "head": 5,
+      "prev_token_score": 0.3017,
+      "induction_score": 0.0003,
+      "bos_score": 0.001,
+      "entropy": 1.0097,
+      "self_attn_score": 0.4685,
+      "offset_scores": [
+        0.3017,
+        0.134,
+        0.05,
+        0.0197,
+        0.009
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 1,
+      "head": 6,
+      "prev_token_score": 0.055,
+      "induction_score": 0.0006,
+      "bos_score": 0.001,
+      "entropy": 0.6294,
+      "self_attn_score": 0.8286,
+      "offset_scores": [
+        0.055,
+        0.0172,
+        0.0089,
+        0.0067,
+        0.0061
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 1,
+      "head": 7,
+      "prev_token_score": 0.0903,
+      "induction_score": 0.0014,
+      "bos_score": 0.0011,
+      "entropy": 1.5664,
+      "self_attn_score": 0.6097,
+      "offset_scores": [
+        0.0903,
+        0.0316,
+        0.0172,
+        0.0133,
+        0.012
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 2,
+      "head": 0,
+      "prev_token_score": 0.1712,
+      "induction_score": 0.0009,
+      "bos_score": 0.0017,
+      "entropy": 2.0731,
+      "self_attn_score": 0.3231,
+      "offset_scores": [
+        0.1712,
+        0.1089,
+        0.0801,
+        0.0588,
+        0.0406
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 2,
+      "head": 1,
+      "prev_token_score": 0.1239,
+      "induction_score": 0.0006,
+      "bos_score": 0.0008,
+      "entropy": 1.0245,
+      "self_attn_score": 0.7237,
+      "offset_scores": [
+        0.1239,
+        0.0468,
+        0.0217,
+        0.0128,
+        0.009
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 2,
+      "head": 2,
+      "prev_token_score": 0.0069,
+      "induction_score": 0.0168,
+      "bos_score": 0.0034,
+      "entropy": 3.7844,
+      "self_attn_score": 0.3104,
+      "offset_scores": [
+        0.0069,
+        0.0018,
+        0.0016,
+        0.0017,
+        0.0018
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 2,
+      "head": 3,
+      "prev_token_score": 0.0047,
+      "induction_score": 0.0012,
+      "bos_score": 0.0202,
+      "entropy": 5.8884,
+      "self_attn_score": 0.0043,
+      "offset_scores": [
+        0.0047,
+        0.0044,
+        0.004,
+        0.0037,
+        0.0037
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 2,
+      "head": 4,
+      "prev_token_score": 0.1222,
+      "induction_score": 0.0004,
+      "bos_score": 0.0008,
+      "entropy": 0.6457,
+      "self_attn_score": 0.7449,
+      "offset_scores": [
+        0.1222,
+        0.0493,
+        0.0258,
+        0.0163,
+        0.0097
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 2,
+      "head": 5,
+      "prev_token_score": 0.1997,
+      "induction_score": 0.0005,
+      "bos_score": 0.0009,
+      "entropy": 1.0094,
+      "self_attn_score": 0.6331,
+      "offset_scores": [
+        0.1997,
+        0.0659,
+        0.0255,
+        0.0146,
+        0.0113
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 2,
+      "head": 6,
+      "prev_token_score": 0.0224,
+      "induction_score": 0.0043,
+      "bos_score": 0.0033,
+      "entropy": 3.7403,
+      "self_attn_score": 0.2737,
+      "offset_scores": [
+        0.0224,
+        0.0133,
+        0.0141,
+        0.0156,
+        0.0157
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 2,
+      "head": 7,
+      "prev_token_score": 0.048,
+      "induction_score": 0.0019,
+      "bos_score": 0.0012,
+      "entropy": 1.5524,
+      "self_attn_score": 0.6379,
+      "offset_scores": [
+        0.048,
+        0.0266,
+        0.0238,
+        0.0211,
+        0.0186
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 3,
+      "head": 0,
+      "prev_token_score": 0.1274,
+      "induction_score": 0.001,
+      "bos_score": 0.0025,
+      "entropy": 2.3841,
+      "self_attn_score": 0.1613,
+      "offset_scores": [
+        0.1274,
+        0.1134,
+        0.0983,
+        0.0877,
+        0.0739
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 3,
+      "head": 1,
+      "prev_token_score": 0.3955,
+      "induction_score": 0.0006,
+      "bos_score": 0.0015,
+      "entropy": 1.1263,
+      "self_attn_score": 0.1839,
+      "offset_scores": [
+        0.3955,
+        0.1975,
+        0.1019,
+        0.0545,
+        0.0268
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 3,
+      "head": 2,
+      "prev_token_score": 0.002,
+      "induction_score": 0.0207,
+      "bos_score": 0.0005,
+      "entropy": 0.4708,
+      "self_attn_score": 0.798,
+      "offset_scores": [
+        0.002,
+        0.0002,
+        0.0003,
+        0.0005,
+        0.0007
+      ],
+      "classification": "induction"
+    },
+    {
+      "layer": 3,
+      "head": 3,
+      "prev_token_score": 0.0106,
+      "induction_score": 0.0014,
+      "bos_score": 0.0113,
+      "entropy": 5.0746,
+      "self_attn_score": 0.0234,
+      "offset_scores": [
+        0.0106,
+        0.0086,
+        0.0079,
+        0.0077,
+        0.0076
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 3,
+      "head": 4,
+      "prev_token_score": 0.0164,
+      "induction_score": 0.0072,
+      "bos_score": 0.0074,
+      "entropy": 3.6708,
+      "self_attn_score": 0.3023,
+      "offset_scores": [
+        0.0164,
+        0.0082,
+        0.0081,
+        0.0088,
+        0.0085
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 3,
+      "head": 5,
+      "prev_token_score": 0.0165,
+      "induction_score": 0.0019,
+      "bos_score": 0.013,
+      "entropy": 4.9896,
+      "self_attn_score": 0.0433,
+      "offset_scores": [
+        0.0165,
+        0.014,
+        0.0138,
+        0.0135,
+        0.0128
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 3,
+      "head": 6,
+      "prev_token_score": 0.0463,
+      "induction_score": 0.0019,
+      "bos_score": 0.0039,
+      "entropy": 4.2038,
+      "self_attn_score": 0.1239,
+      "offset_scores": [
+        0.0463,
+        0.0329,
+        0.0259,
+        0.0216,
+        0.019
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 3,
+      "head": 7,
+      "prev_token_score": 0.1089,
+      "induction_score": 0.0017,
+      "bos_score": 0.0019,
+      "entropy": 2.6025,
+      "self_attn_score": 0.4055,
+      "offset_scores": [
+        0.1089,
+        0.0445,
+        0.024,
+        0.0174,
+        0.0153
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 4,
+      "head": 0,
+      "prev_token_score": 0.011,
+      "induction_score": 0.0027,
+      "bos_score": 0.2758,
+      "entropy": 2.6931,
+      "self_attn_score": 0.1065,
+      "offset_scores": [
+        0.011,
+        0.0069,
+        0.0065,
+        0.0063,
+        0.0056
+      ],
+      "classification": "positional"
+    },
+    {
+      "layer": 4,
+      "head": 1,
+      "prev_token_score": 0.0289,
+      "induction_score": 0.0125,
+      "bos_score": 0.0071,
+      "entropy": 2.6636,
+      "self_attn_score": 0.4865,
+      "offset_scores": [
+        0.0289,
+        0.0096,
+        0.0059,
+        0.0048,
+        0.0041
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 4,
+      "head": 2,
+      "prev_token_score": 0.0439,
+      "induction_score": 0.0025,
+      "bos_score": 0.0148,
+      "entropy": 4.1982,
+      "self_attn_score": 0.1909,
+      "offset_scores": [
+        0.0439,
+        0.0255,
+        0.0212,
+        0.0194,
+        0.018
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 4,
+      "head": 3,
+      "prev_token_score": 0.0875,
+      "induction_score": 0.0013,
+      "bos_score": 0.0078,
+      "entropy": 3.6228,
+      "self_attn_score": 0.0897,
+      "offset_scores": [
+        0.0875,
+        0.0628,
+        0.0466,
+        0.0373,
+        0.0317
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 4,
+      "head": 4,
+      "prev_token_score": 0.1352,
+      "induction_score": 0.0009,
+      "bos_score": 0.0022,
+      "entropy": 1.8718,
+      "self_attn_score": 0.4792,
+      "offset_scores": [
+        0.1352,
+        0.0671,
+        0.0443,
+        0.0339,
+        0.0275
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 4,
+      "head": 5,
+      "prev_token_score": 0.1747,
+      "induction_score": 0.0008,
+      "bos_score": 0.0028,
+      "entropy": 1.9127,
+      "self_attn_score": 0.1913,
+      "offset_scores": [
+        0.1747,
+        0.1163,
+        0.0823,
+        0.0646,
+        0.0529
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 4,
+      "head": 6,
+      "prev_token_score": 0.158,
+      "induction_score": 0.0009,
+      "bos_score": 0.0015,
+      "entropy": 1.4758,
+      "self_attn_score": 0.4511,
+      "offset_scores": [
+        0.158,
+        0.0882,
+        0.0603,
+        0.0432,
+        0.0321
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 4,
+      "head": 7,
+      "prev_token_score": 0.0911,
+      "induction_score": 0.0012,
+      "bos_score": 0.0055,
+      "entropy": 2.441,
+      "self_attn_score": 0.4058,
+      "offset_scores": [
+        0.0911,
+        0.0483,
+        0.0378,
+        0.0352,
+        0.0326
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 5,
+      "head": 0,
+      "prev_token_score": 0.0065,
+      "induction_score": 0.0152,
+      "bos_score": 0.0009,
+      "entropy": 0.7807,
+      "self_attn_score": 0.779,
+      "offset_scores": [
+        0.0065,
+        0.0011,
+        0.0009,
+        0.0012,
+        0.0013
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 5,
+      "head": 1,
+      "prev_token_score": 0.014,
+      "induction_score": 0.0022,
+      "bos_score": 0.1009,
+      "entropy": 4.1854,
+      "self_attn_score": 0.0559,
+      "offset_scores": [
+        0.014,
+        0.0093,
+        0.0079,
+        0.0073,
+        0.0069
+      ],
+      "classification": "positional"
+    },
+    {
+      "layer": 5,
+      "head": 2,
+      "prev_token_score": 0.0569,
+      "induction_score": 0.0014,
+      "bos_score": 0.045,
+      "entropy": 3.6172,
+      "self_attn_score": 0.174,
+      "offset_scores": [
+        0.0569,
+        0.0377,
+        0.0344,
+        0.0347,
+        0.0341
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 5,
+      "head": 3,
+      "prev_token_score": 0.2192,
+      "induction_score": 0.0006,
+      "bos_score": 0.002,
+      "entropy": 1.6257,
+      "self_attn_score": 0.2924,
+      "offset_scores": [
+        0.2192,
+        0.127,
+        0.086,
+        0.0622,
+        0.0454
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 5,
+      "head": 4,
+      "prev_token_score": 0.0069,
+      "induction_score": 0.0008,
+      "bos_score": 0.3162,
+      "entropy": 3.9729,
+      "self_attn_score": 0.0068,
+      "offset_scores": [
+        0.0069,
+        0.006,
+        0.0055,
+        0.0053,
+        0.005
+      ],
+      "classification": "positional"
+    },
+    {
+      "layer": 5,
+      "head": 5,
+      "prev_token_score": 0.0981,
+      "induction_score": 0.0011,
+      "bos_score": 0.0038,
+      "entropy": 3.1486,
+      "self_attn_score": 0.0924,
+      "offset_scores": [
+        0.0981,
+        0.0799,
+        0.0619,
+        0.0507,
+        0.0443
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 5,
+      "head": 6,
+      "prev_token_score": 0.0669,
+      "induction_score": 0.0024,
+      "bos_score": 0.0219,
+      "entropy": 3.6475,
+      "self_attn_score": 0.2653,
+      "offset_scores": [
+        0.0669,
+        0.0381,
+        0.0287,
+        0.0242,
+        0.021
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 5,
+      "head": 7,
+      "prev_token_score": 0.1476,
+      "induction_score": 0.0011,
+      "bos_score": 0.0048,
+      "entropy": 2.3236,
+      "self_attn_score": 0.2447,
+      "offset_scores": [
+        0.1476,
+        0.091,
+        0.0643,
+        0.051,
+        0.042
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 6,
+      "head": 0,
+      "prev_token_score": 0.0061,
+      "induction_score": 0.001,
+      "bos_score": 0.2957,
+      "entropy": 4.2211,
+      "self_attn_score": 0.0096,
+      "offset_scores": [
+        0.0061,
+        0.0052,
+        0.0047,
+        0.0045,
+        0.0043
+      ],
+      "classification": "positional"
+    },
+    {
+      "layer": 6,
+      "head": 1,
+      "prev_token_score": 0.0376,
+      "induction_score": 0.0041,
+      "bos_score": 0.062,
+      "entropy": 2.8879,
+      "self_attn_score": 0.4465,
+      "offset_scores": [
+        0.0376,
+        0.0132,
+        0.0093,
+        0.0081,
+        0.0072
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 6,
+      "head": 2,
+      "prev_token_score": 0.2334,
+      "induction_score": 0.0006,
+      "bos_score": 0.0015,
+      "entropy": 1.6313,
+      "self_attn_score": 0.4211,
+      "offset_scores": [
+        0.2334,
+        0.1199,
+        0.0646,
+        0.0386,
+        0.0263
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 6,
+      "head": 3,
+      "prev_token_score": 0.1238,
+      "induction_score": 0.0007,
+      "bos_score": 0.003,
+      "entropy": 1.9131,
+      "self_attn_score": 0.3892,
+      "offset_scores": [
+        0.1238,
+        0.0663,
+        0.0505,
+        0.0453,
+        0.0408
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 6,
+      "head": 4,
+      "prev_token_score": 0.0389,
+      "induction_score": 0.0015,
+      "bos_score": 0.0129,
+      "entropy": 4.2431,
+      "self_attn_score": 0.0944,
+      "offset_scores": [
+        0.0389,
+        0.0254,
+        0.0209,
+        0.019,
+        0.0183
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 6,
+      "head": 5,
+      "prev_token_score": 0.0659,
+      "induction_score": 0.0015,
+      "bos_score": 0.0071,
+      "entropy": 3.506,
+      "self_attn_score": 0.1341,
+      "offset_scores": [
+        0.0659,
+        0.0423,
+        0.0318,
+        0.0266,
+        0.0237
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 6,
+      "head": 6,
+      "prev_token_score": 0.0409,
+      "induction_score": 0.0019,
+      "bos_score": 0.0161,
+      "entropy": 1.553,
+      "self_attn_score": 0.6315,
+      "offset_scores": [
+        0.0409,
+        0.016,
+        0.0119,
+        0.0098,
+        0.0087
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 6,
+      "head": 7,
+      "prev_token_score": 0.0307,
+      "induction_score": 0.0018,
+      "bos_score": 0.1327,
+      "entropy": 3.3463,
+      "self_attn_score": 0.1152,
+      "offset_scores": [
+        0.0307,
+        0.0157,
+        0.0116,
+        0.0103,
+        0.0099
+      ],
+      "classification": "positional"
+    },
+    {
+      "layer": 7,
+      "head": 0,
+      "prev_token_score": 0.0823,
+      "induction_score": 0.0012,
+      "bos_score": 0.0049,
+      "entropy": 3.0042,
+      "self_attn_score": 0.3044,
+      "offset_scores": [
+        0.0823,
+        0.0385,
+        0.0253,
+        0.0208,
+        0.0198
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 7,
+      "head": 1,
+      "prev_token_score": 0.0451,
+      "induction_score": 0.0021,
+      "bos_score": 0.0025,
+      "entropy": 2.489,
+      "self_attn_score": 0.5087,
+      "offset_scores": [
+        0.0451,
+        0.0174,
+        0.0119,
+        0.0105,
+        0.0105
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 7,
+      "head": 2,
+      "prev_token_score": 0.2493,
+      "induction_score": 0.0005,
+      "bos_score": 0.0017,
+      "entropy": 1.3236,
+      "self_attn_score": 0.3891,
+      "offset_scores": [
+        0.2493,
+        0.1215,
+        0.0721,
+        0.0454,
+        0.0298
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 7,
+      "head": 3,
+      "prev_token_score": 0.1768,
+      "induction_score": 0.0004,
+      "bos_score": 0.0011,
+      "entropy": 1.0144,
+      "self_attn_score": 0.6468,
+      "offset_scores": [
+        0.1768,
+        0.047,
+        0.0234,
+        0.0183,
+        0.0165
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 7,
+      "head": 4,
+      "prev_token_score": 0.0796,
+      "induction_score": 0.0012,
+      "bos_score": 0.0034,
+      "entropy": 2.4014,
+      "self_attn_score": 0.4096,
+      "offset_scores": [
+        0.0796,
+        0.0371,
+        0.026,
+        0.0223,
+        0.021
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 7,
+      "head": 5,
+      "prev_token_score": 0.0754,
+      "induction_score": 0.0014,
+      "bos_score": 0.0015,
+      "entropy": 2.0979,
+      "self_attn_score": 0.5642,
+      "offset_scores": [
+        0.0754,
+        0.0282,
+        0.0176,
+        0.0148,
+        0.0135
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 7,
+      "head": 6,
+      "prev_token_score": 0.0608,
+      "induction_score": 0.001,
+      "bos_score": 0.0014,
+      "entropy": 1.48,
+      "self_attn_score": 0.6544,
+      "offset_scores": [
+        0.0608,
+        0.0274,
+        0.0222,
+        0.0199,
+        0.0174
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 7,
+      "head": 7,
+      "prev_token_score": 0.0174,
+      "induction_score": 0.0038,
+      "bos_score": 0.002,
+      "entropy": 1.5651,
+      "self_attn_score": 0.637,
+      "offset_scores": [
+        0.0174,
+        0.0048,
+        0.0034,
+        0.003,
+        0.003
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 8,
+      "head": 0,
+      "prev_token_score": 0.0486,
+      "induction_score": 0.0042,
+      "bos_score": 0.0043,
+      "entropy": 2.6596,
+      "self_attn_score": 0.4337,
+      "offset_scores": [
+        0.0486,
+        0.01,
+        0.0053,
+        0.0048,
+        0.0051
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 8,
+      "head": 1,
+      "prev_token_score": 0.0254,
+      "induction_score": 0.0026,
+      "bos_score": 0.0109,
+      "entropy": 3.5838,
+      "self_attn_score": 0.2106,
+      "offset_scores": [
+        0.0254,
+        0.0117,
+        0.0081,
+        0.0074,
+        0.0075
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 8,
+      "head": 2,
+      "prev_token_score": 0.1624,
+      "induction_score": 0.0009,
+      "bos_score": 0.0023,
+      "entropy": 2.1317,
+      "self_attn_score": 0.4036,
+      "offset_scores": [
+        0.1624,
+        0.0618,
+        0.0326,
+        0.0251,
+        0.0226
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 8,
+      "head": 3,
+      "prev_token_score": 0.0831,
+      "induction_score": 0.0011,
+      "bos_score": 0.0028,
+      "entropy": 1.7992,
+      "self_attn_score": 0.5902,
+      "offset_scores": [
+        0.0831,
+        0.0208,
+        0.011,
+        0.0094,
+        0.0093
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 8,
+      "head": 4,
+      "prev_token_score": 0.0625,
+      "induction_score": 0.0008,
+      "bos_score": 0.0021,
+      "entropy": 1.721,
+      "self_attn_score": 0.5354,
+      "offset_scores": [
+        0.0625,
+        0.0278,
+        0.0246,
+        0.0241,
+        0.0232
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 8,
+      "head": 5,
+      "prev_token_score": 0.0355,
+      "induction_score": 0.0016,
+      "bos_score": 0.0019,
+      "entropy": 2.2499,
+      "self_attn_score": 0.5267,
+      "offset_scores": [
+        0.0355,
+        0.0116,
+        0.0083,
+        0.0081,
+        0.0086
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 8,
+      "head": 6,
+      "prev_token_score": 0.442,
+      "induction_score": 0.0005,
+      "bos_score": 0.0011,
+      "entropy": 1.2652,
+      "self_attn_score": 0.3974,
+      "offset_scores": [
+        0.442,
+        0.0842,
+        0.0098,
+        0.0037,
+        0.0051
+      ],
+      "classification": "previous_token"
+    },
+    {
+      "layer": 8,
+      "head": 7,
+      "prev_token_score": 0.0953,
+      "induction_score": 0.002,
+      "bos_score": 0.0009,
+      "entropy": 2.0585,
+      "self_attn_score": 0.6217,
+      "offset_scores": [
+        0.0953,
+        0.026,
+        0.0117,
+        0.0083,
+        0.0079
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 9,
+      "head": 0,
+      "prev_token_score": 0.0327,
+      "induction_score": 0.0018,
+      "bos_score": 0.0019,
+      "entropy": 3.217,
+      "self_attn_score": 0.2577,
+      "offset_scores": [
+        0.0327,
+        0.0152,
+        0.0117,
+        0.0103,
+        0.0096
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 9,
+      "head": 1,
+      "prev_token_score": 0.0225,
+      "induction_score": 0.0022,
+      "bos_score": 0.0031,
+      "entropy": 3.7612,
+      "self_attn_score": 0.1789,
+      "offset_scores": [
+        0.0225,
+        0.009,
+        0.0071,
+        0.007,
+        0.007
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 9,
+      "head": 2,
+      "prev_token_score": 0.0298,
+      "induction_score": 0.0037,
+      "bos_score": 0.0028,
+      "entropy": 3.2342,
+      "self_attn_score": 0.3199,
+      "offset_scores": [
+        0.0298,
+        0.0099,
+        0.0067,
+        0.0061,
+        0.0062
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 9,
+      "head": 3,
+      "prev_token_score": 0.0174,
+      "induction_score": 0.0036,
+      "bos_score": 0.0024,
+      "entropy": 2.9413,
+      "self_attn_score": 0.3308,
+      "offset_scores": [
+        0.0174,
+        0.0064,
+        0.0061,
+        0.0065,
+        0.0064
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 9,
+      "head": 4,
+      "prev_token_score": 0.0228,
+      "induction_score": 0.0024,
+      "bos_score": 0.0024,
+      "entropy": 3.2616,
+      "self_attn_score": 0.3084,
+      "offset_scores": [
+        0.0228,
+        0.0076,
+        0.0059,
+        0.006,
+        0.0065
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 9,
+      "head": 5,
+      "prev_token_score": 0.0316,
+      "induction_score": 0.0021,
+      "bos_score": 0.0034,
+      "entropy": 3.8511,
+      "self_attn_score": 0.3044,
+      "offset_scores": [
+        0.0316,
+        0.0107,
+        0.007,
+        0.0063,
+        0.0064
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 9,
+      "head": 6,
+      "prev_token_score": 0.0075,
+      "induction_score": 0.0034,
+      "bos_score": 0.0057,
+      "entropy": 3.5843,
+      "self_attn_score": 0.0525,
+      "offset_scores": [
+        0.0075,
+        0.0052,
+        0.0047,
+        0.0047,
+        0.0044
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 9,
+      "head": 7,
+      "prev_token_score": 0.0084,
+      "induction_score": 0.0031,
+      "bos_score": 0.0052,
+      "entropy": 3.688,
+      "self_attn_score": 0.0439,
+      "offset_scores": [
+        0.0084,
+        0.0059,
+        0.0055,
+        0.0051,
+        0.0047
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 10,
+      "head": 0,
+      "prev_token_score": 0.0073,
+      "induction_score": 0.0022,
+      "bos_score": 0.0075,
+      "entropy": 4.1176,
+      "self_attn_score": 0.0357,
+      "offset_scores": [
+        0.0073,
+        0.006,
+        0.0058,
+        0.0057,
+        0.0055
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 10,
+      "head": 1,
+      "prev_token_score": 0.0076,
+      "induction_score": 0.0021,
+      "bos_score": 0.0059,
+      "entropy": 4.2152,
+      "self_attn_score": 0.0355,
+      "offset_scores": [
+        0.0076,
+        0.0061,
+        0.0059,
+        0.0058,
+        0.0057
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 10,
+      "head": 2,
+      "prev_token_score": 0.0573,
+      "induction_score": 0.0006,
+      "bos_score": 0.0008,
+      "entropy": 1.1504,
+      "self_attn_score": 0.71,
+      "offset_scores": [
+        0.0573,
+        0.0247,
+        0.0226,
+        0.0217,
+        0.0191
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 10,
+      "head": 3,
+      "prev_token_score": 0.059,
+      "induction_score": 0.0015,
+      "bos_score": 0.0027,
+      "entropy": 3.2547,
+      "self_attn_score": 0.3783,
+      "offset_scores": [
+        0.059,
+        0.0192,
+        0.0116,
+        0.0099,
+        0.0098
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 10,
+      "head": 4,
+      "prev_token_score": 0.0247,
+      "induction_score": 0.0015,
+      "bos_score": 0.006,
+      "entropy": 4.3355,
+      "self_attn_score": 0.0572,
+      "offset_scores": [
+        0.0247,
+        0.0158,
+        0.0121,
+        0.0107,
+        0.0104
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 10,
+      "head": 5,
+      "prev_token_score": 0.026,
+      "induction_score": 0.0018,
+      "bos_score": 0.0043,
+      "entropy": 4.5688,
+      "self_attn_score": 0.1087,
+      "offset_scores": [
+        0.026,
+        0.0149,
+        0.0107,
+        0.0093,
+        0.0089
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 10,
+      "head": 6,
+      "prev_token_score": 0.0244,
+      "induction_score": 0.0015,
+      "bos_score": 0.0043,
+      "entropy": 3.8736,
+      "self_attn_score": 0.2439,
+      "offset_scores": [
+        0.0244,
+        0.0105,
+        0.0076,
+        0.007,
+        0.007
+      ],
+      "classification": "other"
+    },
+    {
+      "layer": 10,
+      "head": 7,
+      "prev_token_score": 0.0927,
+      "induction_score": 0.0006,
+      "bos_score": 0.0009,
+      "entropy": 1.5671,
+      "self_attn_score": 0.63,
+      "offset_scores": [
+        0.0927,
+        0.0424,
+        0.0267,
+        0.0202,
+        0.0165
+      ],
+      "classification": "other"
+    }
+  ],
+  "summary": {
+    "induction_count": 2,
+    "prev_token_count": 22,
+    "positional_count": 5,
+    "other_count": 59,
+    "induction_heads": [
+      "L0H5",
+      "L3H2"
+    ],
+    "prev_token_heads": [
+      "L0H6",
+      "L0H7",
+      "L1H4",
+      "L1H5",
+      "L2H0",
+      "L2H1",
+      "L2H4",
+      "L2H5",
+      "L3H0",
+      "L3H1",
+      "L3H7",
+      "L4H4",
+      "L4H5",
+      "L4H6",
+      "L5H3",
+      "L5H7",
+      "L6H2",
+      "L6H3",
+      "L7H2",
+      "L7H3",
+      "L8H2",
+      "L8H6"
+    ],
+    "positional_heads": [
+      "L4H0",
+      "L5H1",
+      "L5H4",
+      "L6H0",
+      "L6H7"
+    ],
+    "encoder_induction": 2,
+    "encoder_prev_token": 14,
+    "decoder_induction": 0,
+    "decoder_prev_token": 8
+  }
+}

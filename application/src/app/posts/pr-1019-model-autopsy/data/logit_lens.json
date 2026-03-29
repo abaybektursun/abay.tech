@@ -1,0 +1,161 @@
+{
+  "probe_points": [
+    {
+      "label": "embed",
+      "layer_idx": -1,
+      "loss_nats": 18.3498,
+      "bits_per_token": 26.4732,
+      "top1_accuracy": 0.005,
+      "delta_bits_per_token": null,
+      "is_encoder": true,
+      "is_decoder": false
+    },
+    {
+      "label": "layer_0",
+      "layer_idx": 0,
+      "loss_nats": 7.3965,
+      "bits_per_token": 10.6708,
+      "top1_accuracy": 0.077,
+      "delta_bits_per_token": -15.8023,
+      "is_encoder": true,
+      "is_decoder": false
+    },
+    {
+      "label": "layer_1",
+      "layer_idx": 1,
+      "loss_nats": 6.4545,
+      "bits_per_token": 9.3119,
+      "top1_accuracy": 0.102,
+      "delta_bits_per_token": -1.3589,
+      "is_encoder": true,
+      "is_decoder": false
+    },
+    {
+      "label": "layer_2",
+      "layer_idx": 2,
+      "loss_nats": 5.7291,
+      "bits_per_token": 8.2653,
+      "top1_accuracy": 0.153,
+      "delta_bits_per_token": -1.0466,
+      "is_encoder": true,
+      "is_decoder": false
+    },
+    {
+      "label": "layer_3",
+      "layer_idx": 3,
+      "loss_nats": 7.0679,
+      "bits_per_token": 10.1968,
+      "top1_accuracy": 0.127,
+      "delta_bits_per_token": 1.9315,
+      "is_encoder": true,
+      "is_decoder": false
+    },
+    {
+      "label": "layer_4",
+      "layer_idx": 4,
+      "loss_nats": 8.2311,
+      "bits_per_token": 11.8749,
+      "top1_accuracy": 0.113,
+      "delta_bits_per_token": 1.6781,
+      "is_encoder": true,
+      "is_decoder": false
+    },
+    {
+      "label": "layer_5",
+      "layer_idx": 5,
+      "loss_nats": 8.7544,
+      "bits_per_token": 12.6299,
+      "top1_accuracy": 0.109,
+      "delta_bits_per_token": 0.755,
+      "is_encoder": false,
+      "is_decoder": true
+    },
+    {
+      "label": "layer_6",
+      "layer_idx": 6,
+      "loss_nats": 7.4501,
+      "bits_per_token": 10.7482,
+      "top1_accuracy": 0.14,
+      "delta_bits_per_token": -1.8817,
+      "is_encoder": false,
+      "is_decoder": true
+    },
+    {
+      "label": "layer_7",
+      "layer_idx": 7,
+      "loss_nats": 4.4315,
+      "bits_per_token": 6.3933,
+      "top1_accuracy": 0.24600000000000002,
+      "delta_bits_per_token": -4.3549,
+      "is_encoder": false,
+      "is_decoder": true
+    },
+    {
+      "label": "layer_8",
+      "layer_idx": 8,
+      "loss_nats": 3.1392,
+      "bits_per_token": 4.5289,
+      "top1_accuracy": 0.355,
+      "delta_bits_per_token": -1.8644,
+      "is_encoder": false,
+      "is_decoder": true
+    },
+    {
+      "label": "layer_9",
+      "layer_idx": 9,
+      "loss_nats": 2.2375,
+      "bits_per_token": 3.228,
+      "top1_accuracy": 0.49700000000000005,
+      "delta_bits_per_token": -1.3009,
+      "is_encoder": false,
+      "is_decoder": true
+    },
+    {
+      "label": "layer_10",
+      "layer_idx": 10,
+      "loss_nats": 1.9088,
+      "bits_per_token": 2.7539,
+      "top1_accuracy": 0.547,
+      "delta_bits_per_token": -0.4741,
+      "is_encoder": false,
+      "is_decoder": true
+    },
+    {
+      "label": "final",
+      "layer_idx": 11,
+      "loss_nats": 1.9088,
+      "bits_per_token": 2.7539,
+      "top1_accuracy": 0.547,
+      "delta_bits_per_token": 0.0,
+      "is_encoder": false,
+      "is_decoder": true
+    }
+  ],
+  "architecture": {
+    "num_layers": 11,
+    "num_encoder_layers": 5,
+    "num_decoder_layers": 6,
+    "skip_connections": [
+      {
+        "from_encoder": 4,
+        "to_decoder": 5
+      },
+      {
+        "from_encoder": 3,
+        "to_decoder": 6
+      },
+      {
+        "from_encoder": 2,
+        "to_decoder": 7
+      },
+      {
+        "from_encoder": 1,
+        "to_decoder": 8
+      },
+      {
+        "from_encoder": 0,
+        "to_decoder": 9
+      }
+    ]
+  }
+}
