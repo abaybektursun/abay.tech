@@ -47,14 +47,6 @@ export default {
   		px: '1px',
   		'0.5': '0.125rem'
   	},
-  	fontFamily: {
-  		sans: [
-  			'geist'
-  		],
-  		mono: [
-  			'geist-mono'
-  		]
-  	},
   	container: {
   		center: true,
   		padding: {
