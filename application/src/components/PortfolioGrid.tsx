@@ -45,18 +45,16 @@ export function PortfolioCard({
   onHoverStart,
   onHoverEnd
 }: PortfolioCardProps) {
-  // Start all cards at 85% size, so they have room to expand
-  const baseScale = 0.85;
+  const baseScale = 0.97;
 
-  // Calculate scale based on proximity to hovered card
   const getScale = () => {
-    if (hoveredIndex === null) return baseScale; // Default smaller size
-    if (index === hoveredIndex) return 1; // Hovered expands to full size (safe max)
+    if (hoveredIndex === null) return baseScale;
+    if (index === hoveredIndex) return 1;
 
     const distance = Math.abs(index - hoveredIndex);
-    if (distance === 1) return baseScale * 0.9; // Neighbors shrink more
-    if (distance === 2) return baseScale * 0.95; // Further neighbors shrink less
-    return baseScale; // Others stay at base size
+    if (distance === 1) return baseScale * 0.99;
+    if (distance === 2) return baseScale * 0.995;
+    return baseScale;
   };
 
   return (
@@ -70,7 +68,7 @@ export function PortfolioCard({
       }}
       transition={{
         opacity: { duration: 0.3 },
-        scale: { duration: 0.6, ease: [0.4, 0, 0.2, 1] } // Extra smooth, gentle ease
+        scale: { duration: 0.22, ease: [0.4, 0, 0.2, 1] }
       }}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
