@@ -1,0 +1,49 @@
+{
+  "episodes": [
+    {
+      "slug": "best-s1337",
+      "label": "Best \u00b7 seed 1337",
+      "seed": 1337,
+      "iter": 99999,
+      "score": 78.68,
+      "ep_return": 3613.67,
+      "length": 1001
+    },
+    {
+      "slug": "best-s42",
+      "label": "Best \u00b7 seed 42",
+      "seed": 42,
+      "iter": 50000,
+      "score": 77.86,
+      "ep_return": 3576.08,
+      "length": 1001
+    },
+    {
+      "slug": "best-s2024",
+      "label": "Best \u00b7 seed 2024",
+      "seed": 2024,
+      "iter": 80000,
+      "score": 79.09,
+      "ep_return": 3632.41,
+      "length": 1001
+    },
+    {
+      "slug": "early-s42",
+      "label": "Mid-training \u00b7 seed 42 \u00b7 10k steps",
+      "seed": 42,
+      "iter": 10000,
+      "score": 53.52,
+      "ep_return": 2458.4,
+      "length": 796
+    },
+    {
+      "slug": "fall-s42",
+      "label": "Catastrophic fall \u00b7 seed 42 \u00b7 60k steps",
+      "seed": 42,
+      "iter": 60000,
+      "score": 4.18,
+      "ep_return": 193.55,
+      "length": 128
+    }
+  ]
+}
