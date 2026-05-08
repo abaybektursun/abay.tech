@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
-import { Linkedin, Github, FileText, Book, Instagram, List, X, Mail } from 'lucide-react';
+import { Linkedin, Github, FileText, Book, Instagram, List, X, Mail, Youtube } from 'lucide-react';
 import Container from "@/components/container";
 
 interface SmartLinkProps {
@@ -16,7 +16,7 @@ interface SmartLinkProps {
 const SmartLink = ({ href, icon, label, internal = false }: SmartLinkProps) => {
   const pathname = usePathname();
 
-  const sharedClassName = "inline-flex items-center gap-2 px-3 py-1.5 hover:text-foreground transition-colors";
+  const sharedClassName = "inline-flex items-center gap-2 px-2 py-1.5 hover:text-foreground transition-colors";
 
   const content = (
     <>
@@ -99,6 +99,11 @@ export function ExternalLinks() {
             href="mailto:villas.cautery-0j@icloud.com"
             icon={<Mail size={14} />}
             label="Email"
+          />
+          <SmartLink
+            href="https://www.youtube.com/watch?v=EcrXY_7tCuk&list=PL7cxuyZiS5_hGw91DN_d5kTtHy-jSvsh2"
+            icon={<Youtube size={14} />}
+            label="YouTube"
           />
           <SmartLink
             href="https://www.goodreads.com/user/show/69651448-abay-bektursun"
