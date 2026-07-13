@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Abay Bektursun — Résumé</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#fff; --ink:#16161a; --soft:#3d3d44; --muted:#85858e; --faint:#b6b6bd; --line:#e3e3e6;
+    --accent:#e2231a; --accentd:#c01c12;
+    --body:"Archivo", system-ui, sans-serif; --label:"Archivo", sans-serif;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  @page{ size:A4; margin:0; }
+  html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body{ font-family:var(--body); background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; }
+
+  .page{ width:210mm; min-height:297mm; padding:20mm 20mm; margin:0 auto; }
+  .top{ display:flex; justify-content:space-between; align-items:baseline; }
+  .name{ font-size:23px; font-weight:700; letter-spacing:-.032em; }
+  .top-links{ display:flex; align-items:center; gap:7px; font-family:var(--label); font-size:8.6px; letter-spacing:.02em; }
+  .top-links a{ color:var(--muted); text-decoration:none; }
+  .top-links span{ color:var(--line); }
+
+  .thesis{ font-size:17.4px; font-weight:500; line-height:1.4; letter-spacing:-.016em; color:var(--ink); max-width:58ch; margin-top:19px; }
+  .thesis .ac{ color:var(--accentd); }
+  .rule{ height:2px; background:var(--accent); margin:19px 0 5px; }
+
+  .row{ display:grid; grid-template-columns:136px 1fr; gap:0 22px; padding:15px 0; border-bottom:1px solid var(--line); align-items:start; }
+  .row.featured{ padding:25px 0; }
+  .row.research{ padding:22px 0; }
+  .row.ctx{ padding:18px 0; }
+  .row.section-end{ border-bottom-color:#c7c7cc; }
+  .row:last-of-type{ border-bottom:0; }
+  .lc .lb{ font-family:var(--label); font-size:9px; letter-spacing:.078em; text-transform:uppercase; color:#141414; font-weight:600; line-height:1.45; }
+  .lc .lb.tight{ font-size:8.2px; letter-spacing:.05em; white-space:nowrap; }
+  .lc .yr{ font-family:var(--label); font-size:8.3px; letter-spacing:.015em; color:var(--muted); margin-top:5px; }
+  .rc .txt{ font-size:13.2px; line-height:1.5; color:var(--soft); max-width:68ch; }
+  .rc .txt b{ color:var(--ink); font-weight:600; }
+  .rc .lk{ display:inline-block; margin-top:7px; font-family:var(--label); font-size:8.1px; letter-spacing:.005em; color:var(--accentd); text-decoration:none; }
+  .rc .lk .ar{ color:var(--accentd); font-weight:500; margin-left:3px; }
+  .row.ctx .lc .lb{ color:var(--muted); }
+  .row.industry .lc .lb{ color:var(--ink); }
+  .row.industry .rc .txt{ color:var(--soft); }
+  .study-sub{ margin-top:4px; font-size:9.6px; line-height:1.4; color:var(--muted); }
+
+  .offline{ display:grid; grid-template-columns:136px 1fr; gap:0 22px; align-items:center; padding:13px 0; border-bottom:1px solid var(--line); }
+  .offline-label{ font-family:var(--label); font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:var(--accentd); font-weight:600; }
+  .offline-line{ display:flex; align-items:center; gap:9px; font-family:var(--label); font-size:8.8px; }
+  .offline-line a{ color:var(--ink); text-decoration:none; }
+  .offline-line .ar{ color:var(--accentd); margin-left:3px; }
+  .offline-line .slash{ color:var(--faint); }
+
+  .foot{ margin-top:18px; margin-left:158px; font-family:var(--label); font-size:8.8px; color:var(--muted); }
+  .foot a{ color:var(--soft); text-decoration:none; }
+  .foot span{ color:var(--line); padding:0 9px; }
+  .foot .a{ color:var(--accent); padding:0; margin-left:3px; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="top"><div class="name">Abay Bektursun</div><div class="top-links"><a href="mailto:ab@abay.tech">ab@abay.tech</a><span>·</span><a href="https://abay.tech">abay.tech</a></div></div>
+    <div class="thesis">Born to study intelligence. Forced to debug a shape mismatch.</div>
+    <div class="rule"></div>
+
+    <div class="row featured">
+      <div class="lc"><div class="lb">Republic Assay</div><div class="yr">2026</div></div>
+      <div class="rc"><div class="txt">Republic Assay tests whether language models share the values of the institutions adopting them, directly in activation space. I built it in <b>four hours</b> and won first place at Patriot Games 250: $15,000 from Vulcan (YC S25).</div><a class="lk" href="https://republicassay.us/">Republic Assay<span class="ar">↗</span></a></div>
+    </div>
+    <div class="row featured">
+      <div class="lc"><div class="lb tight">OpenAI · Parameter Golf</div><div class="yr">2026</div></div>
+      <div class="rc"><div class="txt">OpenAI highlighted my Parameter Golf work in its official article—one of nine submissions chosen from thousands. I <b>led the leaderboard</b> for most of the competition.</div><a class="lk" href="https://openai.com/index/what-parameter-golf-taught-us/">OpenAI article<span class="ar">↗</span></a></div>
+    </div>
+    <div class="row featured">
+      <div class="lc"><div class="lb">PyTorch · Inductor</div><div class="yr">2026</div></div>
+      <div class="rc"><div class="txt">I traced a <b>6% H100 regression</b> to over-fusion; my fix shipped in PyTorch 2.13.</div><a class="lk" href="https://github.com/pytorch/pytorch/pull/179494">PyTorch PR<span class="ar">↗</span></a></div>
+    </div>
+    <div class="row research">
+      <div class="lc"><div class="lb">Model Lineage</div><div class="yr">2026 · ongoing</div></div>
+      <div class="rc"><div class="txt">What survives when a model is fine-tuned down a lineage: <b>SigLIP+Gemma → PaliGemma → π0.5</b>.</div><a class="lk" href="https://abay.tech">Research notes<span class="ar">↗</span></a></div>
+    </div>
+    <div class="row research section-end">
+      <div class="lc"><div class="lb">Borrowed Geometry</div><div class="yr">April 2026</div></div>
+      <div class="rc"><div class="txt">A frozen Gemma slice beat published SOTA on robot manipulation. I traced four unrelated tasks to <b>the same attention heads.</b></div><a class="lk" href="https://abay.tech/posts/borrowed-geometry">Read the research<span class="ar">↗</span></a></div>
+    </div>
+    <div class="row ctx industry">
+      <div class="lc"><div class="lb">Industry</div><div class="yr">2016 — now</div></div>
+      <div class="rc"><div class="txt">A decade of ML engineering: <b>Hewlett Packard Enterprise</b>; computer vision at <b>Apple</b> and <b>Eagle Eye Networks</b>; independent since 2022, getting research models running for clients.</div></div>
+    </div>
+    <div class="row ctx">
+      <div class="lc"><div class="lb">Studied</div><div class="yr">2014 — 17</div></div>
+      <div class="rc"><div class="txt"><div><b>B.S. Computer Science</b> · University of Central Arkansas</div><div class="study-sub">Music · Kazakh National University of Arts · 2009 — 13</div></div></div>
+    </div>
+    <div class="offline">
+      <div class="offline-label">Offline</div>
+      <div class="offline-line"><a href="https://abay.tech/images/AIDA_Abay.png">National freediving champion<span class="ar">↗</span></a><span class="slash">/</span><a href="https://www.instagram.com/p/DQKTritkZgB/?img_index=1">IRONMAN<span class="ar">↗</span></a></div>
+    </div>
+
+    <div class="foot"><a href="https://abay.tech">abay.tech<span class="a">↗</span></a><span>·</span><a href="https://github.com/abaybektursun">GitHub</a><span>·</span><a href="https://linkedin.com/in/abay">LinkedIn</a><span>·</span><a href="https://x.com/Abaybektursun">X</a></div>
+  </div>
+</body>
+</html>
