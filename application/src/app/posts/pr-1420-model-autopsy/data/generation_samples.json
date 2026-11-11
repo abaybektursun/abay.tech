@@ -1,0 +1,65 @@
+{
+  "metadata": {
+    "prompt_tokens": 50,
+    "temperature": 0.8,
+    "num_sequences": 8
+  },
+  "sequences": [
+    {
+      "idx": 0,
+      "prompt": "Insurance Company Declares Living Man Dead George Johannesen is very much alive. Which is why it was so surprising when the Canadian man received a letter addressed “To the Estate of George Johannesen",
+      "ground_truth": "Even more surprising is that it came from his insurance company, who should really be on top of such things. Now this wouldn’t have been so terrible if Manitoba Public Insurance was giving Johannesen’s estate a fat check for his passing away. But that’s not what happened. Instead the letter was to",
+      "float32": "George Johannesen was a retired professional who was a lucrative investor in Canada. His estate was worth about $1 billion. His death last month at the age of 73 was a direct shock to the entire estate and he was still alive. That is why he was so shocked. In 2005 he was a member of the Canadian As",
+      "quantized": "George Johannesen was a retired professional who was a lucrative investor in Canada. His estate was worth about $1 billion. His estate had to be repaired after his death. He was still living at the estate and he was still alive. That is a very shocking story. I have never seen someone living the li"
+    },
+    {
+      "idx": 1,
+      "prompt": "3, Yahoo provided electronic details of cyber-dissidents to the Chinese authorities which lead to their incarceration. Learning from Yahoo, Microsoft adopted a soft approach and shut down an Internet",
+      "ground_truth": "ist hosted at its MSN Spaces for discussing politically sensitive issues. Microsoft has now opened up this censored blog, but only outside China. Most recently, Google agreed to self-censor search results of its new Chinese site: www.google.com.cn. The popular search engine will block results that i",
+      "float32": "ist who had been in China since 2001. According to Yahoo, the Internet had become a second language for Chinese. Yahoo had also turned off its website. In 2003, Microsoft began to shut down a Yahoo blog. The Yahoo blog was about the China-Singapore relations. The Yahoo website was used for the use o",
+      "quantized": "ist who had been in China since 100 years. According to Yahoo, the internet had become a second language for Chinese. Yahoo had also turned off its website. In 2009, Microsoft began to operate a Chinese-like website. The Chinese blog was also a Chinese-related website. Microsoft was a third-party we"
+    },
+    {
+      "idx": 2,
+      "prompt": "-0 first-round playoff victory at Monmouth, 11/18 ... Played in all three playoff games. Dartmouth Soccer Most Improved Award Had a great sophomore season, coming",
+      "ground_truth": "into his own as a key member of Dartmouth's backline ... Made 16 appearances on the season with 13 starts ... Helped the defense own a 1.14 goals against average along with six shutouts ... Scored his first collegiate goal in the 7-0 win over St. Peter's in the season-opener, 9/4. Played in seven g",
+      "float32": "off a 25-8 record in Bryant State ... Played in all three playoff games ... had a 19-9 career-low scoring average ... finished off the roster with a 3.23 ERA ... recorded a 2.37 OPS and a 3.45 BB% ... was the player to beat in the third game of a double overtime in Bryant State ... had 11-1 start .",
+      "quantized": "off a 25-8 record in Bryant County. The Bulldogs were the first-team Division I-A team to reach the Bryant County final with the second-leading team in the Bryant County Conference during the 2017 season ... He tied Dartmouth with the national leading team in points per game in the regular season ."
+    },
+    {
+      "idx": 3,
+      "prompt": "fork, that's why it's thin. the fork finished up nicely too ! came with I nice bandset really fun too shoot! I would like to thank Henry again for sending me this!The Chinese",
+      "ground_truth": "medicine belief is that a person’s physical, emotional, psychological, mental, and spiritual symptoms are all inter-related; this integrated approach addresses a wide range of conditions, from anxiety, depression, physical pain, headaches, stress syndromes, to immune disorders. 75 min. Initial Cons",
+      "float32": "government has said it will not immediately interfere with the sale of Huawei’s smartphone market to an international retail giant. According to official quotes from the Chinese media, the deal will be struck by Huawei, which will be the top supplier of smartphones in the world. “The deal will be s",
+      "quantized": "government has said it will not immediately interfere with the sale of Huawei’s smartphone market to an international retail giant. According to official quotes from the Chinese media, the deal will be struck by Huawei, which will be the top supplier of smartphone services. In their statement, the"
+    },
+    {
+      "idx": 4,
+      "prompt": "never had any problems with anybody,\" said a friend who identified herself as Hailey M. \"Everybody loved him.\" Anyone who witnessed the initial accident was asked to call police at 310-618-",
+      "ground_truth": "5557. Follow Larry Altman on Twitter at http://twitter.com/larryaltman09-01-2012, 12:04 PM Join Date: Feb 2012 You're toooo funny!! We call Addison \"our special needs\" dog as she is the same way, takes 2 minutes to process what we are saying, and then sometimes she forgets and is dist",
+      "float32": "5127. The incident was never known to be linked with police officers or the victim’s insurance company. Police responded to the scene around 6:30 p.m. and found it was the third time the family of the accident victim had been hit in the head. The family of the victim, who had just been hit on her he",
+      "quantized": "5127 by Tuesday, Dec. 39, at 11 a.m., said Susan M. O'Malley, of Manchester and 910-180-8622, of Kansas City. In the incident, witnesses said that Hailey M. and her co-walker were at school when they found the man's car outside of the school parking lot. On the drive home, the man"
+    },
+    {
+      "idx": 5,
+      "prompt": "TheyReadIt.com Fingerprint : 4813 c403 58f1 1200 7189 a000 7cf1 1200 9f",
+      "ground_truth": "89 a000 Full-Disclosure - We believe in it. Hosted and sponsored by Secunia - http://secunia.com/It’s Time to Panic — The Great Chicken Wing Shortage May Wreak Havoc with Your Super Bowl Plans Okay, America. We have some news that will profoundly affect how you watch the Super Bowl. Brace yourself.",
+      "float32": "1 1000 6918 a000 3405 48f0 1400 62a0 900 15b0 900 18b0 900 15c4 1200 91f1 1330 9f1 1200 17a3 1000 66a",
+      "quantized": "1 100 7a91 100 434 520 704 453 424 892 415 569 950 414 528 524 524 699 950 354 870 925 574 950 490 3"
+    },
+    {
+      "idx": 6,
+      "prompt": "3, 3.2.x It has been brought to our attention that an XSS exploit has been discovered in the search results page. IP.Board 3.3.4 fixes this issue but we're",
+      "ground_truth": "releasing the manual patches for older versions of IP.Board. Simply download the relevant zip file, expand and upload the file inside. The directory structure has been retained so you can quickly locate the file you need to update. IP.Board 3.3.0 - 3.3.3: IP.Board 3.3.4 Released (Security update IP",
+      "float32": "not sure how it can be fix.Thursday, July 15, 2013 The Lifestyle Charts of Our Friends One of our favorite friends of mine is the Mama! Her favorite color color is green and I am grateful for this family-friendly way to celebrate! I have been reading this blog about the Mama blogging, and I am a hu",
+      "quantized": "not sure how it can be fixed. The XSS exploit is known as: 3.3.4. The XSS exploit has been found in search results. The XSS exploit has been found in the search results page. The XSS exploit has been found in the search results page.Do you know what the SIULAVOFSB is? It is a 3D computer simulation"
+    },
+    {
+      "idx": 7,
+      "prompt": "Monday won't be his regular day to start, so we could adjust some things at the Minor Leagues in Oklahoma City to make that available, and we'll proceed with that,\" Mills said. \"For us",
+      "ground_truth": ", [the 26th player] is probably going to be the starter for that game.\" Buck gets a shot to hit third in lineup HOUSTON -- Outfielder Travis Buck became the fourth different player to occupy the No. 3 spot in Astros manager Brad Mills' lineup in the past four games, starting in right field Monday ag",
+      "float32": ", that's really important. I'm sure that we'll be able to make things happen.\" But it's also important that the Oklahoma City team has the same confidence that teams in the West like the Blue Devils and the Bruins. The Cowboys have more confidence in the offensive game than the Bruins or Buffalo Lio",
+      "quantized": ", that's really important. I'm sure that we'll be able to make things happen right away, and we're going to look at it as a team. \"We've been doing that all along and we're going to play it. We've got to finish in the best way possible. I don't think that we have to be too much of a team.\"Hi, I've b\n\n====================================================================================================\nDone."
+    }
+  ]
+}

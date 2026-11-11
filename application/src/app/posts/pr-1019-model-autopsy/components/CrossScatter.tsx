@@ -81,7 +81,7 @@ export default function CrossScatter({ probePoints, matrices }: Props) {
         symbolSize: 16,
         data: layers.map((d, i) => [d.avg_condition, d.delta_bpt, d.is_positive ? 1 : 0, i]),
         itemStyle: {
-          color: (p: { data: number[] }) => (p.data[2] === 1 ? "#991b1b" : "#27272a"),
+          color: (p: { data: number[] }) => (p.data[2] === 1 ? "#e07a5f" : "#264653"),
           borderColor: "#e4e4e7",
           borderWidth: 2,
         },

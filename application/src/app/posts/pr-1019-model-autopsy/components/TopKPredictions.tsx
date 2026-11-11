@@ -78,7 +78,8 @@ export default function TopKPredictions({ sequences }: Props) {
                 {contextTokens.map((ct, ci) => (
                   <span
                     key={ci}
-                    className={ci === highlightIdx ? "bg-zinc-800/15 rounded px-0.5" : ""}
+                    className={ci === highlightIdx ? "rounded px-0.5" : ""}
+                    style={ci === highlightIdx ? { backgroundColor: "rgba(224,122,95,0.15)" } : undefined}
                   >
                     {ct.t}
                   </span>
@@ -111,8 +112,8 @@ export default function TopKPredictions({ sequences }: Props) {
                       <span className="text-right text-zinc-600">{(pred.p * 100).toFixed(1)}%</span>
                       <div className="flex items-center">
                         <div
-                          className={`h-2 rounded ${isActual ? "bg-zinc-800" : "bg-zinc-300"}`}
-                          style={{ width: `${Math.max(2, pred.p * 200)}px` }}
+                          className="h-2 rounded"
+                          style={{ backgroundColor: isActual ? "#264653" : "#d4d4d8", width: `${Math.max(2, pred.p * 200)}px` }}
                         />
                       </div>
                     </div>

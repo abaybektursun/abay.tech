@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Script from 'next/script'
 import React from 'react'
 import Container from '@/components/container'
+import Comments from '@/components/comments'
 
 export default function Home() {
   return (
@@ -249,6 +250,8 @@ Respond with a JSON list of categories:
 
           <div id="classificationChart" className="mt-8"></div>
         </section>
+
+        <Comments />
       </article>
 
       {/* 4) Global styles for the spinner */}

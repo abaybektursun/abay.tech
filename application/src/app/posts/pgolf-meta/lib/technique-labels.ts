@@ -1,0 +1,42 @@
+/** Human-readable names for technique snake_case identifiers. */
+const TECHNIQUE_LABELS: Record<string, string> = {
+  leakyrelu_squared: "LeakyReLU²",
+  muon_optimizer: "Muon Optimizer",
+  int6_quant: "Int6 Quant",
+  int8_quant: "Int8 Quant",
+  int6_qat_ste: "Int6 QAT+STE",
+  bigramhash: "BigramHash",
+  swa: "SWA",
+  ema: "EMA",
+  xsa: "XSA",
+  vrl: "VRL",
+  mtp: "MTP",
+  mlp_3x: "MLP 3×",
+  ln_scale: "LN Scale",
+  fp16_embeddings: "FP16 Embeddings",
+  smeargate: "SmearGate",
+  ngram_cache: "N-gram Cache",
+  legal_ttt: "Legal TTT",
+  ttt: "TTT",
+  lora_ttt: "LoRA TTT",
+  lora: "LoRA",
+  flash_attention_3: "Flash Attention 3",
+  partial_rope: "Partial RoPE",
+  gated_attention: "Gated Attention",
+  parallel_muon: "Parallel Muon",
+  value_embeddings: "Value Embeddings",
+  orthogonal_init: "Orthogonal Init",
+  warmdown_scheduling: "Warmdown",
+  sliding_window_eval: "Sliding Window Eval",
+  cosine_ttt_scheduling: "Cosine TTT",
+  depth_recurrence: "Depth Recurrence",
+  hedge_mixer: "Hedge Mixer",
+  crown_q: "CROWN-Q",
+  logit_softcap: "Logit Softcap",
+  unet_skip_connections: "U-Net Skip",
+  gptq_lite: "GPTQ-Lite",
+};
+
+export function formatTechnique(s: string): string {
+  return TECHNIQUE_LABELS[s] ?? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}

@@ -2,17 +2,18 @@
 
 /**
  * CA Rule 90 at the training-edge length (L20). Per-bit error per condition,
- * visualized as 100 bit predictions where errors are highlighted in vermilion.
+ * visualized as 100 bit predictions where errors are highlighted in the accent color.
  *
  * The visceral story: at the boundary of where the trainable interface was
- * trained, the frozen text substrate makes essentially zero errors while
- * matched-capacity baselines are visibly speckled.
+ * trained, the frozen language model substrate makes essentially zero errors
+ * while matched-capacity baselines are visibly speckled.
  *
  * Source: paper Table B.6 (n=2 means) and abstract (492× / 148× ratios).
  */
 import { useMemo } from "react";
 
-const ACCENT = "#B7361C";
+const ACCENT = "#2D4A6F";   // editorial blue — used for "our method" / labels
+const ERROR = "#C8392E";    // editorial red — used for actual error ticks
 const INK = "#11161D";
 const INK_2 = "#3A4150";
 const INK_3 = "#8A8E97";
@@ -40,7 +41,7 @@ const ROWS: Row[] = [
   {
     id: "frozen_gemma",
     label: "Frozen Gemma L24–29",
-    sublabel: "6.1M trainable, 2.93B frozen text weights",
+    sublabel: "6.1M trainable around frozen Gemma 4 31B slice",
     errorRate: 0.0001,
     visibleErrors: 0,
     caption: "1 mistake per 10,000 bits",
@@ -200,8 +201,8 @@ function TickStrip({ errorIndices, ariaLabel }: { errorIndices: Set<number>; ari
             y={0}
             width={TICK_WIDTH + HALO_PAD}
             height={STRIP_VIEW_H}
-            fill={ACCENT}
-            opacity={0.18}
+            fill={ERROR}
+            opacity={0.22}
             rx={TICK_RADIUS + 1}
           />
         ) : null
@@ -216,7 +217,7 @@ function TickStrip({ errorIndices, ariaLabel }: { errorIndices: Set<number>; ari
             y={HALO_PAD}
             width={TICK_WIDTH}
             height={TICK_HEIGHT}
-            fill={isErr ? ACCENT : INK_2}
+            fill={isErr ? ERROR : INK_2}
             opacity={isErr ? 1 : 0.32}
             rx={TICK_RADIUS}
           />

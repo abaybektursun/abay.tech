@@ -3,7 +3,7 @@ version: alpha
 name: Borrowed Geometry · Specimen
 description: |
   Minimal specimen-paper aesthetic. White background, ink for text,
-  one accent (vermilion) used sparingly. Newsreader for display + captions,
+  one accent (accent) used sparingly. Newsreader for display + captions,
   Geist for body, Geist Mono for numerals + eyebrows + data.
   Single 720px content column. No dark bands. No marginalia. No camera tricks.
 
@@ -14,7 +14,7 @@ colors:
   ink-2:    "#3A4150"
   ink-3:    "#8A8E97"
   rule:     "#E5E5E2"
-  accent:   "#B7361C"
+  accent:   "#2D4A6F"
 
 typography:
   display:
@@ -68,7 +68,7 @@ elevation:
 ---
 
 ## Overview
-Single 720px column. White paper. One vermilion accent.
+Single 720px column. White paper. One accent accent.
 
 ## Colors
 Vermilion is the only accent. Used for: (i) one stat per page section,
@@ -90,20 +90,20 @@ Eyebrow ("§ 03 · the numbers") above a serif h2. Optional italic subtitle.
 No background, no card.
 
 ### stat-strip
-Hairline-separated row of numeral cells. No boxes. One cell in vermilion.
+Hairline-separated row of numeral cells. No boxes. One cell in accent.
 
 ### figure-block
 A subtle 1px hairline frame on `surface` (#F7F7F5). Caption underneath in
 serif italic preceded by a mono "figure n." label.
 
 ### segmented-control
-Inline buttons separated by gap. Selected state: 1.5px vermilion underline.
+Inline buttons separated by gap. Selected state: 1.5px accent underline.
 No pill background.
 
 ### viewer (walker2d)
 Internal canvas dark-charcoal (the 3D scene needs contrast); outer page
 white. HUD minimal — score numeral top-right, episode picker as segmented
-control, scrubber as 1px rail with vermilion thumb.
+control, scrubber as 1px rail with accent thumb.
 Static camera. Character pinned to origin (qpos[0] ignored).
 
 ## Do's and Don'ts

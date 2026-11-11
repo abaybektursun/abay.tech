@@ -111,7 +111,8 @@ export default function SideBySideGeneration({
               return (
                 <span
                   key={i}
-                  className={match ? "bg-zinc-800/15 rounded" : ""}
+                  className={match ? "rounded" : ""}
+                  style={match ? { backgroundColor: "rgba(129,178,154,0.2)" } : undefined}
                   title={`Position ${i}: "${tok.t.trim()}" (id ${tok.id})`}
                 >
                   {tok.t}
@@ -133,7 +134,8 @@ export default function SideBySideGeneration({
               return (
                 <span
                   key={i}
-                  className={match ? "bg-zinc-800/15 rounded" : ""}
+                  className={match ? "rounded" : ""}
+                  style={match ? { backgroundColor: "rgba(129,178,154,0.2)" } : undefined}
                   title={`Position ${i}: "${tok.t.trim()}" (id ${tok.id})`}
                 >
                   {tok.t}

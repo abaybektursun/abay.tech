@@ -18,8 +18,8 @@ const TYPES = ["Q", "K", "V", "Out", "MLP_up", "MLP_down"] as const;
 type MatrixType = (typeof TYPES)[number];
 
 const LAYER_COLORS = [
-  "#dbeafe", "#bfdbfe", "#93c5fd", "#60a5fa", "#3b82f6",
-  "#2563eb", "#1d4ed8", "#1e40af", "#1e3a8a", "#172554", "#0f172a",
+  "#d7eeeb", "#c0e1dd", "#a8d4ce", "#8fc7bf", "#76b9b0",
+  "#5daca1", "#4a9589", "#3a7e72", "#2d675d", "#264653", "#1a3440",
 ];
 
 export default function SVCurveViewer({ curves }: Props) {

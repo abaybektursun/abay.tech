@@ -6,7 +6,7 @@ export const COPY = {
     eyebrow: "Computational exaptation · April 2026",
     title: "Borrowed Geometry",
     deck:
-      "A frozen slice of a 31B-parameter language model beat published SOTA on a robot-manipulation benchmark. The model had only ever been trained on text. The same recipe took the random-init baseline to a 59-point gap on a harder version, then matched Decision Transformer on Walker2d with less than half the trainable parameters. The text in those weights is not just text.",
+      "A frozen slice of a 31B-parameter language model beat published SOTA on a robot-manipulation benchmark. None of the downstream tasks below appears in the substrate's pretraining. The same recipe took the random-init baseline to a 59-point gap on a harder version, and matched Decision Transformer on Walker2d with fewer trainable parameters. The structure in those weights is bigger than the data that built it.",
   },
 
   // What came out. Every win, ordered by impressiveness.
@@ -17,7 +17,7 @@ export const COPY = {
         stat: "+4.33pp",
         headline: "Beating published SOTA on robotic manipulation.",
         body:
-          "97.33% on OGBench scene-play-singletask-task1-v0 (Park et al. 2025). Published GCIQL is 93.0%. Three independent seeds, all above 96%, ± 0.74. The substrate is a single frozen Gemma layer wrapped in IQL value/policy heads: 488M frozen parameters that have only ever processed text.",
+          "97.33% on OGBench scene-play-singletask-task1-v0 (Park et al. 2025). Published GCIQL is 93.0%. Three independent seeds, all above 96%, ± 0.74. The substrate is a single frozen Gemma layer wrapped in IQL value/policy heads: 488M frozen parameters that have never seen a robotic state, action, or reward in pretraining.",
       },
       {
         stat: "1 → 60%",
@@ -26,10 +26,10 @@ export const COPY = {
           "Same recipe, harder version: cube-double-play-task1. Random-initialized Gemma collapses to ~1% across thirty evaluations. Pretrained Gemma reaches 60% mean. The 59-point gap is the contribution of pretraining alone, with architecture and trainable count held constant.",
       },
       {
-        stat: "0.43×",
-        headline: "Decision Transformer parity at less than half the trainable parameters.",
+        stat: "521K",
+        headline: "Decision Transformer parity at fewer trainable parameters.",
         body:
-          "Replace Decision Transformer's GPT-2 body with the same frozen Gemma slice. Train only the 521K-parameter wiring. 76.2 ± 0.8 on Walker2d-medium-v2 against Chen et al.'s 74.0, with 0.43× the trainable count. A 28M-parameter standalone student, distilled from the same slice, then beats its own teacher (79.97 vs 78.19) at zero Gemma forward at inference.",
+          "Replace Decision Transformer's GPT-2 body with the same frozen Gemma slice. Train only the 521K-parameter wiring. 76.2 ± 0.8 on Walker2d-medium-v2 against Chen et al.'s 74.0, at fewer trainable parameters than DT. A 28M-parameter standalone student, distilled from the same slice, then beats its own teacher (79.97 vs 78.19) at zero Gemma forward at inference.",
       },
       {
         stat: "8.7×",
@@ -39,7 +39,7 @@ export const COPY = {
       },
       {
         stat: "492×",
-        headline: "At the edge of the training distribution, a parameter-matched LSTM breaks. The frozen text model holds.",
+        headline: "At the edge of the training distribution, a parameter-matched LSTM breaks. The frozen language model holds.",
         body:
           "On cellular automaton Rule 90, at the longest sequence length the trainable interface ever saw during training (still in-distribution, not OOD), the frozen Gemma slice beats a parameter-matched LSTM by 492× and a matched-capacity from-scratch trained transformer by 148× in per-bit error. Same trainable capacity in both controls. The recurrent and the from-scratch transformer baselines plateau at the boundary of where they were trained. The substrate internalizes the distribution.",
       },
@@ -53,10 +53,12 @@ export const COPY = {
       "Per-bit error at the training-edge length (L20) on cellular automaton Rule 90, log scale. The trainable interface saw lengths up to L20 during training; this is the longest in-distribution length. Frozen Gemma sits at 0.0001 per-bit error. A from-scratch trained transformer at matched capacity sits 148× higher at 0.0217. A parameter-matched LSTM sits 492× higher at 0.0661. Random chance is 0.5. The substrate is at the boundary of where it was trained; the trainable baselines are at the boundary of what they can learn.",
     exaptation:
       "192 attention heads in Gemma 4 31B's L24–L29 band, scored by two unrelated measurements. Horizontal axis: each head's text-copying signature on 95 random English sentences, as a ratio to the slice mean. Vertical axis: max zero-ablation impact when the head is deleted, across four non-language tasks (copy, associative recall, cellular automaton Rule 90, binary addition). Vermilion: the four named heads where both measurements concentrate.",
-    cubeIsolation:
-      "Success rate on OGBench cube-double-play-singletask-task1-v0 over 100K training iterations. Three independent seeds per condition; thin lines are per-seed, bold lines are means. Pretrained Gemma at L26 reaches 60% mean. Random-init Gemma at the same depth and shape collapses to ~1%. Architecture without pretraining cannot find this task; pretraining contributes the entire signal.",
+    cubeRollouts:
+      "OGBench cube-double-play-task1, six episode seeds per condition. Same architecture, same IQL heads, same 1M-transition dataset, same compute. The only difference: pretrained Gemma 4 31B layer weights (left) vs random-initialized weights of the same shape (right). Left is the best-checkpoint single-seed rollout (s42, iter 90K, 96%); right is the substrate-isolation control (0/6 success, 500-step horizon timeouts on every episode). The arm on the right flails. The +59-point gap between conditions is what 14 trillion text tokens of pretraining buys on a manipulation task that has never appeared in any text corpus.",
+    scenePlay:
+      "Success rate on OGBench scene-play-singletask-task1-v0 across 100K training iterations. Three independent seeds per condition; thin lines per-seed, bold lines mean. Both conditions freeze the Gemma substrate identically — only the ~488K-parameter V/Q/π interface heads train. The difference is the substrate weights: blue uses Gemma 4 31B's released pretrained checkpoint; red uses random-initialized weights of the same shape and depth. Pretrained reaches 97.3% mean (± 0.74), all three seeds above 96%, clearing the published GCIQL reference at 93% by 4.33 points. Random-init reaches 86.9% — but with ~12× the seed-to-seed variance (± 8.70) and a visibly slower, less stable climb; architecture alone gets you partway, pretraining buys the +10.4-point lift, the tighter variance, and the faster convergence. Y axis is log distance from 100% (axis reversed so 100% sits at the top): visually expands the high-success range so the gap between pretrained's ~2.7% failure and random-init's ~13.1% failure is readable instead of compressed against the chart top.",
     walker2d:
-      "Pose driven directly by the policy's qpos at each simulator step. Drag to orbit, scrub the timeline, switch episodes by seed.",
+      "Best episode from the n=3 walker2d-medium-v2 runs — seed 2024, iter 80k, normalized score 79.8. MuJoCo rendering of the policy rolling out in the unmodified D4RL benchmark env.",
   },
 
   surprise: {
@@ -64,10 +66,10 @@ export const COPY = {
     body: [
       "I started with what looked like a stupid experiment.",
       "A Neural Turing Machine (Graves, Wayne, Danihelka, 2014) is a controller network plus an external read/write memory, end-to-end differentiable. The idea was to give a network a learnable scratchpad. Beautiful. Mostly stopped working at scale a decade ago. The toy benchmarks NTMs were known for were copy, repeat copy, associative recall.",
-      "I unhooked the LSTM controller and wired six frozen middle layers of Gemma 4 31B in its place. Not a single weight updated. The point of the test was negative: see how badly a substrate trained only on text would fail at canonical NTM tasks.",
-      "It did not fail. On copy, frozen Gemma kept up with a parameter-matched LSTM. On associative recall, it substantially beat one. Frozen Gemma's per-bit error on AR drops below 0.01 within 2k training steps; the original 558K LSTM-NTM never crosses 0.01 in 50k. The frozen text model was solving memory-tape tasks faster than a recurrent network specifically designed for them.",
+      "I unhooked the LSTM controller and wired six frozen middle layers of Gemma 4 31B in its place. Not a single weight updated. The point of the test was negative: see how badly a substrate pretrained on natural-language tokens and images would fail at canonical NTM bit-pattern tasks.",
+      "It did not fail. On copy, frozen Gemma kept up with a parameter-matched LSTM. On associative recall, it substantially beat one. Frozen Gemma's per-bit error on AR drops below 0.01 within 2k training steps; the original 558K LSTM-NTM never crosses 0.01 in 50k. The frozen language model was solving memory-tape tasks faster than a recurrent network specifically designed for them.",
       "I extended the same shape to one-dimensional cellular automaton Rule 90 and to binary addition: sequence in, sequence out, well-defined per-bit error. On CA Rule 90 at the longest training-edge length, the gap to a parameter-matched LSTM widened to 492×. Same trainable capacity. The LSTM is at its limit at the boundary of where it was trained. The substrate is not.",
-      "That turned a one-off experiment into a research project. The supervised lineage was the lever. Why is a frozen text model better at length internalization than a recurrent network trained specifically for the task?",
+      "That turned a one-off experiment into a research project. The supervised lineage was the lever. Why is a frozen language model better at length internalization than a recurrent network trained specifically for the task?",
     ],
   },
 
@@ -75,7 +77,7 @@ export const COPY = {
     title: "Compute is the asset",
     body: [
       "Training a frontier model is one of the largest industrial undertakings of our time. The smallest open-weight model that matches the frontier costs tens of millions of dollars to train. What you get for that money is weights. There is a claim from Lin, Tegmark, and Rolnick (2017) about those weights I find fascinating without being able to prove: they are a high-fidelity sample of how reality organizes information. The universe is compositional. Deep nets compose. They are good at this for a reason.",
-      "Huh, Cheung, Wang, and Isola (2024) make this concrete with the Platonic Representation Hypothesis: networks trained on different modalities, on different data, converge toward measurably similar geometries. The geometries inside a pretrained LLM are not text-geometries. They are reality-geometries, sampled through text.",
+      "Huh, Cheung, Wang, and Isola (2024) make this concrete with the Platonic Representation Hypothesis: networks trained on different modalities, on different data, converge toward measurably similar geometries. The geometries inside a pretrained LLM are not text-geometries or image-geometries. They are reality-geometries, sampled through whatever modalities the training data happened to cross.",
       "If that is right, those geometries should be reusable on any task whose structure overlaps reality. Robotics. Memory. Cellular automata. Anywhere compositional structure already lives.",
       "Borrowed geometry.",
     ],
@@ -89,7 +91,7 @@ export const COPY = {
     ],
     q1Label: "Question 1 · text probe",
     q1Body:
-      "For 95 random English sentences, score each head on its copying signature: how often it attends to tokens matching the current token's type. Pure text measurement on a frozen text model. Rank the heads.",
+      "For 95 random English sentences, score each head on its copying signature: how often it attends to tokens matching the current token's type. Pure English-text measurement on the frozen substrate. Rank the heads.",
     q2Label: "Question 2 · task ablation",
     q2Body:
       "Take those same heads, run binary copy, and zero each head one at a time. Measure which deletions break the task hardest. Rank.",
@@ -121,10 +123,10 @@ export const COPY = {
     cubeDouble:
       "OGBench cube-double-play-task1 is the same setup applied to a harder task. Random-init Gemma fails completely: about 1% across three seeds and thirty evaluations. The same architecture with the pretrained weights reaches 60% mean (across seeds: 96, 88, 0; bimodal). The 59-point gap is the cleanest substrate-isolation measurement in the paper. Architecture without pretraining cannot find this task. The pretrained weights are doing the entire job.",
     walker2d:
-      "Walker2d. Replace Decision Transformer's GPT-2 body with the same frozen Gemma slice. Train only the 521K-parameter wiring. 76.2 ± 0.8 across three seeds. Chen et al.'s (2021) Decision Transformer scores 74.0. We match it with 0.43× the trainable parameters. The 5-layer slice (L25–L29, 2.45B frozen) beats the 6-layer baseline by +1.66 with tighter variance. Single-layer compression to 488M frozen is achievable bimodally at favorable seeds. A 28M-parameter standalone student, distilled from the 5L slice with multi-hint Procrustes alignment, then reaches 79.97 normalized score (n=1, replication in flight), beating its own teacher at zero Gemma forward at inference.",
+      "Walker2d. Replace Decision Transformer's GPT-2 body with the same frozen Gemma slice. Train only the 521K-parameter wiring. 76.2 ± 0.8 across three seeds. Chen et al.'s (2021) Decision Transformer scores 74.0. We match it with fewer trainable parameters. The 5-layer slice (L25–L29) beats the 6-layer baseline by +1.66 with tighter variance. Single-layer compression to 488M frozen is achievable bimodally at favorable seeds. A 28M-parameter standalone student, distilled from the 5L slice with multi-hint Procrustes alignment, then reaches 79.97 normalized score (n=1, replication in flight), beating its own teacher at zero Gemma forward at inference.",
     viewerHint:
       "Pose below is driven directly by the policy's qpos at each simulator step. Drag to orbit. Scrub the timeline.",
-    closing: "Three different transfer modalities. Same recipe. The substrate has only ever processed text.",
+    closing: "Three different transfer modalities. Same recipe. None of these tasks was in the substrate's pretraining.",
   },
 
   whatsInside: {
@@ -147,7 +149,7 @@ export const COPY = {
       "The point of this program is not these specific numbers. The point is that frozen pretrained weights are a general computational substrate, and the abstract problem-solving geometries inside them are reusable wherever compositional structure already lives. What I have here is the first anchor at one scale. The territory above and around it is open.",
     ],
     caveat:
-      "None of this is perfect. The paper documents far more limitations than this section captures: failed cross-modality controls (DINOv2 fails the supervised suite), the Dyck-2 plateau on frozen mid-band weights, the L26 cube-task1 bimodal collapse, several single-seed observations, the cross-model replication that depends on a model class that does not yet exist. They are all in the limitations section and the appendix.",
+      "None of this is perfect. The paper documents far more limitations than this section captures: the Dyck-2 plateau on frozen mid-band weights, the L26 cube-task1 bimodal collapse, several single-seed observations, the cross-model replication that depends on a model class that does not yet exist. They are all in the limitations section and the appendix.",
     paperHref: "https://arxiv.org/abs/XXXX.XXXXX", // TODO: replace with actual arXiv ID
     paperLabel: "Read the paper on arXiv",
   },

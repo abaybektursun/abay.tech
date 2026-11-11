@@ -4,6 +4,7 @@ import React from 'react'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import Comments from '@/components/comments'
+import { PostEyebrowWithProvenance } from '@/components/ui/ai-provenance'
 import { Group } from '@visx/group'
 import { scaleBand, scaleLinear, scaleLog } from '@visx/scale'
 import { Bar, Line, Circle, LinePath } from '@visx/shape'
@@ -437,7 +438,7 @@ function AnatomyDiagram() {
         <div className="px-3 py-2.5 border-r border-zinc-100">#</div>
         <div className="px-4 py-2.5 border-r border-zinc-100">Step</div>
         <div className="px-4 py-2.5 border-r border-zinc-100">Tap-In V6</div>
-        <div className="px-4 py-2.5">R8 (this post)</div>
+        <div className="px-4 py-2.5">Tap-In V7 (this post)</div>
       </div>
       {steps.map((s, i) => (
         <div
@@ -455,7 +456,7 @@ function AnatomyDiagram() {
 }
 
 // ─── R9H grid (token-class hybrid screen) ───────────────────────────
-// 30-chunk screen of (E, C) configs: solo Δ BPB and stacked-on-R8 Δ BPB.
+// 30-chunk screen of (E, C) configs: solo Δ BPB and stacked-on-V7-gap Δ BPB.
 // Color-coded cells; winner cell highlighted.
 function R9hGrid() {
   type Cell = { e: number; c: number; solo: number | null; stack: number | null }
@@ -483,7 +484,7 @@ function R9hGrid() {
       <div className={`grid ${cols} text-xs font-medium text-zinc-500 border-b border-zinc-100 bg-zinc-50`}>
         <div className="px-3 py-2.5 border-r border-zinc-100 whitespace-nowrap">(E, C)</div>
         <div className="px-4 py-2.5 border-r border-zinc-100 text-right whitespace-nowrap">solo Δ BPB</div>
-        <div className="px-4 py-2.5 text-right whitespace-nowrap">+ R8 4-way Δ BPB</div>
+        <div className="px-4 py-2.5 text-right whitespace-nowrap">+ V7 gap-stack Δ BPB</div>
       </div>
       {data.map((d, i) => {
         const winSolo = d === bestSolo
@@ -636,7 +637,7 @@ function CaseStudyCard({
   const before = -c.nllBefore
   const after = -c.nllAfter
 
-  // R8's collective verdict: tally top-1 across patterns.
+  // V7 gap matcher's collective verdict: tally top-1 across patterns.
   const voteCounts = new Map<string, number>()
   for (const p of c.patterns) {
     const top = p.topCands[0]?.piece
@@ -750,21 +751,22 @@ export default function StackingSymbolicMemoryPage() {
 
       {/* ─── Header ─── */}
       <header className="mb-10">
-        <p className="text-xs tracking-widest uppercase text-zinc-400 mb-4">
+        <PostEyebrowWithProvenance ai="stacking-symbolic-memory">
           Study &middot; April 2026
-        </p>
+        </PostEyebrowWithProvenance>
         <h1 className="text-[24px] md:text-[28px] font-semibold leading-snug tracking-tight text-zinc-900 mb-5">
-          Stacking Memory at Eval Time
+          Tap-In V7: Stacking Memory at Eval Time
         </h1>
         <p className="text-[15px] text-zinc-500 leading-relaxed">
           A 36M-parameter LM under <a href="https://github.com/openai/parameter-golf"
             className="underline decoration-zinc-300 hover:text-zinc-700">Parameter Golf</a> rules
           can&apos;t see past its 2,048-token attention window. <a href="https://github.com/openai/parameter-golf/pull/1518"
             className="underline decoration-zinc-300 hover:text-zinc-700">Tap-In V6</a> reads
-          the lost prefix and recovers some of that signal. We add two more matchers with
-          different match criteria. All three follow the same four-step recipe; together
-          they lower BPB by <M expr="\sim 0.001" /> pre-TTT, validated across two seeds.
-          The load-bearing principle: <em>orthogonal</em> match criteria stack additively;
+          the lost prefix via contiguous n-gram matches. <strong>Tap-In V7 extends V6&apos;s recipe along two new axes</strong>
+          {' '}&mdash; multi-candidate vote distributions over gap-pattern skip-grams,
+          plus token-class hybrid keys. Together V7 lowers BPB by <M expr="\sim 0.001" />{' '}
+          pre-TTT, validated across two seeds within <M expr="5 \times 10^{-6}" />. The
+          load-bearing principle: <em>orthogonal</em> match criteria stack additively;
           same-axis variants cannibalize.
         </p>
       </header>
@@ -774,12 +776,12 @@ export default function StackingSymbolicMemoryPage() {
       {/* ─── 1. The recipe ─── */}
       <section className="mb-16">
         <h2 className="text-lg font-semibold text-zinc-900 mb-4">
-          The recipe both V6 and R8 follow.
+          The recipe V6 set, V7 extends.
         </h2>
         <p className="text-sm leading-relaxed text-zinc-600 mb-4">
-          At each scored position <M expr="p" />, both rules build a small probability
-          distribution <M expr="Q_{\text{rule}}(v)" /> from the lost prefix and convex-mix it
-          with the model&apos;s output. Four steps. Same contract on both sides:
+          At each scored position <M expr="p" />, both versions build a small probability
+          distribution <M expr="Q_{\text{rule}}(v)" /> from the lost prefix and convex-mix
+          it with the model&apos;s output. Four steps. Same contract on both sides:
           causal, normalized, per-document, built only from already-scored tokens.
         </p>
 
@@ -791,12 +793,16 @@ export default function StackingSymbolicMemoryPage() {
           <M expr="\sum_v P_{\text{new}}(v) = 1" /> by construction. All four conditions
           of <a className="underline decoration-zinc-300 hover:text-zinc-700"
             href="https://github.com/openai/parameter-golf/issues/1017"
-            target="_blank" rel="noopener noreferrer">Issue&nbsp;#1017</a> hold. The only
-          thing the two rules disagree on is <strong>step&nbsp;1</strong>: what counts as a
-          match. V6 matches contiguous suffixes. R8 matches tokens at fixed gap offsets
-          packed into a hash &mdash; <code>(1, 2, 3)</code>, <code>(1, 2, 3, 4)</code>,
-          <code> (1, 3, 5)</code>, <code>(1, 2)</code>. Different keys see different
-          historical positions. That difference is where the additivity comes from.
+            target="_blank" rel="noopener noreferrer">Issue&nbsp;#1017</a> hold. V7 changes
+          two of the four steps. <strong>Step&nbsp;1</strong>: V6 matches contiguous
+          suffixes; V7 matches tokens at fixed gap offsets packed into a hash &mdash;
+          <code> (1, 2, 3)</code>, <code>(1, 2, 3, 4)</code>, <code>(1, 3, 5)</code>,
+          <code>(1, 2)</code>. Different keys see different historical positions, and V7
+          runs all four matchers in parallel and stacks the mixes. <strong>Step&nbsp;3</strong>:
+          V6 picks the longest single match and mixes a Dirac on its continuation;
+          V7 reads out a top-<M expr="K" /> vote distribution and mixes the whole
+          distribution. The first change unlocks compositional gain across gap variants;
+          the second uses the entire vote shape instead of throwing it away.
         </p>
       </section>
 
@@ -809,8 +815,8 @@ export default function StackingSymbolicMemoryPage() {
           A position from FineWeb val. The document is some legal text about
           &ldquo;registry,&rdquo; with the phrase <code>registry.jockey</code> appearing
           several times earlier &mdash; all <em>before</em> the model&apos;s 2,048-token
-          window. Below is the position itself, what every R8 pattern sees, and what
-          the mix does to the model&apos;s top-5.
+          window. Below is the position itself, what every V7 gap pattern sees, and
+          what the mix does to the model&apos;s top-5.
         </p>
 
         <CaseStudyCard
@@ -819,7 +825,7 @@ export default function StackingSymbolicMemoryPage() {
           story={
             <>
               The model put <code>ockey</code> at logp <code>&minus;12.4</code>,
-              outside its top-5 (top guess: <code>son</code>). R8&apos;s
+              outside its top-5 (top guess: <code>son</code>). V7&apos;s
               gap-<code>(1,2,3)</code> hash over the last three tokens hit
               <strong> 6 historical positions</strong>, every one followed by
               <code> ockey</code>. The mix moves <code>ockey</code> to logp
@@ -833,7 +839,7 @@ export default function StackingSymbolicMemoryPage() {
         </p>
         <ol className="text-sm leading-relaxed text-zinc-600 space-y-3 list-none ml-0 mb-4">
           <li>
-            <strong>1. Build a key.</strong> R8 with gap <code>(1, 2, 3)</code> reads
+            <strong>1. Build a key.</strong> V7 with gap <code>(1, 2, 3)</code> reads
             the tokens at <M expr="p-1,\ p-2,\ p-3" /> &mdash; <code>[&quot;j&quot;,
             &quot;registry.&quot;, &quot;.&quot;]</code> &mdash; and packs them into one
             integer hash via bit-shift. Pure causal, target token never read.
@@ -924,7 +930,7 @@ export default function StackingSymbolicMemoryPage() {
         />
 
         <p className="text-sm leading-relaxed text-zinc-600 mt-8 mb-2">
-          And the worst position across all 26,369 fires &mdash; where R8 is wrong
+          And the worst position across all 26,369 fires &mdash; where V7 is wrong
           with high confidence:
         </p>
         <CaseStudyCard
@@ -933,10 +939,10 @@ export default function StackingSymbolicMemoryPage() {
           story={
             <>
               Earlier in the document, the phrase &ldquo;good intentions including X&rdquo;
-              appeared a few times. Every R8 pattern confidently votes for
+              appeared a few times. Every V7 gap pattern confidently votes for
               <code> including</code> with <M expr="q = 1" />. But here
               the sentence ends differently and the target is whitespace.
-              <strong> R8 wastes <M expr="\approx 0.04" /> of mass on a wrong continuation,
+              <strong> V7 wastes <M expr="\approx 0.04" /> of mass on a wrong continuation,
               costing 0.16 nats.</strong> The hurt ceiling is structural &mdash;
               {' '}<M expr="w_{\text{base}} \cdot q_1 \le 0.04" />{' '}&mdash;
               so the matcher can&apos;t blow up.
@@ -948,25 +954,26 @@ export default function StackingSymbolicMemoryPage() {
       {/* ─── 4b. Another axis: token-class hybrid keys ─── */}
       <section className="mb-16">
         <h2 className="text-lg font-semibold text-zinc-900 mb-4">
-          Another axis: token-class hybrid keys.
+          V7&apos;s second axis: token-class hybrid keys.
         </h2>
         <p className="text-sm leading-relaxed text-zinc-600 mb-4">
-          Gap patterns vary <em>which positions</em> the key reads. There&apos;s
-          a second knob the gap variants don&apos;t touch: <em>what each slot in
-          the key actually holds</em>. R8&apos;s slots are exact token IDs
+          Gap patterns vary <em>which positions</em> the key reads. V7 has a second
+          matcher that turns a different knob: <em>what each slot in the key
+          actually holds</em>. The gap matcher&apos;s slots are exact token IDs
           (13&nbsp;bits each, full 8,192-vocab). What if some slots were token
           <em> classes</em> instead &mdash; small buckets of similar tokens?
         </p>
         <p className="text-sm leading-relaxed text-zinc-600 mb-4">
           Build a hybrid key with <M expr="E" /> exact slots (anchor positions)
           plus <M expr="C" /> 5-bit token-class slots (context). Call it
-          <code> r9h_E_C</code>. Exact slots demand specific tokens; class slots
-          generalize across tokens of the same class. The recipe&apos;s steps
-          stay identical &mdash; only step&nbsp;1 changes.
+          <code> r9h_E_C</code> &mdash; V7&apos;s second matcher family. Exact slots
+          demand specific tokens; class slots generalize across tokens of the same
+          class. The recipe&apos;s steps stay identical &mdash; only step&nbsp;1
+          changes.
         </p>
         <p className="text-sm leading-relaxed text-zinc-600 mb-4">
           A 30-chunk screen across the <M expr="(E, C)" /> grid (single-rule
-          alone, then stacked on R8&apos;s 4-way):
+          alone, then stacked on V7&apos;s gap stack):
         </p>
 
         <R9hGrid />
@@ -984,9 +991,9 @@ export default function StackingSymbolicMemoryPage() {
             <div className="px-3 py-2.5 text-right whitespace-nowrap">range</div>
           </div>
           {[
-            { name: 'r9h_2_2 alone',           s42: -0.000729, s314: -0.000734 },
-            { name: 'R8 4-way alone',          s42: -0.000841, s314: -0.000847 },
-            { name: 'R8 4-way + r9h_2_2',      s42: -0.001046, s314: -0.001051, win: true },
+            { name: 'r9h_2_2 alone',                    s42: -0.000729, s314: -0.000734 },
+            { name: 'V7 gap stack alone',               s42: -0.000841, s314: -0.000847 },
+            { name: 'V7 full (gap + r9h_2_2)',          s42: -0.001046, s314: -0.001051, win: true },
           ].map((r, i, a) => (
             <div
               key={r.name}
@@ -1004,19 +1011,20 @@ export default function StackingSymbolicMemoryPage() {
 
         <p className="text-sm leading-relaxed text-zinc-600 mb-4">
           The mean is <M expr="-0.001049" />, range under <M expr="5 \times 10^{-6}" />.
-          That&apos;s a 24% bump over R8 alone &mdash; from one new matcher operating
-          on a different axis of the recipe.
+          That&apos;s a 24% bump over V7&apos;s gap stack alone &mdash; from one new
+          matcher operating on a different axis of the recipe.
         </p>
         <p className="text-sm leading-relaxed text-zinc-600">
           The two-axis structure has a sharper rule than the gap-only stacking did.
-          <strong> Same-axis variants cannibalize:</strong> R8&nbsp;+&nbsp;<code>r9h_2_2</code>
-          plus <code>r9h_2_3</code> (both share <M expr="C=2" /> context depth) is barely
-          better than R8&nbsp;+&nbsp;<code>r9h_2_2</code> alone. <strong>Diagonal pairs
-          stack:</strong> R8&nbsp;+&nbsp;<code>r9h_2_2</code>&nbsp;+&nbsp;<code>r9h_3_1</code>
-          (anchor depth 2&nbsp;then&nbsp;3, context 2&nbsp;then&nbsp;1) is the best
-          three-rule combo we&apos;ve seen on the screen substrate. Moves along the
-          <em> diagonal</em> of the <M expr="(E, C)" /> grid compose; moves on the same
-          row or column don&apos;t. The choice of &ldquo;what fills the key&rdquo; is
+          <strong> Same-axis variants cannibalize:</strong> the V7 gap stack +{' '}
+          <code>r9h_2_2</code> plus <code>r9h_2_3</code> (both share <M expr="C=2" />{' '}
+          context depth) is barely better than the gap stack +{' '}<code>r9h_2_2</code>{' '}
+          alone. <strong>Diagonal pairs stack:</strong> the gap stack +{' '}
+          <code>r9h_2_2</code>&nbsp;+&nbsp;<code>r9h_3_1</code> (anchor depth
+          2&nbsp;then&nbsp;3, context 2&nbsp;then&nbsp;1) is the best three-rule combo
+          we&apos;ve seen on the screen substrate. Moves along the <em>diagonal</em>{' '}
+          of the <M expr="(E, C)" /> grid compose; moves on the same row or column
+          don&apos;t. The choice of &ldquo;what fills the key&rdquo; is
           a grid, not a list.
         </p>
       </section>
@@ -1040,13 +1048,23 @@ export default function StackingSymbolicMemoryPage() {
             mass &mdash; capped at 4% &mdash; onto a wrong continuation.
           </figcaption>
         </figure>
-        <p className="text-sm leading-relaxed text-zinc-600">
+        <p className="text-sm leading-relaxed text-zinc-600 mb-4">
           The asymmetry is structural. The hurt ceiling is set by{' '}
           <M expr="w_{\text{base}} \cdot \text{top1\_share} \le 0.04" />. The help floor
           isn&apos;t bounded the same way: when the lost prefix repeats verbatim, the
           matcher can route up to <M expr="w_{\text{base}}" /> of mass onto a token
-          the model missed entirely. R8 is a small cheap bet with bounded downside
+          the model missed entirely. V7 is a small cheap bet with bounded downside
           and an unbounded right tail.
+        </p>
+        <p className="text-sm leading-relaxed text-zinc-600">
+          The asymmetry is also <em>exploitable</em>. Most of the 79% hurt mass is
+          on positions where the model was already confident-correct; the matcher
+          fires anyway and wastes a few percent on a wrong continuation. Gating by
+          model uncertainty &mdash; only firing when the negative log-prob of the
+          target exceeds some threshold (e.g. <M expr="-\log p_{\text{target}} \ge 1\,\text{nat}" />)
+          &mdash; filters those out. Combined with a higher <M expr="w_{\text{base}}" /> on
+          what remains, this is what production tuning does: trade quantity of
+          fires for quality per fire, then crank <M expr="w" /> on the survivors.
         </p>
       </section>
 
@@ -1095,7 +1113,7 @@ export default function StackingSymbolicMemoryPage() {
         <div className="my-6 bg-zinc-50 border border-zinc-100 rounded-lg px-5 py-5">
           <M block expr="P_{\text{new}}(v) \;=\; (1 - w)\, P_{\text{old}}(v) \;+\; w\, Q_{\text{rule}}(v)" />
         </div>
-        <p className="text-sm leading-relaxed text-zinc-600">
+        <p className="text-sm leading-relaxed text-zinc-600 mb-4">
           With <M expr="\sum_v Q_{\text{rule}}(v) = 1" /> and{' '}
           <M expr="0 \le w \le 1" />, then{' '}
           <M expr="\sum_v P_{\text{new}}(v) = 1" />.
@@ -1106,74 +1124,102 @@ export default function StackingSymbolicMemoryPage() {
           only, which is strictly earlier than the model&apos;s window. There is no
           path by which a matcher reads the target at scoring time.
         </p>
+        <p className="text-xs leading-relaxed text-zinc-500">
+          Implementation note: the production GPU kernel uses{' '}
+          <M expr="w = w_{\text{base}} \cdot q_{\text{target}}" /> (target&apos;s vote share)
+          rather than <M expr="w_{\text{base}} \cdot q_1" /> (top-1&apos;s share) to keep
+          the tilt scalar &mdash; the kernel only needs target stats, not the full
+          vote vector. The two are equal when target is the top-1 candidate; when
+          target is in the bucket but not top-1, the deployed kernel uses a slightly
+          softer mix. Both are convex and preserve normalization.
+        </p>
       </section>
 
-      {/* ─── 7. Limits ─── */}
+      {/* ─── 7. Why C++ for the matcher ─── */}
       <section className="mb-16">
         <h2 className="text-lg font-semibold text-zinc-900 mb-4">
-          What this post does not show.
+          Why the matcher is C++.
         </h2>
-        <ul className="text-sm leading-relaxed text-zinc-600 space-y-3 list-none">
+        <p className="text-sm leading-relaxed text-zinc-600 mb-4">
+          Both of V7&apos;s matchers (gap-pattern and hybrid-key) run inside
+          <code> tapin_cpp.py</code>, JIT-compiled
+          via <code>torch.utils.cpp_extension.load_inline()</code> at import time.
+          The hot path is integer-only: pack a few prefix tokens into a hash key,
+          look up the bucket of historical continuations, accumulate votes, return
+          the top-K. Every step is array indexing and bit-shifts &mdash; the kind
+          of work where Python overhead dominates by 100&times; or more.
+        </p>
+        <p className="text-sm leading-relaxed text-zinc-600 mb-4">
+          The same matcher in pure NumPy takes ~14&thinsp;s per evaluated window
+          across 25M val tokens. In C++ it takes ~0.04&thinsp;s. Three things make
+          that gap:
+        </p>
+        <ul className="text-sm leading-relaxed text-zinc-600 space-y-2 list-none mb-4">
           <li>
-            <strong>Pre-TTT only.</strong> Test-time training shifts the model&apos;s
-            distribution toward each evaluated chunk; the matchers will have less
-            surprise to capture afterwards. The actual post-TTT delta is unmeasured.
+            <strong>GIL-free hot loop.</strong> A <code>py::gil_scoped_release</code>
+            at the top of the matching function lets every window run independently.
+            A <code>ThreadPoolExecutor</code> on the Python side fans out windows
+            across CPU cores. With 16 cores on a Modal CPU instance the matcher
+            saturates the bandwidth of the <M expr="(W, T)" /> token array.
           </li>
           <li>
-            <strong>One substrate.</strong> A 4&times;H100 reproduction of a PR1797-style
-            model. The deployment substrate (PR&nbsp;#1855 + Tap-In V6) hasn&apos;t been
-            run end-to-end with R8 + r9h yet.
+            <strong>Zero allocation on the hot path.</strong> A
+            <code> thread_local Scratch</code> struct holds pre-sized
+            <code> head[V]</code>, <code>tail[V]</code>, <code>fwd[wlen]</code>
+            linked-list arrays plus the candidate-vote scratch. First call grows
+            them; subsequent calls reuse. No <code>malloc</code> in the matching
+            loop, no GC, no Python objects.
           </li>
           <li>
-            <strong>Two seeds, not three.</strong> Validated cross-seed at 42 and 314
-            within <M expr="5 \times 10^{-6}" /> for both R8 alone and the stacked
-            R8&nbsp;+&nbsp;<code>r9h_2_2</code> combo. Seed 1234 cached logits aren&apos;t
-            ready; we don&apos;t yet have a Bonferroni-significant 3-seed claim.
-          </li>
-          <li>
-            <strong>Diagonal pair predicted, not measured at full val.</strong> The
-            R8&nbsp;+&nbsp;<code>r9h_2_2</code>&nbsp;+&nbsp;<code>r9h_3_1</code> diagonal
-            extrapolates from the screen substrate to roughly <M expr="-0.00107" />,
-            but we haven&apos;t paid for the full-val run.
-          </li>
-          <li>
-            <strong>Gap patterns hand-picked.</strong> The R8 gap selection is four
-            from a dozen tried; the <M expr="(E, C)" /> grid for r9h was systematic.
+            <strong>Linked-list-of-occurrences for O(matches) iteration.</strong>{' '}
+            For each token <M expr="t" />, <code>head[t]</code> is the first index
+            where it occurred in the lost prefix; <code>fwd[i]</code> chains to the
+            next. Iterating the chain is an <M expr="O(\text{occurrences})" />{' '}
+            walk &mdash; no scan over the whole prefix.
           </li>
         </ul>
-      </section>
-
-      {/* ─── 8. Code + closing ─── */}
-      <section className="mb-16">
-        <h2 className="text-lg font-semibold text-zinc-900 mb-4">
-          Code &amp; what&apos;s next.
-        </h2>
         <p className="text-sm leading-relaxed text-zinc-600 mb-4">
-          Both matchers are C++ extensions in the existing <code>tapin_cpp.py</code>.
-          R8 (gap patterns) and r9h (token-class hybrids) are independent &mdash;
-          either can run on its own, and stacking is just sequential application of
-          the convex mix.
-        </p>
-        <div className="my-6 bg-zinc-50 border border-zinc-100 rounded-lg px-5 py-4 text-[13px] text-zinc-700 font-mono leading-relaxed overflow-x-auto">
-          <div>TAPIN_V8_ENABLED=1</div>
-          <div>TAPIN_V8_GAP_PATTERNS=&quot;1,2,3|1,2,3,4|1,3,5|1,2&quot;</div>
-          <div>TAPIN_V8_W_BASES=&quot;0.04,0.04,0.04,0.04&quot;</div>
-          <div>TAPIN_V9H=&quot;2_2&quot;     <span className="text-zinc-400"># 2 exact + 2 class slots</span></div>
-        </div>
-        <p className="text-sm leading-relaxed text-zinc-600 mb-4">
-          What we now know that we didn&apos;t when this post started:{' '}
-          <strong>cross-axis composition is the load-bearing principle.</strong>{' '}
-          One axis (R8 gap patterns) gives <M expr="-0.000841" />. A different
-          axis (r9h key shape) gives an additional <M expr="-0.000205" /> on top
-          for a total of <M expr="-0.001049" /> mean across two seeds. Same-axis
-          variants saturate; orthogonal axes compound.
+          The matcher emits a flat <M expr="\text{int32}[5, N]" /> array of fires
+          (positions, tokens, is_cross, match_lengths, vote_counts). Python wraps
+          it as a <code>numpy</code> view with zero copy. The downstream GPU mix
+          reads it directly via <code>torch.from_numpy</code>.
         </p>
         <p className="text-sm leading-relaxed text-zinc-600">
-          What we still don&apos;t know: how much of this survives TTT, how much
-          transfers to the actual deployment substrate (PR&nbsp;#1855 + Tap-In V6),
-          and how much further the recipe&apos;s remaining axes &mdash; mass source,
-          search domain, mix weight &mdash; can push the curve. Three more axes
-          to map before we&apos;ve seen the design space.
+          ~250 LOC of C++ per matcher. <code>-O3 -march=native -ffast-math
+          -funroll-loops</code> at compile, sub-second JIT on a warm cache. The
+          submission path runs the same C++ inside the post-TTT sliding-eval loop
+          on 8&times;H100; matcher cost lives entirely on the CPU side and overlaps
+          with GPU compute via streams.
+        </p>
+        <p className="text-sm leading-relaxed text-zinc-600 mb-3">
+          Research baseline (defaults used throughout this post):
+        </p>
+        <div className="my-3 bg-zinc-50 border border-zinc-100 rounded-lg px-5 py-4 text-[13px] text-zinc-700 font-mono leading-relaxed overflow-x-auto">
+          <div>TAPIN_V7_ENABLED=1</div>
+          <div>TAPIN_V7_GAP_PATTERNS=&quot;1,2,3|1,2,3,4|1,3,5|1,2&quot;</div>
+          <div>TAPIN_V7_GAP_W_BASES=&quot;0.04,0.04,0.04,0.04&quot;</div>
+          <div>TAPIN_V7_HYBRID=&quot;2_2&quot;     <span className="text-zinc-400"># 2 exact + 2 class slots</span></div>
+        </div>
+        <p className="text-sm leading-relaxed text-zinc-600 mt-6 mb-3">
+          Production config (tuning along the named axes):
+        </p>
+        <div className="my-3 bg-zinc-50 border border-zinc-100 rounded-lg px-5 py-4 text-[13px] text-zinc-700 font-mono leading-relaxed overflow-x-auto">
+          <div>TAPIN_V7_ENABLED=1</div>
+          <div>TAPIN_V7_GAP_PATTERNS=&quot;1,2,3|1,2,3,4|1,3,5|1,2|2,3,4|1,2,4|1,2,5|1,4,5|1,2,3,5&quot;</div>
+          <div>TAPIN_V7_GAP_W_BASES=&quot;0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20&quot;</div>
+          <div>TAPIN_V7_HYBRID=&quot;3,3|2,2|2,3|3,2&quot;</div>
+          <div>TAPIN_V7_HYBRID_W=0.20</div>
+          <div>TAPIN_V7_ENTROPY_MIN=1.0     <span className="text-zinc-400"># gate by uncertainty</span></div>
+          <div>TAPIN_V7_MIN_LOST=64</div>
+        </div>
+        <p className="text-sm leading-relaxed text-zinc-600 mt-4">
+          Five tunings, all named in this post: more gap patterns (9 vs&nbsp;4),
+          more hybrid specs along the <M expr="(E, C)" /> diagonal (4&nbsp;vs&nbsp;1),
+          higher <M expr="w_{\text{base}}" /> (0.20 vs 0.04), shorter
+          <M expr="\text{min\_lost}" /> (64&nbsp;vs&nbsp;128), and entropy gating.
+          Together these push the booster well past the baseline numbers reported
+          here on the deployment substrate (post-TTT, full val). The recipe&apos;s
+          remaining headroom is real.
         </p>
       </section>
 

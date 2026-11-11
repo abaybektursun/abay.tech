@@ -40,7 +40,7 @@ export default function ConditionHeatmap({ matrices }: Props) {
         },
         color: {
           type: "log",
-          scheme: "YlOrRd",
+          range: ["#f2efe9", "#e07a5f"],
           domain: [2, 55000],
           label: "Condition #",
           legend: true,

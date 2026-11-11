@@ -1,6 +1,8 @@
 'use client'
 
 import React from 'react'
+import Comments from '@/components/comments'
+import { PostEyebrowWithProvenance } from '@/components/ui/ai-provenance'
 import { Group } from '@visx/group'
 import { scaleBand, scaleLinear, scaleLog } from '@visx/scale'
 import { Bar, Line, Circle } from '@visx/shape'
@@ -347,9 +349,9 @@ export default function DataOrderingPage() {
     <div className="max-w-[600px] mx-auto px-5 pt-6 pb-16 text-zinc-800">
 
       <header className="mb-8">
-        <p className="text-xs tracking-widest uppercase text-zinc-400 mb-3">
+        <PostEyebrowWithProvenance ai="data-ordering" className="mb-3">
           Negative Result &middot; March 2026
-        </p>
+        </PostEyebrowWithProvenance>
         <h1 className="text-[24px] md:text-[28px] font-semibold leading-snug tracking-tight text-zinc-900 mb-4">
           Does Training Data Selection Help for LM Pre-training?
         </h1>
@@ -510,6 +512,8 @@ export default function DataOrderingPage() {
           Code: <code className="font-mono text-zinc-500">experiments/data_order/</code>
         </p>
       </footer>
+
+      <Comments />
     </div>
   )
 }

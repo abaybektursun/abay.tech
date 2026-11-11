@@ -55,7 +55,7 @@ export default function QuantSensitivityHeatmap({
         },
         color: {
           type: "linear",
-          scheme: "YlOrRd",
+          range: ["#f2efe9", "#e07a5f"],
           domain: [0, 500],
           label: "Δ BPB (×10⁻⁶)",
           legend: true,
@@ -76,7 +76,7 @@ export default function QuantSensitivityHeatmap({
               x: "type",
               y: "layer",
               text: (d: (typeof data)[number]) => `${d.delta_micro.toFixed(0)}`,
-              fill: (d: (typeof data)[number]) => (d.delta_micro > 300 ? "white" : "#f4f4f5"),
+              fill: (d: (typeof data)[number]) => (d.delta_micro > 300 ? "white" : "#5a3d30"),
               fontSize: 10,
               fontWeight: "600",
             }
@@ -130,7 +130,7 @@ export default function QuantSensitivityHeatmap({
         ],
         color: {
           type: "linear",
-          scheme: "YlOrRd",
+          range: ["#f2efe9", "#e07a5f"],
           domain: [400, 1100],
         },
       }),

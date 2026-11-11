@@ -23,7 +23,8 @@ interface HeadsPayload {
   named: NamedEntry[];
 }
 
-const ACCENT = "#B7361C";
+const ACCENT = "#2D4A6F";       // editorial blue
+const HIGHLIGHT = "#C49B47";    // amber/gold — top-impact named heads (the headline finding)
 const INK = "#11161D";
 const INK_3 = "#8A8E97";
 const RULE = "#E5E5E2";
@@ -109,20 +110,20 @@ export default function ExaptationScatter({ data }: Props) {
           strokeWidth: 1.2,
           clip: true,
         }),
-        // Top-impact named heads: vermilion + halo.
+        // Top-impact named heads: amber/gold highlight + halo.
         Plot.dot(points.filter((p) => p.top), {
           x: "ratio",
           y: "impact",
           r: 14,
-          fill: ACCENT,
-          fillOpacity: 0.12,
+          fill: HIGHLIGHT,
+          fillOpacity: 0.18,
           clip: true,
         }),
         Plot.dot(points.filter((p) => p.top), {
           x: "ratio",
           y: "impact",
           r: 7,
-          fill: ACCENT,
+          fill: HIGHLIGHT,
           stroke: "white",
           strokeWidth: 1.5,
           clip: true,

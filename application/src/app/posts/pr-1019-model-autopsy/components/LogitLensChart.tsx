@@ -52,8 +52,8 @@ export default function LogitLensChart({ probePoints, numEncoderLayers }: Props)
               x2: "x2",
               y1: "y1",
               y2: "y2",
-              fill: "#27272a",
-              fillOpacity: 0.03,
+              fill: "#264653",
+              fillOpacity: 0.04,
             }
           ),
           Plot.rectY(
@@ -63,23 +63,23 @@ export default function LogitLensChart({ probePoints, numEncoderLayers }: Props)
               x2: "x2",
               y1: "y1",
               y2: "y2",
-              fill: "#991b1b",
-              fillOpacity: 0.03,
+              fill: "#e07a5f",
+              fillOpacity: 0.04,
             }
           ),
           Plot.lineY(data, {
             x: "index",
             y: "loss_nats",
-            stroke: "#27272a",
+            stroke: "#264653",
             strokeWidth: 2,
             curve: "catmull-rom",
           }),
           Plot.dot(data, {
             x: "index",
             y: "loss_nats",
-            fill: (d: typeof data[number]) => (d.delta_bits_per_token !== null && d.delta_bits_per_token > 0 ? "#991b1b" : "#27272a"),
+            fill: (d: typeof data[number]) => (d.delta_bits_per_token !== null && d.delta_bits_per_token > 0 ? "#e07a5f" : "#264653"),
             r: 5,
-            stroke: "#f4f4f5",
+            stroke: "#f2efe9",
             strokeWidth: 2,
             tip: true,
             title: (d: typeof data[number]) =>
@@ -92,7 +92,7 @@ export default function LogitLensChart({ probePoints, numEncoderLayers }: Props)
           Plot.lineY(data, {
             x: "index",
             y: (d: typeof data[number]) => d.top1_accuracy * yMax,
-            stroke: "#a1a1aa",
+            stroke: "#81b29a",
             strokeWidth: 1,
             strokeDasharray: "6,3",
             curve: "catmull-rom",
@@ -122,15 +122,15 @@ export default function LogitLensChart({ probePoints, numEncoderLayers }: Props)
     <figure className="bg-zinc-50 border border-zinc-100 rounded-lg p-5">
       <div className="flex items-center gap-5 mb-4 text-xs text-zinc-400">
         <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-0.5 bg-zinc-800" />
+          <span className="inline-block w-3 h-0.5" style={{ backgroundColor: "#264653" }} />
           Loss (nats)
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-0.5 bg-zinc-400 border-t border-dashed border-zinc-400" />
+          <span className="inline-block w-3 h-0.5 border-t border-dashed" style={{ borderColor: "#81b29a" }} />
           Top-1 accuracy (scaled)
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block w-2 h-2 rounded-full bg-red-800" />
+          <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: "#e07a5f" }} />
           Readability dropped
         </span>
       </div>

@@ -13,6 +13,7 @@ import LossHeatmap from "./components/LossHeatmap";
 import TopKPredictions from "./components/TopKPredictions";
 import SideBySideGeneration from "./components/SideBySideGeneration";
 import InsightCallout from "./components/InsightCallout";
+import { PostEyebrowWithProvenance } from "@/components/ui/ai-provenance";
 
 import trainingLog from "./data/training_log.json";
 import logitLens from "./data/logit_lens.json";
@@ -37,23 +38,27 @@ export default function ModelAnalysisPage() {
 
       {/* ─── Header ─── */}
       <header className="mb-10">
-        <p className="text-xs tracking-widest uppercase text-zinc-400 mb-4">
+        <PostEyebrowWithProvenance ai="pr-1019-model-autopsy">
           <a href="https://github.com/openai/parameter-golf/pull/1019" target="_blank" rel="noopener noreferrer"
             className="underline decoration-zinc-300 hover:text-zinc-700">
             PR #1019
           </a>
           {" "}&middot; March 2026
-        </p>
+        </PostEyebrowWithProvenance>
         <h1 className="text-[24px] md:text-[28px] font-semibold leading-snug tracking-tight text-zinc-900 mb-5">
-          Autopsy of PR #1019&apos;s 27M-Parameter GPT
+          Autopsy of a SOTA Parameter-Golf GPT
         </h1>
         <p className="text-[15px] text-zinc-500 leading-relaxed">
-          I trained a 27M-parameter GPT to 1.134 BPB on FineWeb, then dissected
-          it. Three findings: MLP matrices need more quantization bits than
-          attention — despite Q and Out having 3,000× higher condition numbers. A
-          single layer (L7) contributes −4.35 bits/token of readability — more
-          than any other single layer after L0. And calibration is nearly perfect at 0.24% ECE, so
-          temperature scaling is not worth pursuing.
+          Q matrices have condition numbers up to 54,000×. They&apos;re not the
+          fragile ones. I trained a 27M-parameter GPT to 1.134 BPB on FineWeb
+          and dissected it. MLP is 4× more sensitive to quantization than all
+          attention combined. L7 contributes −4.35 bits/token of readability.
+          Calibration is near-perfect at 0.24% ECE — don&apos;t bother tuning
+          it. As of March 30, 2026 — merged as #1 on the{" "}
+          <a href="https://github.com/openai/parameter-golf" target="_blank" rel="noopener noreferrer"
+            className="underline decoration-zinc-300 hover:text-zinc-700">
+            leaderboard
+          </a>.
         </p>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-8">
           <StatsCard label="Final BPB" value="1.134" />
@@ -73,11 +78,9 @@ export default function ModelAnalysisPage() {
         subtitle="Each matrix quantized individually to int6, all others held at full precision"
       >
         <p className="text-sm leading-relaxed text-zinc-600 mb-8">
-          Quantization replaces precise weights with rounded approximations to
-          make models smaller and faster. To find which weights matter most, I
-          quantize each matrix individually to int6 while keeping everything else
-          at full precision — like loosening one bolt at a time to find which
-          ones hold the structure together.
+          To find which weights matter most, I quantize each matrix individually
+          to int6 while keeping everything else at full precision — loosening
+          one bolt at a time to find which ones hold the structure together.
         </p>
         <QuantSensitivityHeatmap
           perMatrix={quantSensitivity.per_matrix}
@@ -175,12 +178,9 @@ export default function ModelAnalysisPage() {
         subtitle={`ECE = ${(calibration.ece * 100).toFixed(2)}% across 62M tokens`}
       >
         <p className="text-sm leading-relaxed text-zinc-600 mb-8">
-          Calibration measures whether a model&apos;s confidence matches reality —
-          when it says 80% confident, is it right 80% of the time? Expected
-          Calibration Error (ECE) quantifies this gap across all confidence
-          levels. A model with low ECE but high loss means the model knows what
-          it doesn&apos;t know — the bottleneck is prediction accuracy, not
-          misplaced confidence.
+          Low ECE but high loss means the model knows what it doesn&apos;t
+          know — the bottleneck is prediction accuracy, not misplaced
+          confidence.
         </p>
         <CalibrationChart
           calibrationBins={calibration.calibration_bins}
@@ -337,6 +337,9 @@ export default function ModelAnalysisPage() {
       {/* Conclusion */}
       <section className="mb-16">
         <h2 className="text-lg font-semibold text-zinc-900 mb-4">What to Do Differently</h2>
+        <p className="text-sm leading-relaxed text-zinc-600 mb-6">
+          The biggest surprise: condition number is a red herring for quantization. Stable rank is what actually predicts sensitivity. If I trained this again, mixed-precision GPTQ guided by stable rank would be the first thing I&apos;d try.
+        </p>
         <ol className="list-decimal list-inside space-y-3 text-sm leading-relaxed text-zinc-600">
           <li>
             <span className="font-semibold text-zinc-800">Give MLP more GPTQ bits.</span>{" "}

@@ -1,7 +1,7 @@
 /* Borrowed Geometry — minimal tokens.
  * Body font inherits from the abay.tech root layout (Inter).
  * Mono numerals + eyebrows fall back to system monospace.
- * One accent (vermilion). White bg.
+ * One accent (deep editorial blue). White bg.
  */
 
 .specimen {
@@ -11,7 +11,7 @@
   --ink-2: #3A4150;
   --ink-3: #8A8E97;
   --rule: #E5E5E2;
-  --accent: #B7361C;
+  --accent: #2D4A6F;
 
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
 

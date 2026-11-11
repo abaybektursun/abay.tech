@@ -1,0 +1,90 @@
+[
+  {
+    "skip_idx": 0,
+    "encoder_source": "blk5_enc7",
+    "decoder_target_block": 4,
+    "gate_mean_sigmoid": 0.625676155090332,
+    "gate_std_sigmoid": 0.031062889844179153,
+    "gate_min_sigmoid": 0.532076358795166,
+    "gate_max_sigmoid": 0.7818343639373779,
+    "weight_norm": 13.833850860595703,
+    "interpretation": "Uniform blend (37% encoder, 63% decoder)"
+  },
+  {
+    "skip_idx": 1,
+    "encoder_source": "blk4_enc6",
+    "decoder_target_block": 5,
+    "gate_mean_sigmoid": 0.69504314661026,
+    "gate_std_sigmoid": 0.043253153562545776,
+    "gate_min_sigmoid": 0.5482415556907654,
+    "gate_max_sigmoid": 0.8068813681602478,
+    "weight_norm": 6.943018913269043,
+    "interpretation": "Uniform blend (30% encoder, 70% decoder)"
+  },
+  {
+    "skip_idx": 2,
+    "encoder_source": "blk5_enc5",
+    "decoder_target_block": 4,
+    "gate_mean_sigmoid": 0.6528881192207336,
+    "gate_std_sigmoid": 0.06116379052400589,
+    "gate_min_sigmoid": 0.4155179560184479,
+    "gate_max_sigmoid": 0.8026873469352722,
+    "weight_norm": 21.95305824279785,
+    "interpretation": "Mixed (35% enc, 65% dec, varies by dim)"
+  },
+  {
+    "skip_idx": 3,
+    "encoder_source": "blk4_enc4",
+    "decoder_target_block": 5,
+    "gate_mean_sigmoid": 0.6657897233963013,
+    "gate_std_sigmoid": 0.04678075760602951,
+    "gate_min_sigmoid": 0.5263504385948181,
+    "gate_max_sigmoid": 0.797243595123291,
+    "weight_norm": 19.45157814025879,
+    "interpretation": "Uniform blend (33% encoder, 67% decoder)"
+  },
+  {
+    "skip_idx": 4,
+    "encoder_source": "blk3_enc3",
+    "decoder_target_block": 6,
+    "gate_mean_sigmoid": 0.6558853387832642,
+    "gate_std_sigmoid": 0.024791957810521126,
+    "gate_min_sigmoid": 0.5898219347000122,
+    "gate_max_sigmoid": 0.7456790208816528,
+    "weight_norm": 9.15656566619873,
+    "interpretation": "Uniform blend (34% encoder, 66% decoder)"
+  },
+  {
+    "skip_idx": 5,
+    "encoder_source": "blk2_enc2",
+    "decoder_target_block": 7,
+    "gate_mean_sigmoid": 0.6079608798027039,
+    "gate_std_sigmoid": 0.028721677139401436,
+    "gate_min_sigmoid": 0.5257492661476135,
+    "gate_max_sigmoid": 0.6861751675605774,
+    "weight_norm": 9.131858825683594,
+    "interpretation": "Uniform blend (39% encoder, 61% decoder)"
+  },
+  {
+    "skip_idx": 6,
+    "encoder_source": "blk1_enc1",
+    "decoder_target_block": 8,
+    "gate_mean_sigmoid": 0.6236979961395264,
+    "gate_std_sigmoid": 0.030904622748494148,
+    "gate_min_sigmoid": 0.5374909043312073,
+    "gate_max_sigmoid": 0.7333394885063171,
+    "weight_norm": 4.157233715057373,
+    "interpretation": "Uniform blend (38% encoder, 62% decoder)"
+  },
+  {
+    "skip_idx": 7,
+    "encoder_source": "blk0_enc0",
+    "decoder_target_block": 9,
+    "gate_mean_sigmoid": 0.6067489981651306,
+    "gate_std_sigmoid": 0.03479073941707611,
+    "gate_min_sigmoid": 0.5113831162452698,
+    "gate_max_sigmoid": 0.7251238226890564,
+    "weight_norm": 2.792003870010376,
+    "interpretation": "Uniform blend (39% encoder, 61% decoder)"
+  }
+]

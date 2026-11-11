@@ -1,5 +1,5 @@
 ---
-title: "Autopsy of PR #1019's 27M-Parameter GPT"
-subtitle: "I trained a 27M GPT to 1.134 BPB then took it apart. MLP needs 4x more quantization bits than attention, one layer does most of the work, and calibration is already near-perfect."
+title: "Autopsy of a SOTA Parameter-Golf GPT"
+subtitle: "Q matrices have condition numbers up to 54,000×. They're not the fragile ones. Trained a 27M GPT to 1.134 BPB on FineWeb — merged as #1 on the leaderboard — then cut it open."
 date: '2026-03-28'
 ---

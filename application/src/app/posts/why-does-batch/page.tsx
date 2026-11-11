@@ -3,6 +3,7 @@ import React from 'react'
 import Script from 'next/script'
 
 import Container from '@/components/container'
+import Comments from '@/components/comments'
 
 // Then add only the custom overrides after all links
 const overrideStyles = `
@@ -424,6 +425,7 @@ export default function BatchNormPage() {
         ; (2 Mar, 2015)
       </span>
       <br />
+      <Comments />
       <style>{overrideStyles}</style>
       </Container>
       <Script

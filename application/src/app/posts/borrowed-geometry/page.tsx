@@ -8,11 +8,13 @@ import { FONT_VARS } from "./fonts";
 
 import ExaptationScatter from "./components/ExaptationScatter";
 import CATrainingEdgeBand from "./components/CATrainingEdgeBand";
-import CubeIsolationCurves from "./components/CubeIsolationCurves";
+import CubeRolloutPair from "./components/CubeRolloutPair";
+import ScenePlayCurves from "./components/ScenePlayCurves";
 import Comments from "@/components/comments";
+import { PostEyebrowWithProvenance } from "@/components/ui/ai-provenance";
 
 import heads from "./data/heads.json";
-import cubeCurves from "./data/cube_curves.json";
+import sceneCurves from "./data/scene_curves.json";
 
 import "./tokens.css";
 
@@ -20,10 +22,10 @@ const Walker2dViewer = dynamic(() => import("./components/Walker2dViewer"), {
   ssr: false,
   loading: () => (
     <div
-      className="border border-[--rule] bg-[#0E1118] flex items-center justify-center"
-      style={{ aspectRatio: "16/9" }}
+      className="border border-[--rule] bg-[#0E1118] mx-auto flex items-center justify-center"
+      style={{ maxWidth: 560, aspectRatio: "1 / 1" }}
     >
-      <span className="t-eyebrow" style={{ color: "#8E96A4" }}>loading viewer</span>
+      <span className="t-eyebrow" style={{ color: "#8E96A4" }}>loading episode</span>
     </div>
   ),
 });
@@ -37,7 +39,9 @@ export default function BorrowedGeometryPage() {
 
         {/* Hero */}
         <header className="mb-12">
-          <div className="t-eyebrow accent mb-4">{c.hero.eyebrow}</div>
+          <PostEyebrowWithProvenance ai="borrowed-geometry" className="t-eyebrow accent">
+            {c.hero.eyebrow}
+          </PostEyebrowWithProvenance>
           <h1 className="t-display max-w-[18ch]">{c.hero.title}</h1>
           <p className="t-deck mt-5 max-w-[54ch]">{c.hero.deck}</p>
         </header>
@@ -113,8 +117,19 @@ export default function BorrowedGeometryPage() {
           <Body items={c.wins.body} />
           <p className="t-body mt-6">{c.wins.scenePlay}</p>
           <p className="t-body mt-6">{c.wins.cubeDouble}</p>
-          <Figure number="figure 3." caption={c.figures.cubeIsolation}>
-            <CubeIsolationCurves data={cubeCurves} />
+
+          <figure className="my-10 -mx-2 md:-mx-8">
+            <CubeRolloutPair />
+            <figcaption className="t-caption mt-3 px-2 md:px-8 flex gap-3">
+              <span className="t-data uppercase tracking-wider shrink-0" style={{ color: "var(--ink-3)" }}>
+                figure 3.
+              </span>
+              <span>{c.figures.cubeRollouts}</span>
+            </figcaption>
+          </figure>
+
+          <Figure number="figure 4." caption={c.figures.scenePlay}>
+            <ScenePlayCurves data={sceneCurves} />
           </Figure>
           <p className="t-body mt-6">{c.wins.walker2d}</p>
 
@@ -122,7 +137,7 @@ export default function BorrowedGeometryPage() {
             <Walker2dViewer />
             <figcaption className="t-caption mt-3 px-2 md:px-8 flex gap-3">
               <span className="t-data uppercase tracking-wider shrink-0" style={{ color: "var(--ink-3)" }}>
-                figure 4.
+                figure 5.
               </span>
               <span>{c.figures.walker2d}</span>
             </figcaption>
