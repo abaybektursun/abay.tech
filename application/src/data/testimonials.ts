@@ -7,7 +7,7 @@ export const reviews: Review[] = [
       role: 'Founder, Gridlines'
     },
     {
-      content: 'Abay was the best choice for AI developers on this site. He is extremely fast, and detailed with his work. He was available quickly when any issues occured with our operating environment and was able to develop an efficient and accurate AI.',
+      content: 'Abay was the best choice for AI developers. He is extremely fast, and detailed with his work. He was available quickly when any issues occured with our operating environment and was able to develop an efficient and accurate AI.',
       name: 'Kevin Cantrell',
       role: 'Founder, Crop Watch'
     },

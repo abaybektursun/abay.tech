@@ -17,21 +17,22 @@
   html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   body{ font-family:var(--body); background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; }
 
-  .page{ width:210mm; min-height:297mm; padding:20mm 20mm; margin:0 auto; }
+  .page{ width:210mm; padding:15mm 20mm; margin:0 auto; }
   .top{ display:flex; justify-content:space-between; align-items:baseline; }
   .name{ font-size:23px; font-weight:700; letter-spacing:-.032em; }
   .top-links{ display:flex; align-items:center; gap:7px; font-family:var(--label); font-size:8.6px; letter-spacing:.02em; }
   .top-links a{ color:var(--muted); text-decoration:none; }
   .top-links span{ color:var(--line); }
 
-  .thesis{ font-size:17.4px; font-weight:500; line-height:1.4; letter-spacing:-.016em; color:var(--ink); max-width:58ch; margin-top:19px; }
+  .thesis{ font-size:13px; font-weight:500; line-height:1.4; letter-spacing:-.012em; color:var(--ink); white-space:nowrap; margin-top:12px; }
   .thesis .ac{ color:var(--accentd); }
-  .rule{ height:2px; background:var(--accent); margin:19px 0 5px; }
+  .thesis .err{ font-family:ui-monospace,"SF Mono","SFMono-Regular",Menlo,monospace; font-size:.86em; letter-spacing:-.01em; color:var(--ink); }
+  .rule{ height:2px; background:var(--accent); margin:13px 0 4px; }
 
-  .row{ display:grid; grid-template-columns:136px 1fr; gap:0 22px; padding:15px 0; border-bottom:1px solid var(--line); align-items:start; }
-  .row.featured{ padding:25px 0; }
-  .row.research{ padding:22px 0; }
-  .row.ctx{ padding:18px 0; }
+  .row{ display:grid; grid-template-columns:136px 1fr; gap:0 22px; padding:11px 0; border-bottom:1px solid var(--line); align-items:start; }
+  .row.featured{ padding:15px 0; }
+  .row.research{ padding:14px 0; }
+  .row.ctx{ padding:12px 0; }
   .row.section-end{ border-bottom-color:#c7c7cc; }
   .row:last-of-type{ border-bottom:0; }
   .lc .lb{ font-family:var(--label); font-size:9px; letter-spacing:.078em; text-transform:uppercase; color:#141414; font-weight:600; line-height:1.45; }
@@ -46,14 +47,14 @@
   .row.industry .rc .txt{ color:var(--soft); }
   .study-sub{ margin-top:4px; font-size:9.6px; line-height:1.4; color:var(--muted); }
 
-  .offline{ display:grid; grid-template-columns:136px 1fr; gap:0 22px; align-items:center; padding:13px 0; border-bottom:1px solid var(--line); }
+  .offline{ display:grid; grid-template-columns:136px 1fr; gap:0 22px; align-items:center; padding:10px 0; border-bottom:1px solid var(--line); }
   .offline-label{ font-family:var(--label); font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:var(--accentd); font-weight:600; }
   .offline-line{ display:flex; align-items:center; gap:9px; font-family:var(--label); font-size:8.8px; }
   .offline-line a{ color:var(--ink); text-decoration:none; }
   .offline-line .ar{ color:var(--accentd); margin-left:3px; }
   .offline-line .slash{ color:var(--faint); }
 
-  .foot{ margin-top:18px; margin-left:158px; font-family:var(--label); font-size:8.8px; color:var(--muted); }
+  .foot{ margin-top:13px; margin-left:158px; font-family:var(--label); font-size:8.8px; color:var(--muted); }
   .foot a{ color:var(--soft); text-decoration:none; }
   .foot span{ color:var(--line); padding:0 9px; }
   .foot .a{ color:var(--accent); padding:0; margin-left:3px; }
@@ -62,32 +63,40 @@
 <body>
   <div class="page">
     <div class="top"><div class="name">Abay Bektursun</div><div class="top-links"><a href="mailto:ab@abay.tech">ab@abay.tech</a><span>·</span><a href="https://abay.tech">abay.tech</a></div></div>
-    <div class="thesis">Born to study intelligence. Forced to debug a shape mismatch.</div>
+    <div class="thesis">Born to study intelligence. Forced to debug <code class="err">RuntimeError: CUDA out of memory.</code></div>
     <div class="rule"></div>
 
+    <div class="row featured">
+      <div class="lc"><div class="lb tight">Independent Research</div><div class="yr">2026 · ongoing</div></div>
+      <div class="rc"><div class="txt">Working on <b>mechanistic interpretability</b>: finding where skills live inside models and what training actually changes.</div></div>
+    </div>
     <div class="row featured">
       <div class="lc"><div class="lb">Republic Assay</div><div class="yr">2026</div></div>
       <div class="rc"><div class="txt">Republic Assay tests whether language models share the values of the institutions adopting them, directly in activation space. I built it in <b>four hours</b> and won first place at Patriot Games 250: $15,000 from Vulcan (YC S25).</div><a class="lk" href="https://republicassay.us/">Republic Assay<span class="ar">↗</span></a></div>
     </div>
     <div class="row featured">
       <div class="lc"><div class="lb tight">OpenAI · Parameter Golf</div><div class="yr">2026</div></div>
-      <div class="rc"><div class="txt">OpenAI highlighted my Parameter Golf work in its official article—one of nine submissions chosen from thousands. I <b>led the leaderboard</b> for most of the competition.</div><a class="lk" href="https://openai.com/index/what-parameter-golf-taught-us/">OpenAI article<span class="ar">↗</span></a></div>
+      <div class="rc"><div class="txt">OpenAI featured my Parameter Golf work, one of nine submissions chosen from thousands. I <b>led the leaderboard</b> for most of the competition.</div><a class="lk" href="https://openai.com/index/what-parameter-golf-taught-us/">OpenAI article<span class="ar">↗</span></a></div>
     </div>
     <div class="row featured">
       <div class="lc"><div class="lb">PyTorch · Inductor</div><div class="yr">2026</div></div>
       <div class="rc"><div class="txt">I traced a <b>6% H100 regression</b> to over-fusion; my fix shipped in PyTorch 2.13.</div><a class="lk" href="https://github.com/pytorch/pytorch/pull/179494">PyTorch PR<span class="ar">↗</span></a></div>
     </div>
-    <div class="row research">
-      <div class="lc"><div class="lb">Model Lineage</div><div class="yr">2026 · ongoing</div></div>
-      <div class="rc"><div class="txt">What survives when a model is fine-tuned down a lineage: <b>SigLIP+Gemma → PaliGemma → π0.5</b>.</div><a class="lk" href="https://abay.tech">Research notes<span class="ar">↗</span></a></div>
-    </div>
     <div class="row research section-end">
       <div class="lc"><div class="lb">Borrowed Geometry</div><div class="yr">April 2026</div></div>
-      <div class="rc"><div class="txt">A frozen Gemma slice beat published SOTA on robot manipulation. I traced four unrelated tasks to <b>the same attention heads.</b></div><a class="lk" href="https://abay.tech/posts/borrowed-geometry">Read the research<span class="ar">↗</span></a></div>
+      <div class="rc"><div class="txt">Research run by LLM agents that I directed. A frozen Gemma slice beat published SOTA on robot manipulation, and the agents traced four unrelated tasks to <b>the same attention heads.</b></div><a class="lk" href="https://abay.tech/posts/borrowed-geometry">Read the research<span class="ar">↗</span></a></div>
+    </div>
+    <div class="row featured">
+      <div class="lc"><div class="lb">fuelOS</div><div class="yr">2026</div></div>
+      <div class="rc"><div class="txt">Founder. fuelOS is an AI nutrition app, and it is <b>profitable</b>.</div></div>
+    </div>
+    <div class="row featured section-end">
+      <div class="lc"><div class="lb">Elara</div><div class="yr">2025</div></div>
+      <div class="rc"><div class="txt">Co-founder. Elara is an AI interface for wealth managers' CRMs. <b>Acquired by Wealthdoor.</b></div></div>
     </div>
     <div class="row ctx industry">
-      <div class="lc"><div class="lb">Industry</div><div class="yr">2016 — now</div></div>
-      <div class="rc"><div class="txt">A decade of ML engineering: <b>Hewlett Packard Enterprise</b>; computer vision at <b>Apple</b> and <b>Eagle Eye Networks</b>; independent since 2022, getting research models running for clients.</div></div>
+      <div class="lc"><div class="lb">Industry</div><div class="yr">2016 — 26</div></div>
+      <div class="rc"><div class="txt">A decade of ML engineering: <b>Hewlett Packard Enterprise</b>; computer vision at <b>Apple</b> and <b>Eagle Eye Networks</b>; independent AI consultant from 2022 to 2026, getting research models running for clients.</div></div>
     </div>
     <div class="row ctx">
       <div class="lc"><div class="lb">Studied</div><div class="yr">2014 — 17</div></div>

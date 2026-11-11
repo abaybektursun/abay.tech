@@ -63,9 +63,24 @@ export default function Component() {
         { text: "Fight in an MMA match", completed: false },
         { text: "Join 1000-pound club", completed: false },
         { text: "Work for world's leading AI research lab", completed: false },
+        {
+          text: <a href="/images/pytorch_contribution.png" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+            Contribute to a major open source ML codebase
+          </a>,
+          completed: true
+        },
         { text: "Provide my parents a peaceful and comfortable end of life.", completed: false },
-        { 
-          text: "Wildin' Activities", 
+        {
+          text: "Buy land and build a self-sustaining farm",
+          completed: false,
+          hasSubItems: true,
+          subItems: [
+            { text: "Grow rice in a fish pond", completed: false },
+          ]
+        },
+        { text: "Build a large aquarium and terrarium", completed: false },
+        {
+          text: "Wildin' Activities",
           completed: false, 
           hasSubItems: true, 
           subItems: [
