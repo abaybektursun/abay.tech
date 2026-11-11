@@ -8,9 +8,30 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 
 const inter = Inter({ subsets: ["latin"] });
 
+const SITE_URL = "https://abay.tech";
+const SITE_DESC = "ML, systems, and writing by Abay Bektursun.";
+
 export const metadata: Metadata = {
-  title: "Abay Bektursun",
-  description: "Portfolio and Blog",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Abay Bektursun",
+    template: "%s — abay.tech",
+  },
+  description: SITE_DESC,
+  openGraph: {
+    title: "Abay Bektursun",
+    description: SITE_DESC,
+    url: SITE_URL,
+    siteName: "abay.tech",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Abay Bektursun",
+    description: SITE_DESC,
+    creator: "@abaybektursun",
+  },
 };
 
 export const viewport = {
