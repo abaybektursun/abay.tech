@@ -50,8 +50,19 @@ export default $config({
 
     new sst.aws.Nextjs("abay", {
       link: [openaiApiKey, elevenlabsApiKey, table, artifactsTable, sharesTable],
+      // Preserve the previous OpenNext version; newer releases reject Next.js 15.
+      openNextVersion: "3.6.6",
+      // Remove assets and route entries deleted from the site.
+      assets: {
+        purge: true,
+      },
       // Set the domain only for the production stage
-      domain: $app.stage === "production" ? "abay.tech" : undefined,
+      domain: $app.stage === "production"
+        ? {
+            name: "abay.tech",
+            redirects: ["www.abay.tech"],
+          }
+        : undefined,
       environment: {
         OPENAI_API_KEY: openaiApiKey.value,
         ELEVENLABS_API_KEY: elevenlabsApiKey.value,

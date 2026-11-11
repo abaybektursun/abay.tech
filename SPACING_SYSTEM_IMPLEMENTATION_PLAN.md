@@ -1404,7 +1404,6 @@ process.exit(exitCode)
    - Screen reader testing
 
 3. **Performance Testing**
-   - Lighthouse CI
    - WebPageTest
    - Chrome DevTools Performance
 

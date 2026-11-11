@@ -170,18 +170,6 @@ console.log('\n✅ All tests passed!\n');
 5. **Clear Output**: Easy to understand what passed/failed
 6. **Self-Documenting**: Test names describe what they test
 
-## CI/CD Integration
-
-These tests can be integrated into CI/CD pipelines:
-
-```yaml
-# Example GitHub Actions
-- name: Run Standalone Tests
-  run: |
-    cd /tmp
-    node $GITHUB_WORKSPACE/tests/unit/PersonalizedArticle.standalone.test.js
-```
-
 ## Troubleshooting
 
 ### "Invalid package config" error
